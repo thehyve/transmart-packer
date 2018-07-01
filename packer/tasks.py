@@ -1,16 +1,17 @@
 import abc
 import json
 import logging
-
+import os
 from celery import Celery, Task
 from celery.utils import cached_property
 
+from .config import redis_config, task_config
 from .redis_client import redis
 
 logger = logging.getLogger(__name__)
 
 
-app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
+app = Celery('tasks', backend=redis_config['address'], broker=redis_config['address'])
 app.autodiscover_tasks(['packer.jobs'], 'jobs')
 
 
@@ -91,6 +92,12 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
     def __call__(self, *args, **kwargs):
         self.update_status(status=Status.RUNNING, message=f'Starting task.')
         super().__call__(*args, **kwargs)
+
+    def get_data_dir(self, create=True):
+        path = os.path.join(task_config['data_dir'], self.task_id)
+        if create:
+            os.makedirs(path, exist_ok=True)
+        return path
 
     @cached_property
     def task_id(self):

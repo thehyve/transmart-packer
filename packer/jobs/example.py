@@ -1,5 +1,6 @@
 import logging
 import time
+import os
 
 from ..tasks import BaseDataTask, Status, app
 
@@ -11,7 +12,7 @@ def add(self, x, y):
     """
     Example task that does basic additions of two integers.
 
-    :param self: Required for bind to BaseTask
+    :param self: Required for bind to BaseDataTask
     :param x: should be in job_parameters.
     :param y: should be in job_parameters.
     """
@@ -23,5 +24,10 @@ def add(self, x, y):
 
     value = x * y
     logger.info('Calculated value: {}'.format(value))
-    self.task_status.update(result=value)
-    logger.info('Stored to redis.')
+    path = self.get_data_dir()
+
+    with open(os.path.join(path, 'result.zip'), 'w') as writer:
+        writer.write(f'{value}')
+
+    logger.info(f'Stored to disk: {path}.')
+

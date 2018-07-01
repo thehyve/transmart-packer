@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import uuid
+import os
 
 import aioredis
 import jwt
@@ -12,9 +13,9 @@ from tornado.log import app_log as log
 from tornado.options import define
 
 import packer.jobs as jobs
-from .config import tornado_config, redis_config
+from .config import tornado_config, redis_config, task_config
 from .redis_client import redis
-from .tasks import TaskStatusGeneric
+from .tasks import TaskStatusGeneric, Status
 
 USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
@@ -64,6 +65,7 @@ class JobListHandler(BaseHandler):
                 'jobs': [TaskStatusGeneric(job).get() for job in jobs]
             }, sort_keys=True, indent=2)
         )
+        self.finish()
 
 
 class CreateJobHandler(BaseHandler):
@@ -94,14 +96,19 @@ class CreateJobHandler(BaseHandler):
         task_status = TaskStatusGeneric(task_id)
         task_status.create(job_type=job_type,
                            job_parameters=job_parameters,
+                           status=Status.REGISTERED,
                            user=self.user)
 
-        task.apply_async(
-            kwargs=job_parameters,
-            task_id=task_id
-        )
+        try:
+            task.apply_async(
+                kwargs=job_parameters,
+                task_id=task_id
+            )
+        except Exception as e:
+            raise tornado.web.HTTPError(500, str(e))
 
         self.write(task_status.get())
+        self.finish()
 
     def get(self, *args, **kwargs):
         kwargs = {arg: self.get_argument(arg) for arg in self.arguments}
@@ -118,14 +125,48 @@ class JobStatusHandler(BaseHandler):
     Returns status object for single task.
     """
 
-    def get(self, id_):
-        self.write(TaskStatusGeneric(id_).get())
+    def get(self, task_id):
+        self.write(TaskStatusGeneric(task_id).get())
+        self.finish()
+
+
+class DataHandler(BaseHandler):
+    """
+    Returns status object for single task.
+    """
+
+    async def get(self, task_id):
+        task_status = TaskStatusGeneric(task_id).get()
+
+        if task_status['user'] != self.user:
+            raise tornado.web.HTTPError(403, 'Forbidden.')
+
+        if task_status['status'] != Status.SUCCESS:
+            raise tornado.web.HTTPError(404, f'Wrong task status ({task_status["status"]}).')
+
+        try:
+            # Only first file in the directory will be uploaded. Assumption
+            # is that every task can only have a single output file.
+            path = os.path.join(task_config.get('data_dir'), task_id)
+            path = os.path.join(path, os.listdir(path)[0])
+        except (FileNotFoundError, IndexError):
+            raise tornado.web.HTTPError(404, 'No such resource.')
+
+        # FIXME figure out way to do this async
+        with open(path, 'rb') as f:
+            while True:
+                data = f.read(16384)
+                if not data:
+                    break
+                self.write(data)
+        self.finish()
 
 
 class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     @property
     def user(self):
+        # FIXME Setup keycloak here.
         return self.get_secure_cookie(USER_COOKIE).decode()
 
     def __init__(self, *args, **kwargs):
@@ -133,6 +174,7 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
         self.sub = None
 
     def check_origin(self, origin):
+        # FIXME need to limit connections from specific GB
         return True
 
     async def open(self):
@@ -155,7 +197,7 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
         await async_reader(channel)
 
-    def on_message(self, message):
+    async def on_message(self, message):
         log.info(f"Message received: {message}")
 
     async def on_close(self):
@@ -171,6 +213,7 @@ def make_web_app():
         (r"/jobs", JobListHandler),
         (r"/jobs/create", CreateJobHandler),
         (r"/jobs/status/(.+)", JobStatusHandler),
+        (r"/jobs/data/(.+)", DataHandler),
         (r"/jobs/subscribe", StatusWebSocket)
     ], **tornado_config)
 

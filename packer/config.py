@@ -12,5 +12,10 @@ keycloak_config = dict(
 
 redis_config = dict(
     host='localhost',
-    port=6379
+    port=6379,
+    address='redis://localhost'
+)
+
+task_config = dict(
+    data_dir='/tmp/'
 )
