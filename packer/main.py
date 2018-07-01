@@ -4,34 +4,35 @@ import logging
 import uuid
 
 import aioredis
+import jwt
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
 from tornado.log import app_log as log
 from tornado.options import define
-import jwt
 
+import packer.jobs as jobs
 from .config import tornado_config
 from .redis_client import redis
-from .tasks import add, TaskStatusGeneric
+from .tasks import TaskStatusGeneric
 
-logger = logging.getLogger(__name__)
-
-USER_COOKIE = 'packer-user'
+USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
 
 class BaseHandler(tornado.web.RequestHandler):
 
     def get_subject_from_jwt(self):
-        try:
+        if self.request.headers.get("Authorization"):
             token = self.request.headers.get("Authorization")
             token = token.split('Bearer ')[-1]  # strip 'Bearer ' from token so it can be read.
             user_token = jwt.decode(token, verify=False)
             subject = user_token.get('sub')
             log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
             return subject
-        except Exception:  # TODO remove, using session cookie for testing now
-            logger.warning('No authorization provided. Using session.')
+
+        # TODO remove, using session cookie for testing now
+        else:
+            log.warning('No authorization provided. Using session.')
             return None
 
     def initialize(self):
@@ -51,6 +52,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class JobListHandler(BaseHandler):
+    """
+    Provides a list of all jobs, current and past for current user.
+    """
     async def get(self):
         log.info(f'Getting jobs for user: {self.user}')
         jobs = list(redis.smembers(f'jobs:{self.user}'))
@@ -62,36 +66,63 @@ class JobListHandler(BaseHandler):
         )
 
 
-class DataJobHandler(BaseHandler):
+class CreateJobHandler(BaseHandler):
+    """
+    Start any available job type.
+    """
 
-    def get(self, i1: int, i2: int):
-        log.info(f'New job for user: {self.user}')
+    arguments = ('job_type', 'job_parameters')
 
-        id_ = str(uuid.uuid4())
-        channel = f'channel:{self.user}'
+    def create(self, job_type, job_parameters):
+        log.info(f'New job request ({job_type}) for user: {self.user}')
 
-        redis.sadd(f'jobs:{self.user}', id_)
-        TaskStatusGeneric(id_).create(i1=i1, i2=i2, status='REGISTERED')
+        # Find the right job, and check parameters
+        task = jobs.registry.get(job_type)
 
-        async_result = add.delay(int(i1), int(i2), id_, channel)
-        logging.info(f'Task ready = {async_result.ready()}')
-        self.write(f'Task created with identifier: {id_}')
+        if task is None:
+            raise tornado.web.HTTPError(404, f'Job {job_type!r} not found.')
+        log.info(f'Job {job_type!r} found.')
+
+        try:
+            job_parameters = json.loads(job_parameters)
+        except json.JSONDecodeError:
+            raise tornado.web.HTTPError(400, 'Expected json-like job_parameters.')
+
+        task_id = str(uuid.uuid4())  # Job id used for tracking.
+        redis.sadd(f'jobs:{self.user}', task_id)
+
+        task_status = TaskStatusGeneric(task_id)
+        task_status.create(job_type=job_type,
+                           job_parameters=job_parameters,
+                           user=self.user)
+
+        task.apply_async(
+            kwargs=job_parameters,
+            task_id=task_id
+        )
+
+        self.write(task_status.get())
+
+    def get(self, *args, **kwargs):
+        kwargs = {arg: self.get_argument(arg) for arg in self.arguments}
+        self.create(**kwargs)
 
     def post(self):
-        pass
+        # FIXME In proper parsing of dictionary from request data. Have to request as string.
+        kwargs = {arg: self.get_body_argument(arg) for arg in self.arguments}
+        self.create(**kwargs)
 
 
 class JobStatusHandler(BaseHandler):
+    """
+    Returns status object for single task.
+    """
 
     def get(self, id_):
-        result = redis.get(id_)
-        self.write(f'Toots: {result}')
-
-    def post(self):
-        pass
+        self.write(TaskStatusGeneric(id_).get())
 
 
-class EchoWebSocket(tornado.websocket.WebSocketHandler):
+class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     @property
     def user(self):
@@ -105,7 +136,7 @@ class EchoWebSocket(tornado.websocket.WebSocketHandler):
         return True
 
     async def open(self):
-        logger.info("WebSocket opened")
+        log.info("WebSocket opened")
         self.sub = await aioredis.create_redis('redis://localhost')
         channel, = await self.sub.subscribe(f'channel:{self.user}')
 
@@ -135,9 +166,9 @@ def make_web_app():
     log.info('Starting webapp')
     return tornado.web.Application([
         (r"/jobs", JobListHandler),
-        (r"/jobs/([0-9]+)/([0-9]+)", DataJobHandler),
+        (r"/jobs/create", CreateJobHandler),
         (r"/jobs/status/(.+)", JobStatusHandler),
-        (r"/jobs/subscribe", EchoWebSocket)
+        (r"/jobs/subscribe", StatusWebSocket)
     ], **tornado_config)
 
 
