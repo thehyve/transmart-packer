@@ -17,11 +17,11 @@ def add(self, x, y):
     """
 
     for i in range(10, 0, -1):
-        msg = f'Task {self.task_id} will be ready in {i} seconds'
+        msg = f'Task will be ready in {i} seconds'
         self.update_status(Status.RUNNING, msg)
         time.sleep(1)
 
     value = x * y
     logger.info('Calculated value: {}'.format(value))
     self.task_status.update(result=value)
-    logger.info('Stored to redis')
+    logger.info('Stored to redis.')

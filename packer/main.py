@@ -12,7 +12,7 @@ from tornado.log import app_log as log
 from tornado.options import define
 
 import packer.jobs as jobs
-from .config import tornado_config
+from .config import tornado_config, redis_config
 from .redis_client import redis
 from .tasks import TaskStatusGeneric
 
@@ -137,7 +137,10 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     async def open(self):
         log.info("WebSocket opened")
-        self.sub = await aioredis.create_redis('redis://localhost')
+        # FIXME creating redis connection for each websocket might not work well forever.
+        self.sub = await aioredis.create_redis(
+            f'redis://{redis_config.get("host")}',
+        )
         channel, = await self.sub.subscribe(f'channel:{self.user}')
 
         open_msg = f'Listening to channel: {channel.name.decode()!r}'
@@ -148,7 +151,7 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
             while await channel.wait_message():
                 msg = await channel.get(encoding='utf-8')
                 logging.info(msg)
-                self.write_message("message in {}: {}".format(channel.name, msg))
+                self.write_message(msg)
 
         await async_reader(channel)
 

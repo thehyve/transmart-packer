@@ -9,3 +9,8 @@ tornado_config = dict(
 keycloak_config = dict(
     oidc_server_url="https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev",
 )
+
+redis_config = dict(
+    host='localhost',
+    port=6379
+)
