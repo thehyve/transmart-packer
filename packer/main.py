@@ -1,7 +1,8 @@
 import json
 import logging
-import uuid
 import os
+import uuid
+from datetime import datetime
 
 import aioredis
 import jwt
@@ -91,10 +92,13 @@ class CreateJobHandler(BaseHandler):
         redis.sadd(f'jobs:{self.user}', task_id)
 
         task_status = TaskStatusGeneric(task_id)
-        task_status.create(job_type=job_type,
-                           job_parameters=job_parameters,
-                           status=Status.REGISTERED,
-                           user=self.user)
+        task_status.create(
+            job_type=job_type,
+            job_parameters=job_parameters,
+            status=Status.REGISTERED,
+            user=self.user,
+            created_at=str(datetime.utcnow())
+        )
 
         try:
             task.apply_async(
