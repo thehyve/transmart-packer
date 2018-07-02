@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 import uuid
@@ -60,10 +59,8 @@ class JobListHandler(BaseHandler):
         log.info(f'Getting jobs for user: {self.user}')
         jobs = list(redis.smembers(f'jobs:{self.user}'))
         self.write(
-            json.dumps({
-                'user': self.user,
-                'jobs': [TaskStatusGeneric(job).get() for job in jobs]
-            }, sort_keys=True, indent=2)
+            json.dumps([TaskStatusGeneric(job).get() for job in jobs],
+                       sort_keys=True, indent=2)
         )
         self.finish()
 
@@ -110,7 +107,7 @@ class CreateJobHandler(BaseHandler):
         self.write(task_status.get())
         self.finish()
 
-    def get(self, *args, **kwargs):
+    def get(self):
         kwargs = {arg: self.get_argument(arg) for arg in self.arguments}
         self.create(**kwargs)
 
@@ -179,11 +176,7 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     async def open(self):
         log.info("WebSocket opened")
-        # FIXME creating redis connection for each websocket might not work well forever.
-        self.sub = await aioredis.create_redis(
-            f'redis://{redis_config.get("host")}',
-        )
-        channel, = await self.sub.subscribe(f'channel:{self.user}')
+        channel, = await web_app.redis.subscribe(f'channel:{self.user}')
 
         open_msg = f'Listening to channel: {channel.name.decode()!r}'
         log.info(open_msg)
@@ -197,19 +190,30 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
         await async_reader(channel)
 
-    async def on_message(self, message):
+    def on_message(self, message):
         log.info(f"Message received: {message}")
 
-    async def on_close(self):
-        log.info("WebSocket closed")
-        asyncio.get_event_loop().call_soon(self.sub.close)
-        await asyncio.sleep(0)
-        await self.sub.wait_closed()
+    def on_close(self):
+        log.info("WebSocket closed by client.")
+
+
+class Application(tornado.web.Application):
+
+    def __init__(self, *args, **kwargs):
+        self.redis = None
+        super().__init__(*args, **kwargs)
+
+    def init_with_loop(self, loop):
+        self.redis = loop.run_until_complete(
+            aioredis.create_redis(
+                 (redis_config.get("host"), redis_config.get("port")),
+                 loop=loop)
+        )
 
 
 def make_web_app():
     log.info('Starting webapp')
-    return tornado.web.Application([
+    return Application([
         (r"/jobs", JobListHandler),
         (r"/jobs/create", CreateJobHandler),
         (r"/jobs/status/(.+)", JobStatusHandler),
@@ -222,4 +226,7 @@ if __name__ == "__main__":
     tornado.options.parse_command_line()
     web_app = make_web_app()
     web_app.listen(tornado_config.get('port', 8888))
-    tornado.ioloop.IOLoop.current().start()
+    loop = tornado.ioloop.IOLoop.current()
+    web_app.init_with_loop(loop.asyncio_loop)
+
+    loop.start()
