@@ -22,7 +22,7 @@ def add(self, x, y):
         self.update_status(Status.RUNNING, msg)
         time.sleep(1)
 
-    value = x * y
+    value = x + y
     logger.info('Calculated value: {}'.format(value))
     path = self.get_data_dir()
 
