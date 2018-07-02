@@ -99,15 +99,15 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
             os.makedirs(path, exist_ok=True)
         return path
 
-    @cached_property
+    @property
     def task_id(self):
         return self.request.id
 
-    @cached_property
+    @property
     def task_status(self):
         return TaskStatusGeneric(self.task_id)
 
-    @cached_property
+    @property
     def channel(self):
         obj = self.task_status.get()
         return f'channel:{obj.get("user")}'
