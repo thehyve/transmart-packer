@@ -21,5 +21,5 @@ redis_config = dict(
 )
 
 task_config = dict(
-    data_dir='/tmp/'
+    data_dir='/tmp/packer/'
 )

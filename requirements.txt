@@ -4,3 +4,4 @@ celery
 tornado
 aioredis
 pyjwt
+requests

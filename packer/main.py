@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import uuid
 from datetime import datetime
 
@@ -13,9 +12,9 @@ from tornado.log import app_log as log
 from tornado.options import define
 
 import packer.jobs as jobs
-from .config import tornado_config, redis_config, task_config
+from .config import tornado_config, redis_config
 from .redis_client import redis
-from .tasks import TaskStatusGeneric, Status
+from .tasks import TaskStatusGeneric, Status, FSHandler
 
 USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
@@ -58,9 +57,9 @@ class JobListHandler(BaseHandler):
     """
     async def get(self):
         log.info(f'Getting jobs for user: {self.user}')
-        jobs = list(redis.smembers(f'jobs:{self.user}'))
+        jobs_ = list(redis.smembers(f'jobs:{self.user}'))
         self.write(
-            json.dumps([TaskStatusGeneric(job).get() for job in jobs],
+            json.dumps([TaskStatusGeneric(job).get() for job in jobs_],
                        sort_keys=True, indent=2)
         )
         self.finish()
@@ -99,7 +98,7 @@ class CreateJobHandler(BaseHandler):
             user=self.user,
             created_at=str(datetime.utcnow())
         )
-        log.info(f'headers: {self.request.headers}')
+
         try:
             task.apply_async(
                 kwargs=job_parameters,
@@ -146,16 +145,13 @@ class DataHandler(BaseHandler):
         if task_status['status'] != Status.SUCCESS:
             raise tornado.web.HTTPError(404, f'Wrong task status ({task_status["status"]}).')
 
-        try:
-            # Only first file in the directory will be uploaded. Assumption
-            # is that every task can only have a single output file.
-            path = os.path.join(task_config.get('data_dir'), task_id)
-            path = os.path.join(path, os.listdir(path)[0])
-        except (FileNotFoundError, IndexError):
+        file = FSHandler(task_id)
+
+        if not file.exists():
             raise tornado.web.HTTPError(404, 'No such resource.')
 
         # FIXME figure out way to do this async
-        with open(path, 'rb') as f:
+        with file.byte_reader as f:
             while True:
                 data = f.read(16384)
                 if not data:

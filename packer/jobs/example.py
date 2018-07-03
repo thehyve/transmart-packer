@@ -1,8 +1,7 @@
 import logging
 import time
-import os
 
-from ..tasks import BaseDataTask, Status, app
+from ..tasks import BaseDataTask, Status, app, FSHandler
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +23,9 @@ def add(self: BaseDataTask, x: int, y: int) -> None:
 
     value = x + y
     logger.info('Calculated value: {}'.format(value))
-    path = self.get_data_dir()
 
-    with open(os.path.join(path, 'result.zip'), 'w') as writer:
+    with FSHandler(self.task_id).writer as writer:
         writer.write(f'{value}')
 
-    logger.info(f'Stored to disk: {path}.')
+    logger.info(f'Stored to disk.')
 

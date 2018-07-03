@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 app = Celery('tasks', backend=redis_config['address'], broker=redis_config['address'])
 app.autodiscover_tasks(['packer.jobs'], 'jobs')
 
+os.makedirs(task_config['data_dir'], exist_ok=True)
+
 
 class Status:
     REGISTERED = 'REGISTERED'
@@ -150,3 +152,58 @@ class TaskStatusGeneric:
     def create(self, **kwargs):
         kwargs['task_id'] = self.task_id
         redis.set(self.key, json.dumps(kwargs))
+
+
+class FileHandlerABC(metaclass=abc.ABCMeta):
+
+    def __init__(self, task_id):
+        self.task_id = task_id
+
+    @abc.abstractmethod
+    def exists(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def reader(self):
+        """ Read file normally """
+        pass
+
+    @property
+    @abc.abstractmethod
+    def byte_reader(self):
+        """ Read file as bytes. """
+
+    @property
+    @abc.abstractmethod
+    def writer(self):
+        """ Write text to file. """
+
+
+class FSHandler(FileHandlerABC):
+    """
+    Provide method for reading and writing the output file of a task to filesystem.
+    """
+
+    @property
+    def path(self):
+        return os.path.join(task_config['data_dir'], self.task_id)
+
+    def _handler(self, mode):
+        return open(self.path, mode)
+
+    def exists(self):
+        return os.path.exists(self.path)
+
+    @property
+    def reader(self):
+        return self._handler('r')
+
+    @property
+    def byte_reader(self):
+        """ Read file as bytes. """
+        return self._handler('rb')
+
+    @property
+    def writer(self):
+        return self._handler('w')

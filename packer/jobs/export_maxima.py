@@ -1,11 +1,9 @@
 import logging
-import time
 from transmart.api.v2.data_structures import ObservationSet
 import requests
-import json
 
 from ..config import transmart_config
-from ..tasks import BaseDataTask, Status, app
+from ..tasks import BaseDataTask, Status, app, FSHandler
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +31,7 @@ def export_maxima(self: BaseDataTask, constraint):
 
     self.update_status(Status.RUNNING, 'Writing export to disk.')
 
-    with self.open_writer('observations.tsv') as writer:
+    with FSHandler(self.task_id).writer as writer:
         obs.to_csv(writer, sep='\t', index=False)
 
     logger.info(f'Stored to disk: {self.task_id}')
