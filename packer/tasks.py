@@ -3,7 +3,6 @@ import json
 import logging
 import os
 from celery import Celery, Task
-from celery.utils import cached_property
 
 from .config import redis_config, task_config
 from .redis_client import redis
@@ -98,6 +97,9 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
         if create:
             os.makedirs(path, exist_ok=True)
         return path
+
+    def open_writer(self, filename):
+        return open(os.path.join(self.get_data_dir(), filename), 'w')
 
     @property
     def task_id(self):

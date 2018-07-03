@@ -99,11 +99,12 @@ class CreateJobHandler(BaseHandler):
             user=self.user,
             created_at=str(datetime.utcnow())
         )
-
+        log.info(f'headers: {self.request.headers}')
         try:
             task.apply_async(
                 kwargs=job_parameters,
-                task_id=task_id
+                task_id=task_id,
+                headers=self.request.headers
             )
         except Exception as e:
             raise tornado.web.HTTPError(500, str(e))

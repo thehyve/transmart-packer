@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 @app.task(bind=True, base=BaseDataTask)
-def add(self, x, y):
+def add(self: BaseDataTask, x: int, y: int) -> None:
     """
     Example task that does basic additions of two integers.
 
-    :param self: Required for bind to BaseDataTask
+    :param self: first argument is always required for bind to BaseDataTask.
     :param x: should be in job_parameters.
     :param y: should be in job_parameters.
     """
