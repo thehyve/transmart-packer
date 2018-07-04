@@ -153,6 +153,10 @@ class TaskStatusGeneric:
         kwargs['task_id'] = self.task_id
         redis.set(self.key, json.dumps(kwargs))
 
+    async def create_async(self, async_redis, **kwargs):
+        kwargs['task_id'] = self.task_id
+        await async_redis.set(self.key, json.dumps(kwargs))
+
 
 class FileHandlerABC(metaclass=abc.ABCMeta):
 

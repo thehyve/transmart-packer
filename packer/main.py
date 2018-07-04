@@ -15,34 +15,38 @@ from tornado.options import define
 
 import packer.jobs as jobs
 from .config import tornado_config, redis_config
-from .redis_client import redis
 from .tasks import TaskStatusGeneric, Status, FSHandler
 
 USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
 
-class BaseHandler(tornado.web.RequestHandler):
+def get_current_user(self):
+    """ output of this is accessible in requests as self.current_user """
+    if self.request.headers.get("Authorization"):
+        token = self.request.headers.get("Authorization")
+        token = token.split('Bearer ')[-1]  # strip 'Bearer ' from token so it can be read.
 
-    def get_current_user(self):
-        """ output of this is accessible in requests as self.current_user """
-        if self.request.headers.get("Authorization"):
-            token = self.request.headers.get("Authorization")
-            token = token.split('Bearer ')[-1]  # strip 'Bearer ' from token so it can be read.
-            user_token = jwt.decode(token, verify=False)
-            subject = user_token.get('sub')
-            log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
-            return subject
+        # FIXME add shared secret from keycloak to properly verify users.
+        user_token = jwt.decode(token, verify=False)
+        subject = user_token.get('sub')
+        log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
+        return subject
 
+    else:
+        # TODO remove, using session cookie for testing now
+        log.warning('No authorization provided. Using session.')
+        cookie = self.get_secure_cookie(USER_COOKIE)
+        if cookie is not None:
+            return cookie.decode()
         else:
-            # TODO remove, using session cookie for testing now
-            log.warning('No authorization provided. Using session.')
-            cookie = self.get_secure_cookie(USER_COOKIE)
-            if cookie is not None:
-                return cookie.decode()
-            else:
-                log.warning('Creating session cookie.')
-                self.set_secure_cookie(USER_COOKIE, str(uuid.uuid4()), expires_days=1)
-                return self.get_current_user()
+            log.warning('Creating session cookie.')
+            fake_id = str(uuid.uuid4())
+            self.set_secure_cookie(USER_COOKIE, fake_id, expires_days=1)
+            return fake_id
+
+
+class BaseHandler(tornado.web.RequestHandler):
+    get_current_user = get_current_user
 
 
 class JobListHandler(BaseHandler):
@@ -54,7 +58,7 @@ class JobListHandler(BaseHandler):
         log.info(f'Getting jobs for user: {self.current_user}')
         jobs_ = await self.application.redis.smembers(f'jobs:{self.current_user}')
         self.write(
-            {'jobs': [TaskStatusGeneric(job).get() for job in list(jobs_)]}
+            {'jobs': [TaskStatusGeneric(job).get() for job in jobs_]}
         )
         self.finish()
 
@@ -66,7 +70,7 @@ class CreateJobHandler(BaseHandler):
 
     arguments = ('job_type', 'job_parameters')
 
-    def create(self, job_type, job_parameters):
+    async def create(self, job_type, job_parameters):
         log.info(f'New job request ({job_type}) for user: {self.current_user}')
 
         # Find the right job, and check parameters
@@ -82,10 +86,11 @@ class CreateJobHandler(BaseHandler):
             raise HTTPError(400, 'Expected json-like job_parameters.')
 
         task_id = str(uuid.uuid4())  # Job id used for tracking.
-        redis.sadd(f'jobs:{self.current_user}', task_id)
+        await self.application.redis.sadd(f'jobs:{self.current_user}', task_id)
 
         task_status = TaskStatusGeneric(task_id)
-        task_status.create(
+        await task_status.create_async(
+            async_redis=self.application.redis,
             job_type=job_type,
             job_parameters=job_parameters,
             status=Status.REGISTERED,
@@ -105,14 +110,14 @@ class CreateJobHandler(BaseHandler):
         self.write(task_status.get())
         self.finish()
 
-    def get(self):
+    async def get(self):
         kwargs = {arg: self.get_argument(arg) for arg in self.arguments}
-        self.create(**kwargs)
+        await self.create(**kwargs)
 
-    def post(self):
+    async def post(self):
         # FIXME In proper parsing of dictionary from request data. Have to request as string.
         kwargs = {arg: self.get_body_argument(arg) for arg in self.arguments}
-        self.create(**kwargs)
+        await self.create(**kwargs)
 
 
 class JobStatusHandler(BaseHandler):
@@ -169,11 +174,7 @@ class DataHandler(BaseHandler):
 
 
 class StatusWebSocket(tornado.websocket.WebSocketHandler):
-
-    @property
-    def user(self):
-        # FIXME Setup keycloak here.
-        return self.get_secure_cookie(USER_COOKIE).decode()
+    get_current_user = get_current_user
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -185,9 +186,9 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     async def open(self):
         log.info("WebSocket opened")
-        channel, = await self.application.redis.subscribe(f'channel:{self.current_user}')
+        self.sub, = await self.application.redis.subscribe(f'channel:{self.current_user}')
 
-        open_msg = f'Listening to channel: {channel.name.encode()!r}'
+        open_msg = f'Listening to channel: {self.sub.name.decode()!r}'
         log.info(open_msg)
         self.write_message(open_msg)
 
@@ -197,13 +198,15 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
                 logging.info(msg)
                 self.write_message(msg)
 
-        await async_reader(channel)
+        await async_reader(self.sub)
 
-    def on_message(self, message):
+    async def on_message(self, message):
         log.info(f"Message received: {message}")
 
-    def on_close(self):
+    async def on_close(self):
         log.info("WebSocket closed by client.")
+        self.sub.unsubscribe()
+        log.info("Unsubscribed from channel.")
 
 
 class Application(tornado.web.Application):
@@ -214,7 +217,7 @@ class Application(tornado.web.Application):
 
     def init_with_loop(self, loop):
         self.redis = loop.run_until_complete(
-            aioredis.create_redis(
+            aioredis.create_redis_pool(
                 (redis_config.get("host"), redis_config.get("port")),
                 loop=loop,
                 encoding='utf-8'
