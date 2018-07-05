@@ -1,9 +1,12 @@
 import logging
-from transmart.api.v2.data_structures import ObservationSet
-import requests
 
+import requests
+from transmart.api.v2.data_structures import ObservationSet
+
+from packer.file_handling import FSHandler
+from packer.task_status import Status
 from ..config import transmart_config
-from ..tasks import BaseDataTask, Status, app, FSHandler
+from ..tasks import BaseDataTask, app
 
 logger = logging.getLogger(__name__)
 

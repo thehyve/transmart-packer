@@ -3,19 +3,21 @@ import logging
 import uuid
 from datetime import datetime
 
-import aioredis
 import jwt
 import tornado.ioloop
 import tornado.web
-from tornado.web import HTTPError
 import tornado.websocket
 from tornado import iostream, gen
 from tornado.log import app_log as log
 from tornado.options import define
+from tornado.web import HTTPError
 
 import packer.jobs as jobs
-from .config import tornado_config, redis_config
-from .tasks import TaskStatusGeneric, Status, FSHandler
+from packer.file_handling import FSHandler
+from packer.task_status import Status, TaskStatusAsync
+from .config import tornado_config
+from .redis_client import get_async_redis
+from .tasks import app
 
 USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
@@ -48,6 +50,24 @@ def get_current_user(self):
 class BaseHandler(tornado.web.RequestHandler):
     get_current_user = get_current_user
 
+    @property
+    def user_jobs_key(self):
+        return f'jobs:{self.current_user}'
+
+    async def get_task_status(self, task_id):
+        """
+        Checks whether a task exists and current user has permissions to view.
+        Will raise 404 if not, else will return the object to control it.
+
+        :param task_id: uuid
+        :return: TaskStatus object.
+        """
+        is_job = await self.application.redis.sismember(self.user_jobs_key, task_id)
+        if not is_job:
+            raise HTTPError(404, f'There is no task with id {task_id!r}.')
+        else:
+            return TaskStatusAsync(task_id, self.application.redis)
+
 
 class JobListHandler(BaseHandler):
     """
@@ -58,7 +78,8 @@ class JobListHandler(BaseHandler):
         log.info(f'Getting jobs for user: {self.current_user}')
         jobs_ = await self.application.redis.smembers(f'jobs:{self.current_user}')
         self.write(
-            {'jobs': [TaskStatusGeneric(job).get() for job in jobs_]}
+            {'jobs': [await TaskStatusAsync(job, self.application.redis).get() for job in jobs_],
+             'available_job_types': [job for job in jobs.registry.keys()]}
         )
         self.finish()
 
@@ -86,11 +107,10 @@ class CreateJobHandler(BaseHandler):
             raise HTTPError(400, 'Expected json-like job_parameters.')
 
         task_id = str(uuid.uuid4())  # Job id used for tracking.
-        await self.application.redis.sadd(f'jobs:{self.current_user}', task_id)
+        await self.application.redis.sadd(self.user_jobs_key, task_id)
 
-        task_status = TaskStatusGeneric(task_id)
-        await task_status.create_async(
-            async_redis=self.application.redis,
+        task_status = await self.get_task_status(task_id)
+        await task_status.create(
             job_type=job_type,
             job_parameters=job_parameters,
             status=Status.REGISTERED,
@@ -107,7 +127,7 @@ class CreateJobHandler(BaseHandler):
         except Exception as e:
             raise tornado.web.HTTPError(500, str(e))
 
-        self.write(task_status.get())
+        self.write(await task_status.get())
         self.finish()
 
     async def get(self):
@@ -125,8 +145,25 @@ class JobStatusHandler(BaseHandler):
     Returns status object for single task.
     """
 
-    def get(self, task_id):
-        self.write(TaskStatusGeneric(task_id).get())
+    async def get(self, task_id):
+        task_status = await self.get_task_status(task_id)
+        self.write(await task_status.get())
+        self.finish()
+
+
+class JobCancelHandler(BaseHandler):
+    """
+    Returns status object for single task.
+    """
+
+    async def get(self, task_id):
+        task_status = await self.get_task_status(task_id)
+        app.control.revoke(task_id, terminate=True, signal='SIGUSR1')
+        logging.info(f'Cancel signal sent to worker for task: {task_id}')
+        await task_status.update(
+            status=Status.CANCELLED,
+            message='Cancelled prior to execution.'
+        )
         self.finish()
 
 
@@ -136,18 +173,20 @@ class DataHandler(BaseHandler):
     """
 
     async def get(self, task_id):
-        task_status = TaskStatusGeneric(task_id).get()
+        task_status = await self.get_task_status(task_id)
+        task_status = task_status.get()
 
+        # Should never happen, but let's check to be sure.
         if task_status['user'] != self.current_user:
             raise HTTPError(403, 'Forbidden.')
 
         if task_status['status'] != Status.SUCCESS:
-            raise HTTPError(404, f'Wrong task status ({task_status["status"]}).')
+            raise HTTPError(401, f'Wrong task status ({task_status["status"]}).')
 
         file = FSHandler(task_id)
 
         if not file.exists():
-            raise HTTPError(404, 'No such resource.')
+            raise HTTPError(404, 'Resource not found. Contact administrator.')
 
         # chunk size to read
         chunk_size = 1024 * 1024 * 1  # 1 MiB
@@ -205,7 +244,7 @@ class StatusWebSocket(tornado.websocket.WebSocketHandler):
 
     async def on_close(self):
         log.info("WebSocket closed by client.")
-        self.sub.unsubscribe()
+        await self.sub.unsubscribe()
         log.info("Unsubscribed from channel.")
 
 
@@ -216,13 +255,7 @@ class Application(tornado.web.Application):
         super().__init__(*args, **kwargs)
 
     def init_with_loop(self, loop):
-        self.redis = loop.run_until_complete(
-            aioredis.create_redis_pool(
-                (redis_config.get("host"), redis_config.get("port")),
-                loop=loop,
-                encoding='utf-8'
-            )
-        )
+        self.redis = get_async_redis(loop)
 
 
 def make_web_app():
@@ -232,6 +265,7 @@ def make_web_app():
         (r"/jobs/create", CreateJobHandler),
         (r"/jobs/status/(.+)", JobStatusHandler),
         (r"/jobs/data/(.+)", DataHandler),
+        (r"/jobs/cancel/(.+)", JobCancelHandler),
         (r"/jobs/subscribe", StatusWebSocket)
     ], **tornado_config)
 

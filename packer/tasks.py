@@ -1,9 +1,11 @@
 import abc
-import json
 import logging
 import os
-from celery import Celery, Task
 
+from celery import Celery, Task
+from celery.exceptions import SoftTimeLimitExceeded
+
+from packer.task_status import Status, TaskStatus
 from .config import redis_config, task_config
 from .redis_client import redis
 
@@ -14,14 +16,6 @@ app = Celery('tasks', backend=redis_config['address'], broker=redis_config['addr
 app.autodiscover_tasks(['packer.jobs'], 'jobs')
 
 os.makedirs(task_config['data_dir'], exist_ok=True)
-
-
-class Status:
-    REGISTERED = 'REGISTERED'
-    FETCHING = 'FETCHING'
-    RUNNING = 'RUNNING'
-    SUCCESS = 'SUCCESS'
-    FAILED = 'FAILED'
 
 
 class BaseDataTask(Task, metaclass=abc.ABCMeta):
@@ -73,7 +67,16 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
         Returns:
             None: The return value of this handler is ignored.
         """
-        self.update_status(status=Status.FAILED, message=f'Task failed: {exc}')
+        if type(exc) == SoftTimeLimitExceeded:
+            self.update_status(
+                status=Status.CANCELLED,
+                message='Task cancelled during execution or task passed time limit.'
+            )
+        else:
+            self.update_status(
+                status=Status.FAILED,
+                message=f'Task failed with {exc.__class__.__name__}: {exc}'
+            )
 
     def after_return(self, status, retval, task_id, args, kwargs, einfo):
         """Handler called after the task returns.
@@ -109,7 +112,7 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
 
     @property
     def task_status(self):
-        return TaskStatusGeneric(self.task_id)
+        return TaskStatus(self.task_id)
 
     @property
     def channel(self):
@@ -124,7 +127,7 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
         :param message: message for client.
         """
         self.task_status.update(status=status, message=message)
-        logging.info(f'Status update for {self.task_id}: {message} ({status})')
+        logger.info(f'Status update for {self.task_id}: {message} ({status})')
         redis.publish(
             self.channel,
             {
@@ -133,81 +136,3 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
                 'message': message
             }
         )
-
-
-class TaskStatusGeneric:
-
-    def __init__(self, task_id):
-        self.task_id = task_id
-        self.key = f'job_status:{self.task_id}'
-
-    def get(self):
-        return json.loads(redis.get(self.key))
-
-    def update(self, **kwargs):
-        obj = self.get()
-        obj.update(**kwargs)
-        self.create(**obj)
-
-    def create(self, **kwargs):
-        kwargs['task_id'] = self.task_id
-        redis.set(self.key, json.dumps(kwargs))
-
-    async def create_async(self, async_redis, **kwargs):
-        kwargs['task_id'] = self.task_id
-        await async_redis.set(self.key, json.dumps(kwargs))
-
-
-class FileHandlerABC(metaclass=abc.ABCMeta):
-
-    def __init__(self, task_id):
-        self.task_id = task_id
-
-    @abc.abstractmethod
-    def exists(self):
-        pass
-
-    @property
-    @abc.abstractmethod
-    def reader(self):
-        """ Read file normally """
-        pass
-
-    @property
-    @abc.abstractmethod
-    def byte_reader(self):
-        """ Read file as bytes. """
-
-    @property
-    @abc.abstractmethod
-    def writer(self):
-        """ Write text to file. """
-
-
-class FSHandler(FileHandlerABC):
-    """
-    Provide method for reading and writing the output file of a task to filesystem.
-    """
-
-    @property
-    def path(self):
-        return os.path.join(task_config['data_dir'], self.task_id)
-
-    def _handler(self, mode):
-        return open(self.path, mode)
-
-    def exists(self):
-        return os.path.exists(self.path)
-
-    @property
-    def reader(self):
-        return self._handler('r')
-
-    @property
-    def byte_reader(self):
-        """ Read file as bytes. """
-        return self._handler('rb')
-
-    @property
-    def writer(self):
-        return self._handler('w')

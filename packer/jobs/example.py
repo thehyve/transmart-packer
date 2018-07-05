@@ -1,7 +1,9 @@
 import logging
 import time
 
-from ..tasks import BaseDataTask, Status, app, FSHandler
+from packer.file_handling import FSHandler
+from packer.task_status import Status
+from ..tasks import BaseDataTask, app
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +18,7 @@ def add(self: BaseDataTask, x: int, y: int) -> None:
     :param y: should be in job_parameters.
     """
 
-    for i in range(10, 0, -1):
+    for i in range(20, 0, -1):
         msg = f'Task will be ready in {i} seconds'
         self.update_status(Status.RUNNING, msg)
         time.sleep(1)
