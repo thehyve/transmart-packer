@@ -89,10 +89,14 @@ class CreateJobHandler(BaseHandler):
     Start any available job type.
     """
 
-    arguments = ('job_type', 'job_parameters')
+    async def create(self, job_type: str, job_parameters: dict):
 
-    async def create(self, job_type, job_parameters):
         log.info(f'New job request ({job_type}) for user: {self.current_user}')
+        if not isinstance(job_parameters, dict):
+            msg = f'Unexpected argument, "job_parameters" should be in ' \
+                  f'dict-like, but got {type(job_parameters)}'
+            log.error(msg)
+            raise HTTPError(400, msg)
 
         # Find the right job, and check parameters
         task = jobs.registry.get(job_type)
@@ -100,11 +104,6 @@ class CreateJobHandler(BaseHandler):
         if task is None:
             raise HTTPError(404, f'Job {job_type!r} not found.')
         log.info(f'Job {job_type!r} found.')
-
-        try:
-            job_parameters = json.loads(job_parameters)
-        except json.JSONDecodeError:
-            raise HTTPError(400, 'Expected json-like job_parameters.')
 
         task_id = str(uuid.uuid4())  # Job id used for tracking.
         await self.application.redis.sadd(self.user_jobs_key, task_id)
@@ -131,12 +130,20 @@ class CreateJobHandler(BaseHandler):
         self.finish()
 
     async def get(self):
-        kwargs = {arg: self.get_argument(arg) for arg in self.arguments}
+        kwargs = {'job_type': self.get_argument('job_type')}
+        try:
+            kwargs['job_parameters'] = json.loads(kwargs['job_parameters'])
+        except json.JSONDecodeError:
+            raise HTTPError(400, 'Expected valid JSON job parameters.')
+
         await self.create(**kwargs)
 
     async def post(self):
-        # FIXME In proper parsing of dictionary from request data. Have to request as string.
-        kwargs = {arg: self.get_body_argument(arg) for arg in self.arguments}
+        try:
+            kwargs = json.loads(self.request.body)
+        except json.JSONDecodeError:
+            raise HTTPError(400, 'Expected are valid JSON parameters.')
+
         await self.create(**kwargs)
 
 
