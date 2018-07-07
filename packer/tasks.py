@@ -2,6 +2,8 @@ import abc
 import logging
 import os
 
+import json
+
 from celery import Celery, Task
 from celery.exceptions import SoftTimeLimitExceeded
 
@@ -130,9 +132,9 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
         logger.info(f'Status update for {self.task_id}: {message} ({status})')
         redis.publish(
             self.channel,
-            {
+            json.dumps({
                 'task_id': self.task_id,
                 'status': status,
                 'message': message
-            }
+            })
         )

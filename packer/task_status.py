@@ -21,15 +21,15 @@ class TaskStatusABC(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def create(self, **kwargs):
-        pass
+        """ Store status for this task based on kwargs """
 
     @abc.abstractmethod
     def update(self, **kwargs):
-        pass
+        """ Update key-value pairs in kwargs """
 
     @abc.abstractmethod
     def get(self):
-        pass
+        """ Get the status as dictionary """
 
 
 class TaskStatus(TaskStatusABC):

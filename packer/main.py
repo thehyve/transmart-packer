@@ -89,9 +89,15 @@ class CreateJobHandler(BaseHandler):
     Start any available job type.
     """
 
-    async def create(self, job_type: str, job_parameters: dict):
+    async def create(self, job_type: str, job_parameters: dict, **kwargs):
 
         log.info(f'New job request ({job_type}) for user: {self.current_user}')
+
+        if kwargs:
+            msg = f'Illegal arguments provided: {", ".join([k for k in kwargs.keys()])}.'
+            log.info(msg)
+            raise HTTPError(400, msg)
+
         if not isinstance(job_parameters, dict):
             msg = f'Unexpected argument, "job_parameters" should be in ' \
                   f'dict-like, but got {type(job_parameters)}'
@@ -124,15 +130,16 @@ class CreateJobHandler(BaseHandler):
                 headers=self.request.headers
             )
         except Exception as e:
-            raise tornado.web.HTTPError(500, str(e))
+            raise tornado.web.HTTPError(400, str(e))
 
         self.write(await task_status.get())
         self.finish()
 
     async def get(self):
-        kwargs = {'job_type': self.get_argument('job_type')}
+        kwargs = self.request.arguments
+        kwargs['job_type'] = self.get_argument('job_type')
         try:
-            kwargs['job_parameters'] = json.loads(kwargs['job_parameters'])
+            kwargs['job_parameters'] = json.loads(self.get_argument('job_parameters'))
         except json.JSONDecodeError:
             raise HTTPError(400, 'Expected valid JSON job parameters.')
 
@@ -181,22 +188,22 @@ class DataHandler(BaseHandler):
 
     async def get(self, task_id):
         task_status = await self.get_task_status(task_id)
-        task_status = task_status.get()
+        task_status = await task_status.get()
 
         # Should never happen, but let's check to be sure.
         if task_status['user'] != self.current_user:
-            raise HTTPError(403, 'Forbidden.')
+            raise HTTPError(401, 'Unauthorized.')
 
         if task_status['status'] != Status.SUCCESS:
-            raise HTTPError(401, f'Wrong task status ({task_status["status"]}).')
+            raise HTTPError(403, f'Wrong task status ({task_status["status"]}), '
+                                 f'has to be {Status.SUCCESS}.')
 
         file = FSHandler(task_id)
 
         if not file.exists():
             raise HTTPError(404, 'Resource not found. Contact administrator.')
 
-        # chunk size to read
-        chunk_size = 1024 * 1024 * 1  # 1 MiB
+        chunk_size = 1024 * 1024 * 1  # 1 MiB chunk size to read
 
         with file.byte_reader as f:
             while True:
@@ -206,10 +213,9 @@ class DataHandler(BaseHandler):
                 try:
                     self.write(chunk)
                     await self.flush()
+
                 except iostream.StreamClosedError:
-                    # this means the client has closed the connection
-                    # so break the loop
-                    break
+                    break  # the client has closed the connection
 
                 finally:
                     del chunk
@@ -265,27 +271,30 @@ class Application(tornado.web.Application):
         self.redis = get_async_redis(loop)
 
 
-def make_web_app():
-    log.info('Starting webapp')
-    return Application([
+def make_web_app(port, tornado_options):
+    """
+    Create tornado app and loop.
+
+    :return: (app, loop)
+    """
+    log.info('Creating web application.')
+    web_app = Application([
         (r"/jobs", JobListHandler),
         (r"/jobs/create", CreateJobHandler),
         (r"/jobs/status/(.+)", JobStatusHandler),
         (r"/jobs/data/(.+)", DataHandler),
         (r"/jobs/cancel/(.+)", JobCancelHandler),
         (r"/jobs/subscribe", StatusWebSocket)
-    ], **tornado_config)
+    ], **tornado_options)
+    web_app.listen(port)
+    loop = tornado.ioloop.IOLoop.current()
+    web_app.init_with_loop(loop.asyncio_loop)
+    return web_app, loop
 
 
 def main():
     tornado.options.parse_command_line()
-    app = make_web_app()
-    app.listen(tornado_config.get('port', 8888))
-    loop = tornado.ioloop.IOLoop.current()
-    app.init_with_loop(loop.asyncio_loop)
-
+    port = tornado_config.get('port', 8888)
+    web_app, loop = make_web_app(port, tornado_config)
+    log.info(f'Starting at http://localhost:{web_app.settings.get("port")}')
     loop.start()
-
-
-if __name__ == "__main__":
-    main()

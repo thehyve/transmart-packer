@@ -11,23 +11,22 @@ class FileHandlerABC(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def exists(self):
-        pass
+        """ Returns True if the resource exists, else False """
 
     @property
     @abc.abstractmethod
     def reader(self):
-        """ Read file normally """
-        pass
+        """ Return file-like object for reading """
 
     @property
     @abc.abstractmethod
     def byte_reader(self):
-        """ Read file as bytes. """
+        """ Return file-like object for reading in byte mode """
 
     @property
     @abc.abstractmethod
     def writer(self):
-        """ Write text to file. """
+        """ Return file-like object for writing """
 
 
 class FSHandler(FileHandlerABC):
