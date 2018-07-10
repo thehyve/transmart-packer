@@ -1,7 +1,11 @@
 import logging
 
 import requests
-from transmart.api.v2.data_structures import ObservationSet
+
+try:
+    from transmart.api.v2.data_structures import ObservationSet
+except ImportError as e:
+    logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 from packer.file_handling import FSHandler
 from packer.task_status import Status

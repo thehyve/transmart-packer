@@ -14,7 +14,7 @@ from .redis_client import redis
 logger = logging.getLogger(__name__)
 
 
-app = Celery('tasks', backend=redis_config['address'], broker=redis_config['address'])
+app = Celery('tasks', broker=redis_config['url'])
 app.autodiscover_tasks(['packer.jobs'], 'jobs')
 
 os.makedirs(task_config['data_dir'], exist_ok=True)

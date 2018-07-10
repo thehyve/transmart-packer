@@ -1,0 +1,36 @@
+version: "3"
+services:
+    redis:
+        image: redis:alpine
+        command: ["redis-server", "--appendonly", "yes"]
+        hostname: redis
+        volumes:
+            - redis-data:/data
+    webapp:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        command: ['python', '-m', 'packer']
+        ports:
+            - 8999:8999
+        depends_on:
+            - redis
+        volumes:
+            - .:/app
+        links:
+            - redis
+
+    worker:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
+        depends_on:
+            - redis
+        volumes:
+            - .:/app
+        links:
+            - redis
+
+volumes:
+  redis-data:

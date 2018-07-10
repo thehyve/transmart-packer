@@ -1,4 +1,4 @@
-
+import os
 
 tornado_config = dict(
     cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
@@ -15,9 +15,7 @@ transmart_config = dict(
 )
 
 redis_config = dict(
-    host='localhost',
-    port=6379,
-    address='redis://localhost'
+    url=os.environ.get('REDIS_URL', 'redis://localhost:6379'),
 )
 
 task_config = dict(
