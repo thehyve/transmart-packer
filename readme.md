@@ -29,7 +29,7 @@ celery -A packer.tasks worker --loglevel=info
 and
 
 ```bash
-python -m packer.main
+python -m packer
 ``` 
 
 Alternatively, you could build and run the stack from code using docker-compose. This
