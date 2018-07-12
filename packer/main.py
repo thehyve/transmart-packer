@@ -120,7 +120,7 @@ class CreateJobHandler(BaseHandler):
             job_parameters=job_parameters,
             status=Status.REGISTERED,
             user=self.current_user,
-            created_at=str(datetime.utcnow())
+            created_at=str(datetime.now())
         )
 
         try:

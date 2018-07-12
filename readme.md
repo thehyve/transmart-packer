@@ -4,7 +4,7 @@ Run data transformation jobs for transmart.
 
 ## install
 
-First make virtual environment to install dependencies.
+First make virtual environment to install dependencies using `Python3.6+`
 
 ```bash
 pip install -r requirements
@@ -19,6 +19,10 @@ pip install -r requirements
 From root dir run:
 
 ```bash
+redis-server
+``` 
+
+```bash
 celery -A packer.tasks worker --loglevel=info
 ``` 
 
@@ -28,7 +32,27 @@ and
 python -m packer.main
 ``` 
 
+Alternatively, you could build and run the stack from code using docker-compose. This
+has only been tested using Docker for Mac, but should work regardless.
 
+```bash
+# Downloads redis image and creates image with project dependencies.
+docker-compose build
+
+# After build is complete, start via:
+docker-compose up
+``` 
+
+On code change the webserver will automatically restart, but the Celery workers will not.
+After updating the Celery task logic, you will need to restart the Docker container.
+
+## Testing
+To run the test suite, we have to start redis-server and celery workers with the commands above.
+Then you can run:
+
+```bash
+python -m unittest discover -s ./tests
+```
 
 ## Usage
 

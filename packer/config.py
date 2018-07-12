@@ -21,3 +21,11 @@ redis_config = dict(
 task_config = dict(
     data_dir='/tmp/packer/'
 )
+
+celery_config = dict(
+    task_serializer='json',
+    accept_content=['json'],  # Ignore other content
+    result_serializer='json',
+    timezone='Europe/Amsterdam',
+    enable_utc=True,
+)

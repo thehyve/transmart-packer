@@ -8,13 +8,14 @@ from celery import Celery, Task
 from celery.exceptions import SoftTimeLimitExceeded
 
 from packer.task_status import Status, TaskStatus
-from .config import redis_config, task_config
+from .config import redis_config, task_config, celery_config
 from .redis_client import redis
 
 logger = logging.getLogger(__name__)
 
 
 app = Celery('tasks', broker=redis_config['url'])
+app.conf.update(**celery_config)
 app.autodiscover_tasks(['packer.jobs'], 'jobs')
 
 os.makedirs(task_config['data_dir'], exist_ok=True)

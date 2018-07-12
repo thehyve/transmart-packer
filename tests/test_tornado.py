@@ -164,6 +164,7 @@ class TestWebAppHandlers(TestHandlerBase):
         self.assertEqual(400, response.code)
 
     def test_status_change(self):
+        """ test status changing from registered, running, to success. """
         response = self.mocked_post('/jobs/create', self.post_args)
         body = json.loads(response.body)
         task_id = body.get("task_id")
@@ -173,6 +174,13 @@ class TestWebAppHandlers(TestHandlerBase):
         body = json.loads(response.body)
         self.assertEqual(Status.RUNNING, body.get('status'))
         self.assertEqual(task_id, body.get('task_id'))
+        for _ in range(10):
+            response = self.mocked_get(f'/jobs/status/{task_id}')
+            body = json.loads(response.body)
+            if Status.SUCCESS == body.get('status'):
+                break
+            time.sleep(0.3)
+        self.assertEqual(Status.SUCCESS, body.get('status'))
 
     def test_status_wrong_task(self):
         response = self.get('/jobs/status/some-non-existent-uuid')

@@ -44,7 +44,10 @@ class TaskStatus(TaskStatusABC):
         self.create(**obj)
 
     def get(self):
-        return json.loads(redis.get(self.key))
+        try:
+            return json.loads(redis.get(self.key))
+        except TypeError:
+            return {}
 
 
 class TaskStatusAsync(TaskStatusABC):
