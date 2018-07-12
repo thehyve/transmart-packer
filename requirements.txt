@@ -1,4 +1,4 @@
-transmart
+transmart[full]
 redis
 celery
 tornado

@@ -19,7 +19,7 @@ redis_config = dict(
 )
 
 task_config = dict(
-    data_dir='/tmp/packer/'
+    data_dir=os.environ.get('DATA_DIR', '/tmp/packer/')
 )
 
 celery_config = dict(
