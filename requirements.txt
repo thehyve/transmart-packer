@@ -5,3 +5,5 @@ tornado
 aioredis
 pyjwt
 requests
+pandas
+numpy
