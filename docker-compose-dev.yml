@@ -7,7 +7,9 @@ services:
         volumes:
             - redis-data:/data
     webapp:
-        image: thehyve/transmart-packer
+        build:
+            context: .
+            dockerfile: ./Dockerfile
         command: ['python', '-m', 'packer']
         ports:
             - 8999:8999
@@ -19,7 +21,9 @@ services:
             - redis
 
     worker:
-        image: thehyve/transmart-packer
+        build:
+            context: .
+            dockerfile: ./Dockerfile
         command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
         depends_on:
             - redis
