@@ -7,11 +7,11 @@ tornado_config = dict(
 )
 
 keycloak_config = dict(
-    oidc_server_url="https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev",
+    oidc_server_url=os.environ.get('KEYCLOAK_URL'),
 )
 
 transmart_config = dict(
-    host='https://transmart-dev.thehyve.net'
+    host=os.environ.get('TRANSMART_URL')
 )
 
 app_config = dict(

@@ -19,6 +19,10 @@ services:
             - .:/app
         links:
             - redis
+        environment:
+          TRANSMART_URL: 'http://localhost:8081'
+          KEYCLOAK_URL: 'http://localhost:8080/auth/realms/dev'
+          CLIENT_ORIGIN_URL: 'http://localhost:4200'
 
     worker:
         build:
