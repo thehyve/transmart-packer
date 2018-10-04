@@ -3,6 +3,7 @@ import datetime as dt
 import pandas as pd
 import numpy as np
 import requests
+from celery.exceptions import Ignore
 
 try:
     from transmart.api.v2.data_structures import ObservationSet
@@ -29,6 +30,7 @@ def tm_conversion_export(self: BaseDataTask, constraint):
     :param constraint: should be in job_parameters.
     """
     handle = f'{transmart_config.get("host")}/v2/observations'
+    logger.info(f'Getting data from observations from {handle!r}')
     self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r}')
     r = requests.post(url=handle,
                       json={'type': 'clinical', 'constraint': constraint},
@@ -39,7 +41,7 @@ def tm_conversion_export(self: BaseDataTask, constraint):
     if r.status_code == 401:
         logging.warning(f'Unauthorized')
         self.update_status(Status.FAILED, 'Unauthorized.')
-        return
+        raise Ignore()
 
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
     obs = ObservationSet(r.json()).dataframe

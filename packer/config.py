@@ -14,6 +14,10 @@ transmart_config = dict(
     host='https://transmart-dev.thehyve.net'
 )
 
+app_config = dict(
+    host=os.environ.get('CLIENT_ORIGIN_URL')
+)
+
 redis_config = dict(
     url=os.environ.get('REDIS_URL', 'redis://localhost:6379'),
 )

@@ -15,7 +15,7 @@ from tornado.web import HTTPError
 import packer.jobs as jobs
 from packer.file_handling import FSHandler
 from packer.task_status import Status, TaskStatusAsync
-from .config import tornado_config
+from .config import tornado_config, app_config
 from .redis_client import get_async_redis
 from .tasks import app
 
@@ -50,6 +50,12 @@ def get_current_user(self):
 class BaseHandler(tornado.web.RequestHandler):
     get_current_user = get_current_user
 
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", app_config.get("host"))
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers", "authorization, content-type")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
     @property
     def user_jobs_key(self):
         return f'jobs:{self.current_user}'
@@ -67,6 +73,11 @@ class BaseHandler(tornado.web.RequestHandler):
             raise HTTPError(404, f'There is no task with id {task_id!r}.')
         else:
             return TaskStatusAsync(task_id, self.application.redis)
+
+    async def options(self, *args):
+        # no body
+        self.set_status(200)
+        self.finish()
 
 
 class JobListHandler(BaseHandler):
