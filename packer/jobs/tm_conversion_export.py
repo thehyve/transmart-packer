@@ -1,5 +1,6 @@
 import logging
 import datetime as dt
+from zipfile import ZipFile
 import pandas as pd
 import numpy as np
 import requests
@@ -49,7 +50,8 @@ def tm_conversion_export(self: BaseDataTask, constraint):
 
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     with FSHandler(self.task_id).writer as writer:
-        reformatted_obs.to_csv(writer, sep='\t', index=False)
+        with ZipFile(writer, 'w') as data_zip:
+            data_zip.writestr('data.tsv', reformatted_obs.to_csv(encoding='utf-8', sep='\t', index=False))
 
     logger.info(f'Stored to disk: {self.task_id}')
 
