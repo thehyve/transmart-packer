@@ -33,3 +33,7 @@ celery_config = dict(
     timezone='Europe/Amsterdam',
     enable_utc=True,
 )
+
+logging_config = dict(
+    path=os.environ.get('LOG_CFG', 'packer/logging.yaml')
+)

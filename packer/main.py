@@ -1,5 +1,8 @@
 import json
 import logging
+import logging.config
+import yaml
+import os
 import uuid
 from datetime import datetime
 
@@ -15,7 +18,7 @@ from tornado.web import HTTPError
 import packer.jobs as jobs
 from packer.file_handling import FSHandler
 from packer.task_status import Status, TaskStatusAsync
-from .config import tornado_config, app_config
+from .config import tornado_config, app_config, logging_config
 from .redis_client import get_async_redis
 from .tasks import app
 
@@ -45,6 +48,19 @@ def get_current_user(self):
             fake_id = str(uuid.uuid4())
             self.set_secure_cookie(USER_COOKIE, fake_id, expires_days=1)
             return fake_id
+
+
+def setup_logging(default_level=logging.INFO):
+    # Setup logging configuration
+    path = logging_config.get('path', 'packer/logging.yaml')
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            log.info(f'Setting logging based on {path} configuration')
+            config = yaml.safe_load(f.read())
+        logging.config.dictConfig(config)
+    else:
+        log.info('Logging configuration not found. Setting basic console log level.')
+        logging.basicConfig(level=default_level)
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -306,6 +322,7 @@ def make_web_app(port, tornado_options):
 def main():
     tornado.options.parse_command_line()
     port = tornado_config.get('port', 8888)
+    setup_logging()
     web_app, loop = make_web_app(port, tornado_config)
     log.info(f'Starting at http://localhost:{web_app.settings.get("port")}')
     loop.start()

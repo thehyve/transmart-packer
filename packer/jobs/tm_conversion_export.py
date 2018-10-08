@@ -18,7 +18,7 @@ from ..tasks import BaseDataTask, app
 logger = logging.getLogger(__name__)
 SEP = '\t'
 DATE_FORMAT = '%d-%m-%Y'
-IDENTIFYING_COLUMN_LIST = ['Patient ID', 'Diagnosis ID', 'Biosource ID', 'Biomaterial ID']
+IDENTIFYING_COLUMN_LIST = ['Patient ID', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID']
 
 
 @app.task(bind=True, base=BaseDataTask)
@@ -39,7 +39,7 @@ def tm_conversion_export(self: BaseDataTask, constraint):
                       })
 
     if r.status_code == 401:
-        logging.warning(f'Unauthorized')
+        logger.error('Export failed. Unauthorized.')
         self.update_status(Status.FAILED, 'Unauthorized.')
         raise Ignore()
 
@@ -48,7 +48,6 @@ def tm_conversion_export(self: BaseDataTask, constraint):
     reformatted_obs = reformat_export(obs)
 
     self.update_status(Status.RUNNING, 'Writing export to disk.')
-
     with FSHandler(self.task_id).writer as writer:
         reformatted_obs.to_csv(writer, sep='\t', index=False)
 
@@ -57,7 +56,7 @@ def tm_conversion_export(self: BaseDataTask, constraint):
 
 def reformat_export(obs):
     if obs.empty:
-        print('Retrieved hypercube is empty!')
+        logger.warn('Retrieved hypercube is empty! Exporting empty result.')
         return obs
 
     # order rows by concept_paths:
@@ -66,6 +65,7 @@ def reformat_export(obs):
     concept_order = obs['concept.name'].unique().tolist()
 
     # reformat columns: rename, drop, merge
+    logger.info('Reformatting columns...')
     obs = reformat_columns(obs)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs, concept_order)
@@ -105,9 +105,10 @@ def drop_higher_level(lowest_level_column, data):
 
 
 def limit_rows_to_lowest_level(data):
-    drop_higher_level('Biomaterial ID', data)
-    drop_higher_level('Biosource ID', data)
-    drop_higher_level('Diagnosis ID', data)
+    logger.info('Removing redundant rows...')
+    drop_higher_level('PMC Biomaterial ID', data)
+    drop_higher_level('PMC Biosource ID', data)
+    drop_higher_level('PMC Diagnosis ID', data)
 
 
 def rebuild_rows(data):

@@ -1,3 +1,4 @@
+PyYAML
 transmart[full]
 redis
 celery
