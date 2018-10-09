@@ -23,12 +23,14 @@ IDENTIFYING_COLUMN_LIST = ['Patient ID', 'PMC Diagnosis ID', 'PMC Biosource ID',
 
 
 @app.task(bind=True, base=BaseDataTask)
-def tm_conversion_export(self: BaseDataTask, constraint):
+def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constraint, **custom_name):
     """
     Reformat hypercube data into a specific export file.
+    Export table with the following IDs: Patient, Diagnosis, Biosource, Biomaterial
 
     :param self: Required for bind to BaseDataTask
     :param constraint: should be in job_parameters.
+    :param custom_name: optional in job_parameters.
     """
     handle = f'{transmart_config.get("host")}/v2/observations'
     logger.info(f'Getting data from observations from {handle!r}')
