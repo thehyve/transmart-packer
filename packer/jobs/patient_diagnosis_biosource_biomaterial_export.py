@@ -46,6 +46,12 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
         self.update_status(Status.FAILED, 'Unauthorized.')
         raise Ignore()
 
+    if r.status_code != 200:
+        logger.error('Export failed. Error occurred.')
+        self.update_status(Status.FAILED, f'Connection error occurred when fetching {handle}. '
+                                          f'Response status {r.status_code}')
+        raise Ignore()
+
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
     obs = ObservationSet(r.json()).dataframe
     reformatted_obs = reformat_export(obs)
@@ -65,17 +71,19 @@ def reformat_export(obs):
 
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
+    obs.rename(columns={'patient.trial': 'Patient ID'}, inplace=True)
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_order = obs['concept.name'].unique().tolist()
+    id_columns = get_identifying_columns(obs)
 
     # reformat columns: rename, drop, merge
     logger.info('Reformatting columns...')
-    obs = reformat_columns(obs)
+    obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs, concept_order)
 
     # propagate data to lower levels and display only rows that represent the lowest level
-    obs_pivot = rebuild_rows(obs_pivot)
+    obs_pivot = rebuild_rows(obs_pivot, id_columns)
     obs_pivot.reset_index(drop=True, inplace=True)
 
     # fill NaNs with empty string
@@ -108,21 +116,23 @@ def drop_higher_level(lowest_level_column, data):
         data.drop(data[conditions].index, inplace=True)
 
 
-def limit_rows_to_lowest_level(data):
+def limit_rows_to_lowest_level(data, id_columns):
     logger.info('Removing redundant rows...')
-    drop_higher_level('PMC Biomaterial ID', data)
-    drop_higher_level('PMC Biosource ID', data)
-    drop_higher_level('PMC Diagnosis ID', data)
+    lowest_level_col_id = len(id_columns)-1
+    for idx, column in enumerate(reversed(id_columns)):
+        if idx == lowest_level_col_id:
+            break
+        drop_higher_level(column, data)
 
 
-def rebuild_rows(data):
+def rebuild_rows(data, id_columns):
     # sort rows by identifying columns
-    data.sort_values(IDENTIFYING_COLUMN_LIST, na_position='first', inplace=True)
-    grouped_data = data.groupby('Patient ID')
+    data.sort_values(id_columns, na_position='first', inplace=True)
+    grouped_data = data.groupby(id_columns[0])
     # propagate data to lower levels
     ffill_data = grouped_data.ffill()
     # limit rows to the lowest level
-    limit_rows_to_lowest_level(ffill_data)
+    limit_rows_to_lowest_level(ffill_data, id_columns)
     return ffill_data
 
 
@@ -139,11 +149,10 @@ def update_date_fields(data, obs):
             obs[column] = data[column].apply(get_date_string)
 
 
-def reformat_columns(obs):
+def reformat_columns(obs, id_columns):
     # rename columns and set indexes
-    obs.rename(columns={'patient.trial': 'Patient ID'}, inplace=True)
     obs.reset_index(inplace=True)
-    headers = np.append(IDENTIFYING_COLUMN_LIST, 'concept.name')
+    headers = np.append(id_columns, 'concept.name')
 
     # prepare 'value' column
     if {'stringValue', 'numericValue'}.issubset(obs.columns):
@@ -172,3 +181,12 @@ def concepts_row_to_columns(obs, concept_order):
     obs_pivot.reset_index(inplace=True)
     obs_pivot.drop(obs_pivot.columns[[0]], axis=1, inplace=True)
     return obs_pivot
+
+
+def get_identifying_columns(obs):
+    columns = []
+    for id_column in IDENTIFYING_COLUMN_LIST:
+        if id_column in obs:
+            columns.append(id_column)
+    logger.info(columns)
+    return columns
