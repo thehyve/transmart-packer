@@ -11,7 +11,8 @@ RUN pip install -r /requirements.txt &&\
     chmod +x /entrypoint.sh
 
 COPY packer /app/packer
-RUN chown -R tornado /app
+RUN mkdir -p /app/tmp_data_dir
+RUN chown -R tornado:tornado /app
 WORKDIR /app
 USER tornado
 
