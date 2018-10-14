@@ -45,6 +45,12 @@ class TestHandlerBase(AsyncHTTPTestCase):
     def get_new_ioloop(self):
         return tornado.ioloop.IOLoop.instance()
 
+    def options(self, url):
+        self.fetch(url, method='OPTIONS')
+
+    def set_default_headers(self):
+        return
+
 
 class TestWebAppHandlers(TestHandlerBase):
     post_args = {
@@ -211,8 +217,8 @@ class TestWebAppHandlers(TestHandlerBase):
 
         response = self.mocked_get(f'/jobs/data/{task_id}')
         self.assertEqual(200, response.code)
-        calculated_value = int(response.body.decode())
-        self.assertEqual(10, calculated_value)
+        calculated_value = response.body
+        self.assertEqual(10, int.from_bytes(calculated_value, byteorder='big'))
 
         response = self.get(f'/jobs/data/{task_id}')
         self.assertEqual(404, response.code)
