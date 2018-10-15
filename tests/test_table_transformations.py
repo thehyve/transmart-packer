@@ -1,24 +1,12 @@
 import unittest
 from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_json_to_pdbb_df, from_obs_df_to_pdbb_df
+    from_obs_df_to_pdbb_df
 import numpy as np
 import pandas as pd
 import pandas.testing as pdt
 
 
 class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
-
-    def test_no_observations(self):
-        observations_api_response = {
-            'dimensionDeclarations': [],
-            'cells': [],
-            'dimensionElements': {}
-        }
-
-        df = from_obs_json_to_pdbb_df(observations_api_response)
-
-        self.assertIsNotNone(df)
-        self.assertEqual(df.size, 0)
 
     def test_result_data_shape(self):
         self.test_data = [
@@ -54,13 +42,15 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P1', 'D1', 'BS1', 'BM2', 42.0, 'Wed Mar 07 01:00:00 CET 2018', 'Skin', 'Diagnosis 1 Name'],
             ['P2', 'D1', 'BS2', 'BM3', 39.0, 'Fri Jan 19 01:00:00 CET 2018', 'Liver', 'Diagnosis 1 Name 2'],
             ['P2', 'D1', 'BS2', 'BM4', 39.0, 'Sun Jun 05 02:00:00 CEST 2011', 'Liver', 'Diagnosis 1 Name 2'],
-        ], columns=['Patient ID', 'PMC Diagnosis ID', 'PMC Biosource ID',
-                                                             'PMC Biomaterial ID', 'Age', 'Date of biomaterial',
-                                                             'Cell type', 'Diagnosis Name']))
+        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+                    'Age', 'Date of biomaterial', 'Cell type', 'Diagnosis Name']))
 
     def test_empty_export_reformatting(self):
         test_obs = pd.DataFrame()
-        self.assertTrue(from_obs_df_to_pdbb_df(test_obs).empty)
+        result_obs = from_obs_df_to_pdbb_df(test_obs)
+        self.assertIsNotNone(result_obs)
+        self.assertTrue(result_obs.empty)
+        self.assertEqual(result_obs.size, 0)
 
 
 if __name__ == '__main__':

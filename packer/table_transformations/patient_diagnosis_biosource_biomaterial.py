@@ -10,7 +10,10 @@ except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 DATE_FORMAT = '%d-%m-%Y'
-IDENTIFYING_COLUMN_LIST = ['Patient ID', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID']
+IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
+                           'PMC Diagnosis ID': 'Diagnosis Id',
+                           'PMC Biosource ID': 'Biosource Id',
+                           'PMC Biomaterial ID': 'Biomaterial Id'}
 
 
 def from_obs_json_to_pdbb_df(obs_json):
@@ -31,19 +34,23 @@ def from_obs_df_to_pdbb_df(obs):
         return obs
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
-    obs.rename(columns={'patient.trial': 'Patient ID'}, inplace=True)
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_order = obs['concept.name'].unique().tolist()
-    id_columns = get_identifying_columns(obs)
+    id_column_dict = get_identifying_columns(obs)
+
     # reformat columns: rename, drop, merge
     logger.info('Reformatting columns...')
+    obs.rename(columns=id_column_dict, inplace=True)
+    id_columns = list(id_column_dict.values())
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs, concept_order)
+
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = rebuild_rows(obs_pivot, id_columns)
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
+
     # fill NaNs with empty string
     obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
@@ -142,9 +149,9 @@ def concepts_row_to_columns(obs, concept_order):
 
 
 def get_identifying_columns(obs):
-    columns = []
-    for id_column in IDENTIFYING_COLUMN_LIST:
-        if id_column in obs:
-            columns.append(id_column)
+    columns = {}
+    for k, v in IDENTIFYING_COLUMN_DICT.items():
+        if k in obs:
+            columns.update({k: v})
     logger.info(columns)
     return columns
