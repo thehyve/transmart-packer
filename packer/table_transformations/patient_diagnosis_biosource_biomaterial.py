@@ -39,15 +39,16 @@ def from_obs_df_to_pdbb_df(obs):
     id_column_dict = get_identifying_columns(obs)
 
     # reformat columns: rename, drop, merge
-    logger.info('Reformatting columns...')
+    logger.info(f'Renaming columns: {id_column_dict}')
     obs.rename(columns=id_column_dict, inplace=True)
     id_columns = list(id_column_dict.values())
+    logger.info('Reformatting columns...')
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs, concept_order)
 
     # propagate data to lower levels and display only rows that represent the lowest level
-    obs_pivot = rebuild_rows(obs_pivot, id_columns)
+    obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
 
@@ -71,13 +72,12 @@ def drop_higher_level(lowest_level_column, data):
         elif column_index == 2:
             conditions = ((data[data.columns[0]] == row[0]) &
                           (data[data.columns[1]] == row[1]) &
-                          (data[data.columns[2]].isnull()) &
-                          (data[data.columns[3]].isnull()))
-        else:
+                          (data[data.columns[2]].isnull()))
+        elif column_index == 1:
             conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]].isnull()) &
-                          (data[data.columns[2]].isnull()) &
-                          (data[data.columns[3]].isnull()))
+                          (data[data.columns[1]].isnull()))
+        else:
+            return
         data.drop(data[conditions].index, inplace=True)
 
 
@@ -90,14 +90,16 @@ def limit_rows_to_lowest_level(data, id_columns):
         drop_higher_level(column, data)
 
 
-def rebuild_rows(data, id_columns):
-    # sort rows by identifying columns
+def merge_redundant_rows(data, id_columns):
+    # sort rows by identifying columns, merging of rows strongly depends on sorting
     data.sort_values(id_columns, na_position='first', inplace=True)
     grouped_data = data.groupby(id_columns[0])
     # propagate data to lower levels
     ffill_data = grouped_data.ffill()
     # limit rows to the lowest level
     limit_rows_to_lowest_level(ffill_data, id_columns)
+    # drop rows with duplicated identifying columns, keep only the last one
+    ffill_data.drop_duplicates(subset=id_columns, keep='last', inplace=True)
     return ffill_data
 
 
@@ -153,5 +155,4 @@ def get_identifying_columns(obs):
     for k, v in IDENTIFYING_COLUMN_DICT.items():
         if k in obs:
             columns.update({k: v})
-    logger.info(columns)
     return columns
