@@ -13,7 +13,7 @@ DATE_FORMAT = '%d-%m-%Y'
 IDENTIFYING_COLUMN_LIST = ['Patient ID', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID']
 
 
-def to_patient_diagnosis_biosource_biomaterial_dataframe(obs_json):
+def from_obs_json_to_pdbb_df(obs_json):
     """
     :param obs_json: json returned by transmart v2/observations call
     :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
@@ -22,32 +22,33 @@ def to_patient_diagnosis_biosource_biomaterial_dataframe(obs_json):
 
     obs = ObservationSet(obs_json).dataframe
 
+    return from_obs_df_to_pdbb_df(obs)
+
+
+def from_obs_df_to_pdbb_df(obs):
     if obs.empty:
         logger.warn('Retrieved hypercube is empty! Exporting empty result.')
         return obs
-
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
     obs.rename(columns={'patient.trial': 'Patient ID'}, inplace=True)
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_order = obs['concept.name'].unique().tolist()
     id_columns = get_identifying_columns(obs)
-
     # reformat columns: rename, drop, merge
     logger.info('Reformatting columns...')
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs, concept_order)
-
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = rebuild_rows(obs_pivot, id_columns)
     obs_pivot.reset_index(drop=True, inplace=True)
-
+    obs_pivot = obs_pivot.rename_axis(None)
     # fill NaNs with empty string
     obs_pivot.fillna('', inplace=True)
-
+    obs_pivot.columns.name = None
     # update date fields with format
-    #update_date_fields(obs_pivot, obs)
+    # update_date_fields(obs_pivot, obs)
     return obs_pivot
 
 

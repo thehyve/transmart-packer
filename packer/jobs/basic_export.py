@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 SEP = '\t'
 
 @app.task(bind=True, base=BaseDataTask)
-def basic_export(self: BaseDataTask, constraint):
+def basic_export(self: BaseDataTask, constraint, **custom_name):
     """
     Example task that does basic additions of two integers.
 
@@ -24,7 +24,7 @@ def basic_export(self: BaseDataTask, constraint):
     :param constraint: should be in job_parameters.
     """
     handle = f'{transmart_config.get("host")}/v2/observations'
-    self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r}')
+    self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r} for a job named {custom_name}.')
     r = requests.post(url=handle,
                       json={'type': 'clinical', 'constraint': constraint},
                       headers={
