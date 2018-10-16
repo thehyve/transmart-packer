@@ -55,8 +55,14 @@ def from_obs_df_to_pdbb_df(obs):
     # fill NaNs with empty string
     obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
+
+    # update integer fields - downcasted to float by ffill function
+    # (NaN does not have an integer representation)
+    obs_pivot = update_integer_fields(obs_pivot)
+
     # update date fields with format
     # update_date_fields(obs_pivot, obs)
+
     return obs_pivot
 
 
@@ -103,6 +109,19 @@ def merge_redundant_rows(data, id_columns):
     return ffill_data
 
 
+def update_integer_fields(data):
+    for col in data.columns:
+        data[col] = data[col].apply(to_int)
+    return data
+
+
+def to_int(x):
+    try:
+        return int(x)
+    except:
+        return x
+
+
 def get_date_string(timestamp, string_format=DATE_FORMAT):
     if pd.notnull(timestamp) and timestamp is not None and timestamp != '':
         return dt.datetime.utcfromtimestamp(float(timestamp) / 1000).strftime(string_format)
@@ -133,7 +152,6 @@ def reformat_columns(obs, id_columns):
     else:
         obs['value'] = ""
     obs = obs.set_index(list(headers), append=True)[['value']]
-
     return obs
 
 
