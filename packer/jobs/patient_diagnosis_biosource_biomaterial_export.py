@@ -1,3 +1,4 @@
+import csv
 import logging
 from zipfile import ZipFile
 import requests
@@ -23,8 +24,9 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     :param constraint: should be in job_parameters.
     :param custom_name: optional in job_parameters.
     """
+    name = custom_name['custom_name']
     handle = f'{transmart_config.get("host")}/v2/observations'
-    logger.info(f'Getting data from observations from {handle!r} for a job named {custom_name}.')
+    logger.info(f'Getting data from observations from {handle!r} for a job named {name}.')
     self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r}')
     r = requests.post(url=handle,
                       json={'type': 'clinical', 'constraint': constraint},
@@ -49,6 +51,6 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     with FSHandler(self.task_id).writer as writer:
         with ZipFile(writer, 'w') as data_zip:
-            data_zip.writestr(f'{custom_name}.tsv', reformatted_obs.to_csv(encoding='utf-8', sep=SEP, index=False))
-
+            data_zip.writestr(f'{name}.tsv', reformatted_obs.to_csv(encoding='utf-8', sep=SEP, index=False,
+                                                                    quoting=csv.QUOTE_NONNUMERIC, quotechar='"'))
     logger.info(f'Stored to disk: {self.task_id}')
