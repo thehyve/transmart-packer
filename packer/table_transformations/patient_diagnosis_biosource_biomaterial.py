@@ -1,4 +1,6 @@
 import datetime as dt
+import re
+
 import pandas as pd
 import numpy as np
 import logging
@@ -9,7 +11,7 @@ try:
 except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
-DATE_FORMAT = '%d-%m-%Y'
+DATE_FORMAT = '%Y-%m-%d'
 IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
                            'PMC Diagnosis ID': 'Diagnosis Id',
                            'PMC Biosource ID': 'Biosource Id',
@@ -56,9 +58,8 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
 
-    # update integer fields - downcasted to float by ffill function
-    # (NaN does not have an integer representation)
-    obs_pivot = update_integer_fields(obs_pivot)
+    # update values to have correct types
+    obs_pivot = update_datatypes(obs_pivot)
 
     # update date fields with format
     # update_date_fields(obs_pivot, obs)
@@ -109,9 +110,14 @@ def merge_redundant_rows(data, id_columns):
     return ffill_data
 
 
-def update_integer_fields(data):
+def update_datatypes(data):
     for col in data.columns:
+        # update integer fields - downcasted to float by ffill function
+        # (NaN does not have an integer representation)
         data[col] = data[col].apply(to_int)
+        # update datetime fields
+        if re.match(r'^[0-9]+\.\sDate', col, flags=re.IGNORECASE):
+            data[col] = data[col].apply(to_datetime)
     return data
 
 
@@ -122,17 +128,14 @@ def to_int(x):
         return x
 
 
-def get_date_string(timestamp, string_format=DATE_FORMAT):
-    if pd.notnull(timestamp) and timestamp is not None and timestamp != '':
-        return dt.datetime.utcfromtimestamp(float(timestamp) / 1000).strftime(string_format)
+def to_datetime(date_str, string_format=DATE_FORMAT):
+    if pd.notnull(date_str) and date_str is not None and date_str != '':
+        try:
+            return pd.to_datetime(date_str).strftime(string_format)
+        except:
+            return date_str
     else:
-        return timestamp
-
-
-def update_date_fields(data, obs):
-    for column in data.columns:
-        if column.upper().startswith('DATE'):
-            obs[column] = data[column].apply(get_date_string)
+        return date_str
 
 
 def reformat_columns(obs, id_columns):
