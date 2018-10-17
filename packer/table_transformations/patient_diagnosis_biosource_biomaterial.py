@@ -17,6 +17,7 @@ IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
                            'PMC Biosource ID': 'Biosource Id',
                            'PMC Biomaterial ID': 'Biomaterial Id'}
 
+TIMEZONE = dt.datetime.now().astimezone().tzinfo
 
 def from_obs_json_to_pdbb_df(obs_json):
     """
@@ -131,7 +132,8 @@ def to_int(x):
 def to_datetime(date_str, string_format=DATE_FORMAT):
     if pd.notnull(date_str) and date_str is not None and date_str != '':
         try:
-            return pd.to_datetime(date_str).strftime(string_format)
+            # transform UTC to local timezone and specified format
+            return pd.to_datetime(date_str).tz_localize('UTC').tz_convert(TIMEZONE).strftime(string_format)
         except:
             return date_str
     else:

@@ -153,6 +153,30 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertTrue(result_obs.empty)
         self.assertEqual(result_obs.size, 0)
 
+    def test_utc_to_local_timezone_conversion(self):
+        self.test_data = [
+            [np.nan, 'patient_concept_1', '\\Patient\\Age\\', 'Age', 42.0, 1, 'P1', np.nan, 'TEST'],
+            ['D1', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', '02. Date of diagnosis',
+             np.nan, 1, 'P1', '2018-12-31T23:30:00Z', 'TEST'],
+            [np.nan, 'patient_concept_1', '\\Patient\\Age\\', 'Age', 39.0, 2, 'P2', np.nan, 'TEST'],
+            ['D1', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', '02. Date of diagnosis',
+             np.nan, 2, 'P2', '2018-12-31T10:30:00Z', 'TEST'],
+            ]
+        observations_df = pd.DataFrame(self.test_data, columns=['PMC Diagnosis ID',
+                                                                'concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue', 'patient.id',
+                                                                'patient.trial', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        pdt.assert_frame_equal(df, pd.DataFrame([
+            ['P1', 'D1', 42, '2019-01-01'],
+            ['P2', 'D1', 39, '2018-12-31'],
+        ], columns=['Patient Id', 'Diagnosis Id',
+                    'Age', '02. Date of diagnosis']))
+
+
 
 if __name__ == '__main__':
     unittest.main()
