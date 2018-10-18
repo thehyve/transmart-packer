@@ -8,6 +8,7 @@ tornado_config = dict(
 
 keycloak_config = dict(
     oidc_server_url=os.environ.get('KEYCLOAK_URL'),
+    client_id=os.environ.get('CLIENT_ID', 'transmart'),
 )
 
 transmart_config = dict(
