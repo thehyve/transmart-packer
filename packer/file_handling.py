@@ -55,4 +55,4 @@ class FSHandler(FileHandlerABC):
 
     @property
     def writer(self):
-        return self._handler('w')
+        return self._handler('wb')

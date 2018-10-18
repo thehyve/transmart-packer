@@ -7,11 +7,16 @@ tornado_config = dict(
 )
 
 keycloak_config = dict(
-    oidc_server_url="https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev",
+    oidc_server_url=os.environ.get('KEYCLOAK_URL'),
+    client_id=os.environ.get('CLIENT_ID', 'transmart'),
 )
 
 transmart_config = dict(
-    host='https://transmart-dev.thehyve.net'
+    host=os.environ.get('TRANSMART_URL')
+)
+
+app_config = dict(
+    host=os.environ.get('CLIENT_ORIGIN_URL', 'http://localhost:4200')
 )
 
 redis_config = dict(
@@ -28,4 +33,8 @@ celery_config = dict(
     result_serializer='json',
     timezone='Europe/Amsterdam',
     enable_utc=True,
+)
+
+logging_config = dict(
+    path=os.environ.get('LOG_CFG', 'packer/logging.yaml')
 )

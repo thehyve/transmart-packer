@@ -21,3 +21,7 @@ redis_config = dict(
 task_config = dict(
     data_dir='/tmp/packer/'
 )
+
+app_config = dict(
+    host='https://glowingbear-dev.thehyve.net'
+)

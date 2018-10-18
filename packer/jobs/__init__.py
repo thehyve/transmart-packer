@@ -1,7 +1,9 @@
+from .patient_diagnosis_biosource_biomaterial_export import patient_diagnosis_biosource_biomaterial_export
 from .example import add
-from .export_maxima import export_maxima
+from .basic_export import basic_export
 
 registry = {
     'add': add,
-    'export_maxima': export_maxima
+    'basic_export': basic_export,
+    'patient_diagnosis_biosource_biomaterial_export': patient_diagnosis_biosource_biomaterial_export
 }

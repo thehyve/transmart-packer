@@ -1,7 +1,11 @@
+PyYAML
 transmart[full]
 redis
 celery
 tornado
 aioredis
-pyjwt
+cryptography >= 1.4
+pyjwt==1.6.3
 requests
+pandas
+numpy

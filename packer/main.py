@@ -1,5 +1,8 @@
 import json
 import logging
+import logging.config
+import yaml
+import os
 import uuid
 from datetime import datetime
 
@@ -7,48 +10,76 @@ import jwt
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+from jwt.algorithms import RSAAlgorithm
 from tornado import iostream, gen
 from tornado.log import app_log as log
 from tornado.options import define
 from tornado.web import HTTPError
+import requests
 
 import packer.jobs as jobs
 from packer.file_handling import FSHandler
 from packer.task_status import Status, TaskStatusAsync
-from .config import tornado_config
+from .config import tornado_config, app_config, logging_config, keycloak_config
 from .redis_client import get_async_redis
 from .tasks import app
-
-USER_COOKIE = 'packer-user'  # TODO remove, using session cookie for testing now
 
 
 def get_current_user(self):
     """ output of this is accessible in requests as self.current_user """
-    if self.request.headers.get("Authorization"):
-        token = self.request.headers.get("Authorization")
-        token = token.split('Bearer ')[-1]  # strip 'Bearer ' from token so it can be read.
-
-        # FIXME add shared secret from keycloak to properly verify users.
-        user_token = jwt.decode(token, verify=False)
+    token = get_request_token(self)
+    if token:
+        algorithm, public_key = get_keycloak_public_key_and_algorithm()
+        user_token = jwt.decode(token, public_key, algorithms=algorithm, audience=keycloak_config.get("client_id"))
         subject = user_token.get('sub')
         log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
         return subject
-
     else:
-        # TODO remove, using session cookie for testing now
-        log.warning('No authorization provided. Using session.')
-        cookie = self.get_secure_cookie(USER_COOKIE)
-        if cookie is not None:
-            return cookie.decode()
-        else:
-            log.warning('Creating session cookie.')
-            fake_id = str(uuid.uuid4())
-            self.set_secure_cookie(USER_COOKIE, fake_id, expires_days=1)
-            return fake_id
+        error_msg = 'No authorisation token found in the request'
+        log.error(error_msg)
+        raise HTTPError(401, 'Unauthorized.')
+
+
+def get_request_token(request_holder):
+    token = request_holder.request.headers.get("Authorization")
+    if token:
+        return token.split('Bearer ')[-1]
+    return None
+
+
+def get_keycloak_public_key_and_algorithm():
+    handle = f'{keycloak_config.get("oidc_server_url")}/protocol/openid-connect/certs'
+    log.info(f'Validating the token...')
+    r = requests.get(handle)
+    json_response = r.json()
+    key0 = json_response.get('keys')[0]
+    key0_json = json.dumps(key0)
+    log.debug(f'key: {str(key0_json)}')
+    public_key = RSAAlgorithm.from_jwk(key0_json)
+    return key0.get('alg'), public_key
+
+
+def setup_logging(default_level=logging.INFO):
+    # Setup logging configuration
+    path = logging_config.get('path', 'packer/logging.yaml')
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            log.info(f'Setting logging based on {path} configuration')
+            config = yaml.safe_load(f.read())
+        logging.config.dictConfig(config)
+    else:
+        log.info('Logging configuration not found. Setting basic console log level.')
+        logging.basicConfig(level=default_level)
 
 
 class BaseHandler(tornado.web.RequestHandler):
     get_current_user = get_current_user
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", app_config.get("host"))
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers", "authorization, content-type")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
     @property
     def user_jobs_key(self):
@@ -67,6 +98,11 @@ class BaseHandler(tornado.web.RequestHandler):
             raise HTTPError(404, f'There is no task with id {task_id!r}.')
         else:
             return TaskStatusAsync(task_id, self.application.redis)
+
+    async def options(self, *args):
+        # no body
+        self.set_status(200)
+        self.finish()
 
 
 class JobListHandler(BaseHandler):
@@ -295,6 +331,7 @@ def make_web_app(port, tornado_options):
 def main():
     tornado.options.parse_command_line()
     port = tornado_config.get('port', 8888)
+    setup_logging()
     web_app, loop = make_web_app(port, tornado_config)
     log.info(f'Starting at http://localhost:{web_app.settings.get("port")}')
     loop.start()

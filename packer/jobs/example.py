@@ -36,7 +36,7 @@ def add(self: BaseDataTask, x: int, y: int, sleep: int = 10) -> None:
     logger.info('Calculated value: {}'.format(value))
 
     with FSHandler(self.task_id).writer as writer:
-        writer.write(f'{value}')
+        writer.write(value.to_bytes(2, byteorder='big'))
 
     logger.info(f'Stored to disk.')
 

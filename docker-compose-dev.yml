@@ -7,7 +7,9 @@ services:
         volumes:
             - redis-data:/data
     webapp:
-        image: thehyve/transmart-packer
+        build:
+            context: .
+            dockerfile: ./Dockerfile
         command: ['python', '-m', 'packer']
         ports:
             - 8999:8999
@@ -18,12 +20,14 @@ services:
         links:
             - redis
         environment:
-          TRANSMART_URL: 'https://transmart-dev.thehyve.net'
-          KEYCLOAK_URL: 'https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev'
-          CLIENT_ORIGIN_URL: 'https://glowingbear-dev.thehyve.net'
+          TRANSMART_URL: 'http://localhost:8081'
+          KEYCLOAK_URL: 'http://localhost:8080/auth/realms/dev'
+          CLIENT_ORIGIN_URL: 'http://localhost:4200'
 
     worker:
-        image: thehyve/transmart-packer
+        build:
+            context: .
+            dockerfile: ./Dockerfile
         command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
         depends_on:
             - redis

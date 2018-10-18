@@ -1,4 +1,3 @@
-from packer.tasks import app
 from packer.jobs import add
 from packer.jobs.example import compute_addition
 import unittest
