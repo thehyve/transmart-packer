@@ -153,6 +153,27 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertTrue(result_obs.empty)
         self.assertEqual(result_obs.size, 0)
 
+    def test_concept_path_respected(self):
+        self.test_data = [
+            ['dname', '\\02. Diagnosis\\Name\\', 'Name', np.nan, 1, 'P1', 'Diagnosis 1', 'TEST'],
+            ['bsname', '\\03. Biosource\\Name\\', 'Name', np.nan, 1, 'P1', 'Biosource 1', 'TEST'],
+            ['pname', '\\01. Patient\\Name\\', 'Name', np.nan, 1, 'P1', 'Patient 1', 'TEST'],
+            ['bmname', '\\04. Biomaterial\\Name\\', 'Name', np.nan, 1, 'P1', 'Biomaterial 1', 'TEST'],
+            ['pname', '\\01. Patient\\Name\\', 'Name', np.nan, 2, 'P2', 'Patient 2', 'TEST'],
+        ]
+        observations_df = pd.DataFrame(self.test_data, columns=['concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue', 'patient.id',
+                                                                'patient.trial', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        pdt.assert_frame_equal(df, pd.DataFrame([
+            ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
+            ['P2', 'Patient 2', '', '', ''],
+        ], columns=['Patient Id',
+                    'Name', 'Name', 'Name', 'Name']))
+
 
 if __name__ == '__main__':
     unittest.main()

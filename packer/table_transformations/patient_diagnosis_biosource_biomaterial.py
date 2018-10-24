@@ -37,7 +37,9 @@ def from_obs_df_to_pdbb_df(obs):
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
-    concept_order = obs['concept.name'].unique().tolist()
+    concept_path_col = obs['concept.conceptPath']
+    concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
+    unq_concept_paths_ord = concept_path_col.unique().tolist()
     id_column_dict = get_identifying_columns(obs)
 
     # reformat columns: rename, drop, merge
@@ -47,10 +49,11 @@ def from_obs_df_to_pdbb_df(obs):
     logger.info('Reformatting columns...')
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
-    obs_pivot = concepts_row_to_columns(obs, concept_order)
+    obs_pivot = concepts_row_to_columns(obs, unq_concept_paths_ord)
 
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
+    obs_pivot = obs_pivot.rename(index=str, columns=concept_path_to_name)
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
 
@@ -141,7 +144,7 @@ def to_datetime(date_str, string_format=DATE_FORMAT):
 def reformat_columns(obs, id_columns):
     # rename columns and set indexes
     obs.reset_index(inplace=True)
-    headers = np.append(id_columns, 'concept.name')
+    headers = np.append(id_columns, 'concept.conceptPath')
 
     # prepare 'value' column
     if {'stringValue', 'numericValue'}.issubset(obs.columns):
