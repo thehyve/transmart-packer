@@ -28,16 +28,20 @@ from .tasks import app
 def get_current_user(self):
     """ output of this is accessible in requests as self.current_user """
     token = get_request_token(self)
-    if token:
-        algorithm, public_key = get_keycloak_public_key_and_algorithm()
+    try:
+        if len(token) == 0:
+            error_msg = 'No authorisation token found in the request'
+            log.error(error_msg)
+            raise HTTPError(401, 'Unauthorized.')
+        decoded_token_header = jwt.get_unverified_header(token)
+        token_kid = decoded_token_header.get('kid')
+        algorithm, public_key = get_keycloak_public_key_and_algorithm(token_kid)
         user_token = jwt.decode(token, public_key, algorithms=algorithm, audience=keycloak_config.get("client_id"))
         subject = user_token.get('sub')
         log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
         return subject
-    else:
-        error_msg = 'No authorisation token found in the request'
-        log.error(error_msg)
-        raise HTTPError(401, 'Unauthorized.')
+    except Exception as e:
+        raise HTTPError(401, f'Access unauthorized. {str(e)}')
 
 
 def get_request_token(request_holder):
@@ -47,16 +51,31 @@ def get_request_token(request_holder):
     return None
 
 
-def get_keycloak_public_key_and_algorithm():
+def get_keycloak_public_key_and_algorithm(token_kid):
     handle = f'{keycloak_config.get("oidc_server_url")}/protocol/openid-connect/certs'
     log.info(f'Validating the token...')
     r = requests.get(handle)
-    json_response = r.json()
-    key0 = json_response.get('keys')[0]
-    key0_json = json.dumps(key0)
-    log.debug(f'key: {str(key0_json)}')
-    public_key = RSAAlgorithm.from_jwk(key0_json)
-    return key0.get('alg'), public_key
+    if r.status_code != 200:
+        error = "Could not validate the token. " \
+                "Reason: [{}]: {}".format(r.status_code, r.text)
+        logging.error(error)
+        raise ValueError(error)
+    try:
+        json_response = r.json()
+    except Exception:
+        error = "Could not retrieve the public key. " \
+                 "Got unexpected response: '{}'".format(r.text)
+        logging.error(error)
+        raise ValueError(error)
+    try:
+        matching_key = next((item for item in json_response.get('keys') if item['kid'] == token_kid), None)
+        matching_key_json = json.dumps(matching_key)
+        public_key = RSAAlgorithm.from_jwk(matching_key_json)
+    except Exception as e:
+        error = f'Invalid public key!. Reason: {e}'
+        logging.error(error)
+        raise ValueError(error)
+    return matching_key.get('alg'), public_key
 
 
 def setup_logging(default_level=logging.INFO):
@@ -103,6 +122,10 @@ class BaseHandler(tornado.web.RequestHandler):
         # no body
         self.set_status(200)
         self.finish()
+
+    def write_error(self, status_code, **kwargs):
+        self.set_status(status_code)
+        self.finish({"error": str(kwargs['exc_info'][1])})
 
 
 class JobListHandler(BaseHandler):
