@@ -40,23 +40,20 @@ def from_obs_df_to_pdbb_df(obs):
     concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
     unq_concept_paths_ord = concept_path_col.unique().tolist()
     id_column_dict = get_identifying_columns(obs)
-
-    # reformat columns: rename, drop, merge
     logger.info(f'Renaming columns: {id_column_dict}')
-    obs.rename(columns=id_column_dict, inplace=True)
-    id_columns = list(id_column_dict.values())
+    id_columns = list(id_column_dict.keys())
+
     logger.info('Reformatting columns...')
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
     obs_pivot = concepts_row_to_columns(obs)
-
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
     # update values to have correct types. it depends on previous calls, hence order dependent.
     obs_pivot = update_datatypes(obs_pivot)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
-    obs_pivot = obs_pivot.rename(index=str, columns=concept_path_to_name)
+    obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
 
