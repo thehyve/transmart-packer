@@ -108,7 +108,7 @@ def update_datatypes(data):
         # update datetime fields
         if re.match(r'.*[^\\]*\bdate\b[^\\]*\\$', col, flags=re.IGNORECASE):
             data[col] = data[col].apply(to_datetime)
-        else:
+        elif np.issubdtype(data[col].dtype, np.number):
             data[col] = data[col].apply(to_int)
     return data
 
