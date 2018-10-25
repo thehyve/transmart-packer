@@ -39,18 +39,18 @@ def from_obs_df_to_pdbb_df(obs):
     concept_path_col = obs['concept.conceptPath']
     concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
     unq_concept_paths_ord = concept_path_col.unique().tolist()
-    id_column_dict = get_identifying_columns(obs)
+    id_column_dict = _get_identifying_columns(obs)
     logger.info(f'Renaming columns: {id_column_dict}')
     id_columns = list(id_column_dict.keys())
 
     logger.info('Reformatting columns...')
-    obs = reformat_columns(obs, id_columns)
+    obs = _reformat_columns(obs, id_columns)
     # transform concept rows to column headers
-    obs_pivot = concepts_row_to_columns(obs)
+    obs_pivot = _concepts_row_to_columns(obs)
     # propagate data to lower levels and display only rows that represent the lowest level
-    obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
+    obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
     # update values to have correct types. it depends on previous calls, hence order dependent.
-    obs_pivot = update_datatypes(obs_pivot)
+    obs_pivot = _update_datatypes(obs_pivot)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
     obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
@@ -62,7 +62,7 @@ def from_obs_df_to_pdbb_df(obs):
     return obs_pivot
 
 
-def merge_redundant_rows(data, id_columns):
+def _merge_redundant_rows(data, id_columns):
     if data.empty:
         return
     # sort rows by identifying columns, merging of rows strongly depends on sorting
@@ -98,24 +98,24 @@ def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_colum
             descendant_row[column] = ancestor_row[column]
 
 
-def update_datatypes(data):
+def _update_datatypes(data):
     for col in data.columns:
         # update datetime fields
         if re.match(r'.*[^\\]*\bdate\b[^\\]*\\$', col, flags=re.IGNORECASE):
-            data[col] = data[col].apply(to_datetime)
+            data[col] = data[col].apply(_to_datetime)
         elif np.issubdtype(data[col].dtype, np.number):
-            data[col] = data[col].apply(to_int)
+            data[col] = data[col].apply(_to_int)
     return data
 
 
-def to_int(x):
+def _to_int(x):
     try:
         return int(x)
     except:
         return x
 
 
-def to_datetime(date_str, string_format=DATE_FORMAT):
+def _to_datetime(date_str, string_format=DATE_FORMAT):
     if pd.notnull(date_str) and date_str is not None and date_str != '':
         try:
             return pd.to_datetime(date_str).strftime(string_format)
@@ -125,7 +125,7 @@ def to_datetime(date_str, string_format=DATE_FORMAT):
         return date_str
 
 
-def reformat_columns(obs, id_columns):
+def _reformat_columns(obs, id_columns):
     # rename columns and set indexes
     obs.reset_index(inplace=True)
     headers = np.append(id_columns, 'concept.conceptPath')
@@ -145,7 +145,7 @@ def reformat_columns(obs, id_columns):
     return obs
 
 
-def concepts_row_to_columns(obs):
+def _concepts_row_to_columns(obs):
     # use unstack to move the last level of the index to column names
     obs_pivot = obs.unstack(level=-1)
     # update column names by dropping value level
@@ -156,7 +156,7 @@ def concepts_row_to_columns(obs):
     return obs_pivot
 
 
-def get_identifying_columns(obs):
+def _get_identifying_columns(obs):
     columns = {}
     for k, v in IDENTIFYING_COLUMN_DICT.items():
         if k in obs:
