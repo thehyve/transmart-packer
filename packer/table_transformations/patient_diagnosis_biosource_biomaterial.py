@@ -1,4 +1,3 @@
-import datetime as dt
 import re
 
 import pandas as pd
@@ -37,98 +36,86 @@ def from_obs_df_to_pdbb_df(obs):
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
-    concept_order = obs['concept.name'].unique().tolist()
-    id_column_dict = get_identifying_columns(obs)
-
-    # reformat columns: rename, drop, merge
+    concept_path_col = obs['concept.conceptPath']
+    concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
+    unq_concept_paths_ord = concept_path_col.unique().tolist()
+    id_column_dict = _get_identifying_columns(obs)
     logger.info(f'Renaming columns: {id_column_dict}')
-    obs.rename(columns=id_column_dict, inplace=True)
-    id_columns = list(id_column_dict.values())
-    logger.info('Reformatting columns...')
-    obs = reformat_columns(obs, id_columns)
-    # transform concept rows to column headers
-    obs_pivot = concepts_row_to_columns(obs, concept_order)
+    id_columns = list(id_column_dict.keys())
 
+    logger.info('Reformatting columns...')
+    obs = _reformat_columns(obs, id_columns)
+    # transform concept rows to column headers
+    obs_pivot = _concepts_row_to_columns(obs)
     # propagate data to lower levels and display only rows that represent the lowest level
-    obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
+    obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
+    # update values to have correct types. it depends on previous calls, hence order dependent.
+    obs_pivot = _update_datatypes(obs_pivot)
+    # fix columns order
+    obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
+    obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
 
-    # fill NaNs with empty string
-    obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
-
-    # update values to have correct types
-    obs_pivot = update_datatypes(obs_pivot)
-
-    # update date fields with format
-    # update_date_fields(obs_pivot, obs)
 
     return obs_pivot
 
 
-def drop_higher_level(lowest_level_column, data):
-    lowest_level = data[data[lowest_level_column].notnull()]
-    column_index = data.columns.get_loc(lowest_level_column)
-    for index, row in lowest_level.iterrows():
-        if column_index == 3:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]] == row[1]) &
-                          (data[data.columns[2]] == row[2]) &
-                          (data[data.columns[3]].isnull()))
-        elif column_index == 2:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]] == row[1]) &
-                          (data[data.columns[2]].isnull()))
-        elif column_index == 1:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]].isnull()))
-        else:
-            return
-        data.drop(data[conditions].index, inplace=True)
-
-
-def limit_rows_to_lowest_level(data, id_columns):
-    logger.info('Removing redundant rows...')
-    lowest_level_col_id = len(id_columns) - 1
-    for idx, column in enumerate(reversed(id_columns)):
-        if idx == lowest_level_col_id:
-            break
-        drop_higher_level(column, data)
-
-
-def merge_redundant_rows(data, id_columns):
+def _merge_redundant_rows(data, id_columns):
+    if data.empty:
+        return
     # sort rows by identifying columns, merging of rows strongly depends on sorting
-    data.sort_values(id_columns, na_position='first', inplace=True)
-    grouped_data = data.groupby(id_columns[0])
-    # propagate data to lower levels
-    ffill_data = grouped_data.ffill()
-    # limit rows to the lowest level
-    limit_rows_to_lowest_level(ffill_data, id_columns)
-    # drop rows with duplicated identifying columns, keep only the last one
-    ffill_data.drop_duplicates(subset=id_columns, keep='last', inplace=True)
-    return ffill_data
+    rows = data.sort_values(id_columns, na_position='last').to_dict('records')
+    result_rows = [rows[0]]
+    for row in rows[1:]:
+        row_copied = False
+        for result_row in reversed(result_rows):
+            if _is_ancestor_row(row, result_row, id_columns):
+                _copy_missing_value_to_descendant_row(row, result_row, id_columns)
+                row_copied = True
+            else:
+                break
+        if not row_copied:
+            result_rows.append(row)
+    return pd.DataFrame(result_rows)
 
 
-def update_datatypes(data):
+def _is_ancestor_row(ancestor_row_candidate, descendant_row_candidate, id_columns):
+    for id_column in id_columns:
+        if pd.isnull(ancestor_row_candidate[id_column]):
+            break
+        if ancestor_row_candidate[id_column] != descendant_row_candidate[id_column]:
+            return False
+    return True
+
+
+def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_columns):
+    for column, value in ancestor_row.items():
+        if column in id_columns or pd.isnull(value):
+            continue
+        if column not in descendant_row or pd.isnull(descendant_row[column]):
+            descendant_row[column] = ancestor_row[column]
+
+
+def _update_datatypes(data):
     for col in data.columns:
-        # update integer fields - downcasted to float by ffill function
-        # (NaN does not have an integer representation)
-        data[col] = data[col].apply(to_int)
         # update datetime fields
-        if re.match(r'^[0-9]+\.\sDate', col, flags=re.IGNORECASE):
-            data[col] = data[col].apply(to_datetime)
+        if re.match(r'.*[^\\]*\bdate\b[^\\]*\\$', col, flags=re.IGNORECASE):
+            data[col] = data[col].apply(_to_datetime)
+        elif np.issubdtype(data[col].dtype, np.number):
+            data[col] = data[col].apply(_to_int)
     return data
 
 
-def to_int(x):
+def _to_int(x):
     try:
         return int(x)
     except:
         return x
 
 
-def to_datetime(date_str, string_format=DATE_FORMAT):
+def _to_datetime(date_str, string_format=DATE_FORMAT):
     if pd.notnull(date_str) and date_str is not None and date_str != '':
         try:
             return pd.to_datetime(date_str).strftime(string_format)
@@ -138,10 +125,10 @@ def to_datetime(date_str, string_format=DATE_FORMAT):
         return date_str
 
 
-def reformat_columns(obs, id_columns):
+def _reformat_columns(obs, id_columns):
     # rename columns and set indexes
     obs.reset_index(inplace=True)
-    headers = np.append(id_columns, 'concept.name')
+    headers = np.append(id_columns, 'concept.conceptPath')
 
     # prepare 'value' column
     if {'stringValue', 'numericValue'}.issubset(obs.columns):
@@ -158,20 +145,18 @@ def reformat_columns(obs, id_columns):
     return obs
 
 
-def concepts_row_to_columns(obs, concept_order):
+def _concepts_row_to_columns(obs):
     # use unstack to move the last level of the index to column names
     obs_pivot = obs.unstack(level=-1)
     # update column names by dropping value level
     obs_pivot.columns = obs_pivot.columns.droplevel(level=0)
-    # fix the order of concept columns
-    obs_pivot = obs_pivot[concept_order]
     # fix indexes
     obs_pivot.reset_index(inplace=True)
     obs_pivot.drop(obs_pivot.columns[[0]], axis=1, inplace=True)
     return obs_pivot
 
 
-def get_identifying_columns(obs):
+def _get_identifying_columns(obs):
     columns = {}
     for k, v in IDENTIFYING_COLUMN_DICT.items():
         if k in obs:

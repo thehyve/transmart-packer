@@ -153,6 +153,60 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertTrue(result_obs.empty)
         self.assertEqual(result_obs.size, 0)
 
+    def test_concept_path_respected(self):
+        self.test_data = [
+            ['dname', '\\02. Diagnosis\\Name\\', 'Name', np.nan, 1, 'P1', 'Diagnosis 1', 'TEST'],
+            ['bsname', '\\03. Biosource\\Name\\', 'Name', np.nan, 1, 'P1', 'Biosource 1', 'TEST'],
+            ['pname', '\\01. Patient\\Name\\', 'Name', np.nan, 1, 'P1', 'Patient 1', 'TEST'],
+            ['bmname', '\\04. Biomaterial\\Name\\', 'Name', np.nan, 1, 'P1', 'Biomaterial 1', 'TEST'],
+            ['pname', '\\01. Patient\\Name\\', 'Name', np.nan, 2, 'P2', 'Patient 2', 'TEST'],
+        ]
+        observations_df = pd.DataFrame(self.test_data, columns=['concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue', 'patient.id',
+                                                                'patient.trial', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        pdt.assert_frame_equal(df, pd.DataFrame([
+            ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
+            ['P2', 'Patient 2', np.nan, np.nan, np.nan],
+        ], columns=['Patient Id',
+                    'Name', 'Name', 'Name', 'Name']))
+
+    def test_values_propagation(self):
+        self.test_data = [
+            [1, 'P1', None, None, None, 'ptxt', '\\01. Patient\\Text\\', 'Text', None, 'Patient #1', 'T'],
+            [1, 'P1', None, None, None, 'pnum', '\\01. Patient\\Number\\', 'Number', 5., None, 'T'],
+            [1, 'P1', 'D1', None, None, 'dtxt', '\\02. Diagnosis\\Text\\', 'Text', None, 'Diagnosis #1', 'T'],
+            [1, 'P1', 'D2', None, None, 'dnum', '\\02. Diagnosis\\Number\\', 'Number', 10., None, 'T'],
+            [1, 'P1', 'D2', None, None, 'dtxt', '\\02. Diagnosis\\Text\\', 'Text', None, 'Diagnosis #2', 'T'],
+            [1, 'P1', 'D1', 'BS1', None, 'bsnum', '\\03. Biosource\\Number\\', 'Number', 15., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', None, 'bstxt', '\\03. Biosource\\Text\\', 'Text', None, 'Biosource #1', 'T'],
+            [1, 'P1', 'D2', 'BS2', None, 'bsnum', '\\03. Biosource\\Number\\', 'Number', 20., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM1', 'bmnum', '\\04. Biomaterial\\Number\\', 'Number', 25., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM1', 'bmtxt', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #1', 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM2', 'bmtxt', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #2', 'T'],
+
+            [2, 'P2', None, None, None, 'pnum', '\\01. Patient\\Number\\', 'Number', 30., None, 'T'],
+            [2, 'P2', 'D3', None, None, 'dnum', '\\02. Diagnosis\\Number\\', 'Number', 35., None, 'T'],
+        ]
+        observations_df = pd.DataFrame(self.test_data, columns=[
+            'patient.id', 'patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
+            'concept.conceptCode', 'concept.conceptPath', 'concept.name', 'numericValue', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        pdt.assert_frame_equal(df, pd.DataFrame([
+            ['P1', 'D1', 'BS1', 'BM1', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', 25, 'Biomaterial #1'],
+            ['P1', 'D1', 'BS1', 'BM2', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', None,
+             'Biomaterial #2'],
+            ['P1', 'D2', 'BS2', None, 5, 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
+            ['P2', 'D3', None, None, 30, None, 35, None, None, None, None, None],
+        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+                    'Number', 'Text', 'Number', 'Text', 'Number', 'Text', 'Number', 'Text']))
+
 
 if __name__ == '__main__':
     unittest.main()
