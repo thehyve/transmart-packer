@@ -170,7 +170,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
-            ['P2', 'Patient 2', '', '', ''],
+            ['P2', 'Patient 2', np.nan, np.nan, np.nan],
         ], columns=['Patient Id',
                     'Name', 'Name', 'Name', 'Name']))
 
@@ -199,11 +199,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 5, 'Patient #1', '', 'Diagnosis #1', 15, 'Biosource #1', 25, 'Biomaterial #1'],
-            ['P1', 'D1', 'BS1', 'BM2', 5, 'Patient #1', '', 'Diagnosis #1', 15, 'Biosource #1', '',
+            ['P1', 'D1', 'BS1', 'BM1', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', 25, 'Biomaterial #1'],
+            ['P1', 'D1', 'BS1', 'BM2', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', None,
              'Biomaterial #2'],
-            ['P1', 'D2', 'BS2', '', 5, 'Patient #1', 10, 'Diagnosis #2', 20, '', '', ''],
-            ['P2', 'D3', '', '', 30, '', 35, '', '', '', '', ''],
+            ['P1', 'D2', 'BS2', None, 5, 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
+            ['P2', 'D3', None, None, 30, None, 35, None, None, None, None, None],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     'Number', 'Text', 'Number', 'Text', 'Number', 'Text', 'Number', 'Text']))
 

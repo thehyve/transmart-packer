@@ -60,8 +60,6 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
 
-    # fill NaNs with empty string
-    obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
 
     return obs_pivot
