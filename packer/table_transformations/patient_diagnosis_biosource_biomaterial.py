@@ -1,4 +1,3 @@
-import datetime as dt
 import re
 
 import pandas as pd
@@ -49,10 +48,14 @@ def from_obs_df_to_pdbb_df(obs):
     logger.info('Reformatting columns...')
     obs = reformat_columns(obs, id_columns)
     # transform concept rows to column headers
-    obs_pivot = concepts_row_to_columns(obs, unq_concept_paths_ord)
+    obs_pivot = concepts_row_to_columns(obs)
 
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = merge_redundant_rows(obs_pivot, id_columns)
+    # update values to have correct types. it depends on previous calls, hence order dependent.
+    obs_pivot = update_datatypes(obs_pivot)
+    # fix columns order
+    obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
     obs_pivot = obs_pivot.rename(index=str, columns=concept_path_to_name)
     obs_pivot.reset_index(drop=True, inplace=True)
     obs_pivot = obs_pivot.rename_axis(None)
@@ -61,66 +64,52 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot.fillna('', inplace=True)
     obs_pivot.columns.name = None
 
-    # update values to have correct types
-    obs_pivot = update_datatypes(obs_pivot)
-
-    # update date fields with format
-    # update_date_fields(obs_pivot, obs)
-
     return obs_pivot
 
 
-def drop_higher_level(lowest_level_column, data):
-    lowest_level = data[data[lowest_level_column].notnull()]
-    column_index = data.columns.get_loc(lowest_level_column)
-    for index, row in lowest_level.iterrows():
-        if column_index == 3:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]] == row[1]) &
-                          (data[data.columns[2]] == row[2]) &
-                          (data[data.columns[3]].isnull()))
-        elif column_index == 2:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]] == row[1]) &
-                          (data[data.columns[2]].isnull()))
-        elif column_index == 1:
-            conditions = ((data[data.columns[0]] == row[0]) &
-                          (data[data.columns[1]].isnull()))
-        else:
-            return
-        data.drop(data[conditions].index, inplace=True)
-
-
-def limit_rows_to_lowest_level(data, id_columns):
-    logger.info('Removing redundant rows...')
-    lowest_level_col_id = len(id_columns) - 1
-    for idx, column in enumerate(reversed(id_columns)):
-        if idx == lowest_level_col_id:
-            break
-        drop_higher_level(column, data)
-
-
 def merge_redundant_rows(data, id_columns):
+    if data.empty:
+        return
     # sort rows by identifying columns, merging of rows strongly depends on sorting
-    data.sort_values(id_columns, na_position='first', inplace=True)
-    grouped_data = data.groupby(id_columns[0])
-    # propagate data to lower levels
-    ffill_data = grouped_data.ffill()
-    # limit rows to the lowest level
-    limit_rows_to_lowest_level(ffill_data, id_columns)
-    # drop rows with duplicated identifying columns, keep only the last one
-    ffill_data.drop_duplicates(subset=id_columns, keep='last', inplace=True)
-    return ffill_data
+    rows = data.sort_values(id_columns, na_position='last').to_dict('records')
+    result_rows = [rows[0]]
+    for row in rows[1:]:
+        row_copied = False
+        for result_row in reversed(result_rows):
+            if _is_ancestor_row(row, result_row, id_columns):
+                _copy_missing_value_to_descendant_row(row, result_row, id_columns)
+                row_copied = True
+            else:
+                break
+        if not row_copied:
+            result_rows.append(row)
+    return pd.DataFrame(result_rows)
+
+
+def _is_ancestor_row(ancestor_row_candidate, descendant_row_candidate, id_columns):
+    for id_column in id_columns:
+        if pd.isna(ancestor_row_candidate[id_column]):
+            break
+        if ancestor_row_candidate[id_column] != descendant_row_candidate[id_column]:
+            return False
+    return True
+
+
+def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_columns):
+    for column, value in ancestor_row.items():
+        if column in id_columns or pd.isna(value):
+            continue
+        if column not in descendant_row or pd.isna(descendant_row[column]):
+            descendant_row[column] = ancestor_row[column]
 
 
 def update_datatypes(data):
     for col in data.columns:
-        # update integer fields - downcasted to float by ffill function
-        # (NaN does not have an integer representation)
-        data[col] = data[col].apply(to_int)
         # update datetime fields
-        if re.match(r'^[0-9]+\.\sDate', col, flags=re.IGNORECASE):
+        if re.match(r'.*[^\\]*\bdate\b[^\\]*\\$', col, flags=re.IGNORECASE):
             data[col] = data[col].apply(to_datetime)
+        else:
+            data[col] = data[col].apply(to_int)
     return data
 
 
@@ -161,13 +150,11 @@ def reformat_columns(obs, id_columns):
     return obs
 
 
-def concepts_row_to_columns(obs, concept_order):
+def concepts_row_to_columns(obs):
     # use unstack to move the last level of the index to column names
     obs_pivot = obs.unstack(level=-1)
     # update column names by dropping value level
     obs_pivot.columns = obs_pivot.columns.droplevel(level=0)
-    # fix the order of concept columns
-    obs_pivot = obs_pivot[concept_order]
     # fix indexes
     obs_pivot.reset_index(inplace=True)
     obs_pivot.drop(obs_pivot.columns[[0]], axis=1, inplace=True)
