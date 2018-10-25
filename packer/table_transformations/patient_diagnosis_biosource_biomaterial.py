@@ -83,7 +83,7 @@ def merge_redundant_rows(data, id_columns):
 
 def _is_ancestor_row(ancestor_row_candidate, descendant_row_candidate, id_columns):
     for id_column in id_columns:
-        if pd.isna(ancestor_row_candidate[id_column]):
+        if pd.isnull(ancestor_row_candidate[id_column]):
             break
         if ancestor_row_candidate[id_column] != descendant_row_candidate[id_column]:
             return False
@@ -92,9 +92,9 @@ def _is_ancestor_row(ancestor_row_candidate, descendant_row_candidate, id_column
 
 def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_columns):
     for column, value in ancestor_row.items():
-        if column in id_columns or pd.isna(value):
+        if column in id_columns or pd.isnull(value):
             continue
-        if column not in descendant_row or pd.isna(descendant_row[column]):
+        if column not in descendant_row or pd.isnull(descendant_row[column]):
             descendant_row[column] = ancestor_row[column]
 
 
