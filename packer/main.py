@@ -23,6 +23,7 @@ from packer.task_status import Status, TaskStatusAsync
 from .config import tornado_config, app_config, logging_config, keycloak_config
 from .redis_client import get_async_redis
 from .tasks import app
+import functools
 
 
 def get_current_user(self):
@@ -51,12 +52,13 @@ def get_request_token(request_holder):
     return None
 
 
+@functools.lru_cache(maxsize=2)
 def get_keycloak_public_key_and_algorithm(token_kid):
     handle = f'{keycloak_config.get("oidc_server_url")}/protocol/openid-connect/certs'
-    log.info(f'Validating the token...')
+    log.info(f'Getting public key for the kid={token_kid} from the keycloak...')
     r = requests.get(handle)
     if r.status_code != 200:
-        error = "Could not validate the token. " \
+        error = "Could not get certificates from the keycloak. " \
                 "Reason: [{}]: {}".format(r.status_code, r.text)
         logging.error(error)
         raise ValueError(error)
@@ -75,6 +77,7 @@ def get_keycloak_public_key_and_algorithm(token_kid):
         error = f'Invalid public key!. Reason: {e}'
         logging.error(error)
         raise ValueError(error)
+    log.info(f'The public key for the kid={token_kid} has been fetched.')
     return matching_key.get('alg'), public_key
 
 
