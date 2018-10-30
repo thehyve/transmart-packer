@@ -1,6 +1,6 @@
 import unittest
 from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_df_to_pdbb_df
+    from_obs_df_to_pdbb_df, format_columns
 import numpy as np
 import pandas as pd
 import pandas.testing as pdt
@@ -38,10 +38,10 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 42, 'Diagnosis 1 Name', 'Skin', '2018-04-24'],
-            ['P1', 'D1', 'BS1', 'BM2', 42, 'Diagnosis 1 Name', 'Skin', '2018-03-07'],
-            ['P2', 'D1', 'BS2', 'BM3', 39, 'Diagnosis 1 Name 2', 'Liver', '2018-01-19'],
-            ['P2', 'D1', 'BS2', 'BM4', 39, 'Diagnosis 1 Name 2', 'Liver', '2011-06-05'],
+            ['P1', 'D1', 'BS1', 'BM1', 42., 'Diagnosis 1 Name', 'Skin', '2018-04-24T02:00:00Z'],
+            ['P1', 'D1', 'BS1', 'BM2', 42., 'Diagnosis 1 Name', 'Skin', 'Wed Mar 07 01:00:00 CET 2018'],
+            ['P2', 'D1', 'BS2', 'BM3', 39., 'Diagnosis 1 Name 2', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
+            ['P2', 'D1', 'BS2', 'BM4', 39., 'Diagnosis 1 Name 2', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     'Age', 'Diagnosis Name', 'Cell type', '01. Date of biomaterial']))
 
@@ -67,8 +67,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 'BS1', 42, 'Skin', 'Diagnosis 1 Name'],
-            ['P2', 'D1', 'BS2', 39, 'Liver', 'Diagnosis 1 Name 2'],
+            ['P1', 'D1', 'BS1', 42., 'Skin', 'Diagnosis 1 Name'],
+            ['P2', 'D1', 'BS2', 39., 'Liver', 'Diagnosis 1 Name 2'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
                     'Age', 'Cell type', 'Diagnosis Name']))
 
@@ -90,8 +90,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 42, 'Diagnosis 1 Name'],
-            ['P2', 'D1', 39, 'Diagnosis 1 Name 2'],
+            ['P1', 'D1', 42., 'Diagnosis 1 Name'],
+            ['P2', 'D1', 39., 'Diagnosis 1 Name 2'],
         ], columns=['Patient Id', 'Diagnosis Id',
                     'Age', 'Diagnosis Name']))
 
@@ -108,8 +108,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 42],
-            ['P2', 39],
+            ['P1', 42.],
+            ['P2', 39.],
         ], columns=['Patient Id',
                     'Age']))
 
@@ -139,10 +139,10 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 42, 'Skin', '2018-04-24'],
-            ['P1', 'D1', 'BS1', 'BM2', 42, 'Skin', '2018-03-07'],
-            ['P2', 'D1', 'BS2', 'BM3', 39, 'Liver', '2018-01-19'],
-            ['P2', 'D1', 'BS2', 'BM4', 39, 'Liver', '2011-06-05'],
+            ['P1', 'D1', 'BS1', 'BM1', 42., 'Skin', '2018-04-24T02:00:00Z'],
+            ['P1', 'D1', 'BS1', 'BM2', 42., 'Skin', '2018-03-07T01:00:00Z'],
+            ['P2', 'D1', 'BS2', 'BM3', 39., 'Liver', '2018-01-19T01:00:00Z'],
+            ['P2', 'D1', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     'Age', 'Cell type', '01. Date of biomaterial']))
 
@@ -199,13 +199,30 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', 25, 'Biomaterial #1'],
-            ['P1', 'D1', 'BS1', 'BM2', 5, 'Patient #1', None, 'Diagnosis #1', 15, 'Biosource #1', None,
+            ['P1', 'D1', 'BS1', 'BM1', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', 25., 'Biomaterial #1'],
+            ['P1', 'D1', 'BS1', 'BM2', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', None,
              'Biomaterial #2'],
-            ['P1', 'D2', 'BS2', None, 5, 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
-            ['P2', 'D3', None, None, 30, None, 35, None, None, None, None, None],
+            ['P1', 'D2', 'BS2', None, 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
+            ['P2', 'D3', None, None, 30., None, 35., None, None, None, None, None],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     'Number', 'Text', 'Number', 'Text', 'Number', 'Text', 'Number', 'Text']))
+
+    def test_format_columns(self):
+        src_df = pd.DataFrame(
+            {
+                '01. Date of smth': ['2018-04-24T02:00:00Z', 'Wed Mar 07 01:00:00 CET 2018', 'NA', np.nan],
+                '02. Number': [np.nan, 30.0, 2.00001, 7.5],
+                '03. Text': ['1.0', 'yes', '', 'Wed Mar 07 01:00:00 CET 2018'],
+            })
+
+        frmt_df = format_columns(src_df)
+
+        pdt.assert_frame_equal(frmt_df, pd.DataFrame(
+            {
+                '01. Date of smth': ['2018-04-24', '2018-03-07', 'NA', ''],
+                '02. Number': ['', '30', '2.00001', '7.5'],
+                '03. Text': ['1.0', 'yes', '', 'Wed Mar 07 01:00:00 CET 2018'],
+            }))
 
 
 if __name__ == '__main__':

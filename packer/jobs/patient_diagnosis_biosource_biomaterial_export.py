@@ -3,7 +3,7 @@ import logging
 from zipfile import ZipFile
 import requests
 from celery.exceptions import Ignore
-from ..table_transformations.patient_diagnosis_biosource_biomaterial import from_obs_json_to_pdbb_df
+from ..table_transformations.patient_diagnosis_biosource_biomaterial import from_obs_json_to_formatted_pdbb_df
 
 from packer.file_handling import FSHandler
 from packer.task_status import Status
@@ -46,7 +46,7 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
         raise Ignore()
 
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
-    reformatted_obs = from_obs_json_to_pdbb_df(r.json())
+    reformatted_obs = from_obs_json_to_formatted_pdbb_df(r.json())
 
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     with FSHandler(self.task_id).writer as writer:
