@@ -17,7 +17,7 @@ IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
                            'PMC Biomaterial ID': 'Biomaterial Id'}
 
 
-def from_obs_json_to_pdbb_df(obs_json):
+def from_obs_json_to_formatted_pdbb_df(obs_json):
     """
     :param obs_json: json returned by transmart v2/observations call
     :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
@@ -25,8 +25,9 @@ def from_obs_json_to_pdbb_df(obs_json):
     """
 
     obs = ObservationSet(obs_json).dataframe
-
-    return from_obs_df_to_pdbb_df(obs)
+    pdbb_df = from_obs_df_to_pdbb_df(obs)
+    format_pdbb_df = format_columns(pdbb_df)
+    return format_pdbb_df
 
 
 def from_obs_df_to_pdbb_df(obs):
@@ -49,8 +50,6 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot = _concepts_row_to_columns(obs)
     # propagate data to lower levels and display only rows that represent the lowest level
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
-    # update values to have correct types. it depends on previous calls, hence order dependent.
-    obs_pivot = _update_datatypes(obs_pivot)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
     obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
@@ -60,6 +59,33 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot.columns.name = None
 
     return obs_pivot
+
+
+def format_columns(df):
+    """
+    :param df: pandas dataframe with various data types of columns
+    :return: modified data frame with all collumns converted to formatted string
+    """
+    result_df = pd.DataFrame()
+    for col_num, col in enumerate(df.columns):
+        # update datetime fields
+        if re.match(r'.*\bdate\b.*', col, flags=re.IGNORECASE):
+            result_df[col_num] = df.iloc[:, col_num].apply(_to_datetime)
+        elif np.issubdtype(df.iloc[:, col_num].dtype, np.number):
+            result_df[col_num] = df.iloc[:, col_num].apply(_num_to_str)
+        else:
+            result_df[col_num] = df.iloc[:, col_num]
+    result_df = result_df.fillna('')
+    result_df.columns=df.columns
+    return result_df
+
+
+def _num_to_str(x):
+    if pd.isnull(x):
+        return ''
+    if isinstance(x, float) and x.is_integer():
+        return str(int(x))
+    return str(x)
 
 
 def _merge_redundant_rows(data, id_columns):
@@ -96,23 +122,6 @@ def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_colum
             continue
         if column not in descendant_row or pd.isnull(descendant_row[column]):
             descendant_row[column] = ancestor_row[column]
-
-
-def _update_datatypes(data):
-    for col in data.columns:
-        # update datetime fields
-        if re.match(r'.*[^\\]*\bdate\b[^\\]*\\$', col, flags=re.IGNORECASE):
-            data[col] = data[col].apply(_to_datetime)
-        elif np.issubdtype(data[col].dtype, np.number):
-            data[col] = data[col].apply(_to_int)
-    return data
-
-
-def _to_int(x):
-    try:
-        return int(x)
-    except:
-        return x
 
 
 def _to_datetime(date_str, string_format=DATE_FORMAT):
