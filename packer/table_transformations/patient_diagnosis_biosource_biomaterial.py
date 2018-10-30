@@ -66,13 +66,18 @@ def format_columns(df):
     :param df: pandas dataframe with various data types of columns
     :return: modified data frame with all collumns converted to formatted string
     """
+    result_df = pd.DataFrame()
     for col_num, col in enumerate(df.columns):
         # update datetime fields
         if re.match(r'.*\bdate\b.*', col, flags=re.IGNORECASE):
-            df.iloc[:, col_num] = df.iloc[:, col_num].apply(_to_datetime)
+            result_df[col_num] = df.iloc[:, col_num].apply(_to_datetime)
         elif np.issubdtype(df.iloc[:, col_num].dtype, np.number):
-            df.iloc[:, col_num] = df.iloc[:, col_num].apply(_num_to_str)
-    return df.fillna('')
+            result_df[col_num] = df.iloc[:, col_num].apply(_num_to_str)
+        else:
+            result_df[col_num] = df.iloc[:, col_num]
+    result_df = result_df.fillna('')
+    result_df.columns=df.columns
+    return result_df
 
 
 def _num_to_str(x):

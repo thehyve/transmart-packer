@@ -224,6 +224,21 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                 '03. Text': ['1.0', 'yes', '', 'Wed Mar 07 01:00:00 CET 2018'],
             }))
 
+    def test_format_columns_with_the_same_name(self):
+        src_df = pd.DataFrame(
+            [
+                [1., np.nan],
+                [np.nan, 2.],
+            ], columns=['Number', 'Number'])
+
+        frmt_df = format_columns(src_df)
+
+        pdt.assert_frame_equal(frmt_df, pd.DataFrame(
+            [
+                ['1', ''],
+                ['', '2'],
+            ], columns=['Number', 'Number']))
+
 
 if __name__ == '__main__':
     unittest.main()
