@@ -182,7 +182,7 @@ class CreateJobHandler(BaseHandler):
             job_parameters=job_parameters,
             status=Status.REGISTERED,
             user=self.current_user,
-            created_at=str(datetime.now())
+            created_at=datetime.utcnow().isoformat(sep='T', timespec='seconds') + 'Z'
         )
 
         try:
