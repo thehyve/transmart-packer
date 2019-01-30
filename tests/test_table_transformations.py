@@ -1,6 +1,6 @@
 import unittest
 from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_df_to_pdbb_df, format_columns
+    from_obs_df_to_pdbb_df, format_columns, rename_columns
 import numpy as np
 import pandas as pd
 import pandas.testing as pdt
@@ -42,8 +42,9 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P1', 'D1', 'BS1', 'BM2', 42., 'Diagnosis 1 Name', 'Skin', 'Wed Mar 07 01:00:00 CET 2018'],
             ['P2', 'D1', 'BS2', 'BM3', 39., 'Diagnosis 1 Name 2', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
             ['P2', 'D1', 'BS2', 'BM4', 39., 'Diagnosis 1 Name 2', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
-                    'Age', 'Diagnosis Name', 'Cell type', '01. Date of biomaterial']))
+        ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
+                    '\\01.Patient\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
+                    '\\04.Biomaterial\\Date\\']))
 
     def test_result_data_shape_no_biomaterial_column(self):
         self.test_data = [
@@ -69,8 +70,9 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 'BS1', 42., 'Skin', 'Diagnosis 1 Name'],
             ['P2', 'D1', 'BS2', 39., 'Liver', 'Diagnosis 1 Name 2'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
-                    'Age', 'Cell type', 'Diagnosis Name']))
+        ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID',
+                    '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Biosource\\Cell type\\',
+                    '\\Patient\\Diagnosis\\Diagnosis Name\\']))
 
     def test_result_data_shape_no_biosource_no_biomaterial_columns(self):
         self.test_data = [
@@ -92,8 +94,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 42., 'Diagnosis 1 Name'],
             ['P2', 'D1', 39., 'Diagnosis 1 Name 2'],
-        ], columns=['Patient Id', 'Diagnosis Id',
-                    'Age', 'Diagnosis Name']))
+        ], columns=['patient.trial', 'PMC Diagnosis ID',
+                    '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Diagnosis Name\\']))
 
     def test_result_data_shape_patient_column_only(self):
         self.test_data = [
@@ -110,8 +112,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 42.],
             ['P2', 39.],
-        ], columns=['Patient Id',
-                    'Age']))
+        ], columns=['patient.trial',
+                    '\\Patient\\Age\\']))
 
     def test_result_data_shape_no_diagnosis_observations_with_sorting(self):
         self.test_data = [
@@ -143,8 +145,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P1', 'D1', 'BS1', 'BM2', 42., 'Skin', '2018-03-07T01:00:00Z'],
             ['P2', 'D1', 'BS2', 'BM3', 39., 'Liver', '2018-01-19T01:00:00Z'],
             ['P2', 'D1', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
-                    'Age', 'Cell type', '01. Date of biomaterial']))
+        ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
+                    '\\01.Patient\\Age\\', '\\03.Biosource\\Cell type\\', '\\04.Biomaterial\\Date\\']))
 
     def test_empty_data(self):
         test_obs = pd.DataFrame()
@@ -171,8 +173,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
             ['P2', 'Patient 2', np.nan, np.nan, np.nan],
-        ], columns=['Patient Id',
-                    'Name', 'Name', 'Name', 'Name']))
+        ], columns=['patient.trial',
+                    '\\01. Patient\\Name\\', '\\02. Diagnosis\\Name\\', '\\03. Biosource\\Name\\', '\\04. Biomaterial\\Name\\']))
 
     def test_values_propagation(self):
         self.test_data = [
@@ -204,8 +206,10 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
              'Biomaterial #2'],
             ['P1', 'D2', 'BS2', None, 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
             ['P2', 'D3', None, None, 30., None, 35., None, None, None, None, None],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
-                    'Number', 'Text', 'Number', 'Text', 'Number', 'Text', 'Number', 'Text']))
+        ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
+                    '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\', '\\02. Diagnosis\\Text\\',
+                    '\\03. Biosource\\Number\\', '\\03. Biosource\\Text\\', '\\04. Biomaterial\\Number\\',
+                    '\\04. Biomaterial\\Text\\']))
 
     def test_format_columns(self):
         src_df = pd.DataFrame(
@@ -238,6 +242,21 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                 ['1', ''],
                 ['', '2'],
             ], columns=['Number', 'Number']))
+
+    def test_rename_columns(self):
+        src_df = pd.DataFrame(
+            [
+                ['P1', 'D1', 'BS1', 'BM1', 'TXT'],
+            ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
+                        '\\01. Patient\\Text\\'], index=[])
+
+        renamed_df = rename_columns(src_df, concept_path_to_name = {'\\01. Patient\\Text\\': 'Text'})
+
+        pdt.assert_frame_equal(renamed_df, pd.DataFrame(
+            [
+                ['P1', 'D1', 'BS1', 'BM1', 'TXT'],
+            ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+                    'Text'], index=[]))
 
 
 if __name__ == '__main__':

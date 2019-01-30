@@ -26,8 +26,9 @@ def from_obs_json_to_formatted_pdbb_df(obs_json):
 
     obs = ObservationSet(obs_json).dataframe
     pdbb_df = from_obs_df_to_pdbb_df(obs)
-    format_pdbb_df = format_columns(pdbb_df)
-    return format_pdbb_df
+    renamded_pdbb_df = rename_columns(pdbb_df, concept_path_to_name = _concept_path_to_name(obs))
+    formated_pdbb_df = format_columns(renamded_pdbb_df)
+    return formated_pdbb_df
 
 
 def from_obs_df_to_pdbb_df(obs):
@@ -38,11 +39,8 @@ def from_obs_df_to_pdbb_df(obs):
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_path_col = obs['concept.conceptPath']
-    concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
     unq_concept_paths_ord = concept_path_col.unique().tolist()
-    id_column_dict = _get_identifying_columns(obs)
-    logger.info(f'Renaming columns: {id_column_dict}')
-    id_columns = list(id_column_dict.keys())
+    id_columns = list(_get_identifying_columns(obs).keys())
 
     logger.info('Reformatting columns...')
     obs = _reformat_columns(obs, id_columns)
@@ -52,13 +50,21 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
-    obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
+    # put index as regular columns
     obs_pivot.reset_index(drop=True, inplace=True)
-    obs_pivot = obs_pivot.rename_axis(None)
-
-    obs_pivot.columns.name = None
 
     return obs_pivot
+
+
+def rename_columns(df, concept_path_to_name = {}):
+    id_column_dict = _get_identifying_columns(df)
+    rename_dict = dict(id_column_dict, **concept_path_to_name)
+    logger.debug(f'Renaming columns: {rename_dict}')
+    return df.rename(index=str, columns=rename_dict)
+
+
+def _concept_path_to_name(df):
+    return dict(zip(df['concept.conceptPath'], df['concept.name']))
 
 
 def format_columns(df):
