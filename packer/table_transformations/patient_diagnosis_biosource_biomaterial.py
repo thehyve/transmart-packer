@@ -17,7 +17,7 @@ IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
                            'PMC Biomaterial ID': 'Biomaterial Id'}
 
 
-def from_obs_json_to_formatted_pdbb_df(obs_json):
+def from_obs_json_to_export_pdbb_df(obs_json):
     """
     :param obs_json: json returned by transmart v2/observations call
     :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
@@ -50,8 +50,6 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
-    # put index as regular columns
-    obs_pivot.reset_index(drop=True, inplace=True)
 
     return obs_pivot
 
