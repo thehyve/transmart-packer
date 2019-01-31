@@ -20,7 +20,8 @@ services:
         environment:
           TRANSMART_URL: 'https://transmart-dev.thehyve.net'
           KEYCLOAK_URL: 'https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev'
-          CLIENT_ORIGIN_URL: 'https://glowingbear-dev.thehyve.net'
+          CLIENT_ORIGIN_URL: '*'
+          CLIENT_ID: 'transmart-client'
 
     worker:
         image: thehyve/transmart-packer
@@ -31,6 +32,8 @@ services:
             - .:/app
         links:
             - redis
+        environment:
+          TRANSMART_URL: 'https://transmart-dev.thehyve.net'
 
 volumes:
   redis-data:

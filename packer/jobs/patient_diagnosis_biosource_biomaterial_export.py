@@ -36,7 +36,6 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     custom_name = params['custom_name']
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     save(export_df, self.task_id, custom_name)
-    logger.info(f'Stored to disk: {self.task_id}')
 
 
 def observations_json(self, constraint):
