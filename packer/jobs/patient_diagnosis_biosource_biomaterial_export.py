@@ -20,8 +20,10 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     Export table with the following IDs: Patient, Diagnosis, Biosource, Biomaterial
 
     :param self: Required for bind to BaseDataTask
-    :param constraint: should be in job_parameters.
-    :param params: optional in job_parameters.
+    :param constraint: mandatory tranmsart api constraint to get data for.
+    :param params: optional job parameters:
+        - row_filter: constraint to filter rows
+        - custom_name: name of the job and export file
     """
     obs_json = observations_json(self, constraint)
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
@@ -34,7 +36,11 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
         self.update_status(Status.RUNNING, 'Removing extra rows based on the row filter.')
         export_df = filter_rows(export_df, row_export_df)
 
-    custom_name = params['custom_name']
+    if 'custom_name' in params:
+        custom_name = params['custom_name']
+    else:
+        logger.debug(f'No custom name supplied. Use task id as such {self.task_id}.')
+        custom_name = self.task_id
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     save(export_df, self.task_id, custom_name)
 
