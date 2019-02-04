@@ -27,10 +27,11 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
     export_df = from_obs_json_to_export_pdbb_df(obs_json)
     if 'row_filter' in params:
-        self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
+        self.update_status(Status.RUNNING, 'Observations for the row filter gotten, transforming.')
         row_filter_constraint = params['row_filter']
         row_filter_obs_json = observations_json(self, row_filter_constraint)
         row_export_df = from_obs_json_to_export_pdbb_df(row_filter_obs_json)
+        self.update_status(Status.RUNNING, 'Removing extra rows based on the row filter.')
         export_df = filter_rows(export_df, row_export_df)
 
     custom_name = params['custom_name']
