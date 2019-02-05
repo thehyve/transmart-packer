@@ -262,6 +262,27 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     'Text'], index=[]))
 
+    def test_diagnossless_biosources(self):
+        self.test_data = [
+            ['BS1', 'D1', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
+             np.nan, 1, 'P1', 'Skin', 'TEST'],
+            ['BS2', None, 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
+             np.nan, 2, 'P2', 'Liver', 'TEST']
+            ]
+        observations_df = pd.DataFrame(self.test_data, columns=['PMC Biosource ID', 'PMC Diagnosis ID',
+                                                                'concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue', 'patient.id',
+                                                                'patient.trial', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        pdt.assert_frame_equal(df, pd.DataFrame([
+            ['P1', 'D1', 'BS1', 'Skin'],
+            ['P2', None, 'BS2', 'Liver'],
+        ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID',
+                    '\\Patient\\Diagnosis\\Biosource\\Cell type\\']))
+
 
 if __name__ == '__main__':
     unittest.main()
