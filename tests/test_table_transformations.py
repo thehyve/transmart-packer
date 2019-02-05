@@ -13,20 +13,24 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             [np.nan, np.nan, np.nan, 'patient_concept_1', '\\01.Patient\\Age\\', 'Age', 42.0, 1, 'P1', np.nan, 'TEST'],
             [np.nan, np.nan, 'D1', 'diagnosis_concept_1', '\\02.Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
              np.nan, 1, 'P1', 'Diagnosis 1 Name', 'TEST'],
+            [np.nan, np.nan, 'D2', 'diagnosis_concept_1', '\\02.Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
+             np.nan, 1, 'P1', 'Diagnosis 2 Name', 'TEST'],
             [np.nan, 'BS1', 'D1', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
              np.nan, 1, 'P1', 'Skin', 'TEST'],
             ['BM1', 'BS1', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 1, 'P1', '2018-04-24T02:00:00Z', 'TEST'],
-            ['BM2', 'BS1', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+            [np.nan, 'BS2', 'D2', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
+             np.nan, 1, 'P1', 'Tissue 2', 'TEST'],
+            ['BM2', 'BS2', 'D2', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 1, 'P1', 'Wed Mar 07 01:00:00 CET 2018', 'TEST'],
             [np.nan, np.nan, np.nan, 'patient_concept_1', '\\01.Patient\\Age\\', 'Age', 39.0, 2, 'P2', np.nan, 'TEST'],
-            [np.nan, np.nan, 'D1', 'diagnosis_concept_1', '\\02.Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
-             np.nan, 2, 'P2', 'Diagnosis 1 Name 2', 'TEST'],
-            [np.nan, 'BS2', 'D1', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
+            [np.nan, np.nan, 'D3', 'diagnosis_concept_1', '\\02.Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
+             np.nan, 2, 'P2', 'Diagnosis 3 Name', 'TEST'],
+            [np.nan, 'BS3', 'D3', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
              np.nan, 2, 'P2', 'Liver', 'TEST'],
-            ['BM3', 'BS2', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+            ['BM3', 'BS3', 'D3', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 2, 'P2', 'Fri Jan 19 01:00:00 CET 2018', 'TEST'],
-            ['BM4', 'BS2', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+            ['BM4', 'BS3', 'D3', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 2, 'P2', 'Sun Jun 05 02:00:00 CEST 2011', 'TEST']]
         observations_df = pd.DataFrame(self.test_data, columns=['PMC Biomaterial ID', 'PMC Biosource ID',
                                                                 'PMC Diagnosis ID', 'concept.conceptCode',
@@ -39,9 +43,9 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 'BS1', 'BM1', 42., 'Diagnosis 1 Name', 'Skin', '2018-04-24T02:00:00Z'],
-            ['P1', 'D1', 'BS1', 'BM2', 42., 'Diagnosis 1 Name', 'Skin', 'Wed Mar 07 01:00:00 CET 2018'],
-            ['P2', 'D1', 'BS2', 'BM3', 39., 'Diagnosis 1 Name 2', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
-            ['P2', 'D1', 'BS2', 'BM4', 39., 'Diagnosis 1 Name 2', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
+            ['P1', 'D2', 'BS2', 'BM2', 42., 'Diagnosis 2 Name', 'Tissue 2', 'Wed Mar 07 01:00:00 CET 2018'],
+            ['P2', 'D3', 'BS3', 'BM3', 39., 'Diagnosis 3 Name', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
+            ['P2', 'D3', 'BS3', 'BM4', 39., 'Diagnosis 3 Name', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
         ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
                     '\\01.Patient\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
                     '\\04.Biomaterial\\Date\\']))
@@ -54,9 +58,9 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['BS1', 'D1', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
              np.nan, 1, 'P1', 'Skin', 'TEST'],
             [np.nan, np.nan, 'patient_concept_1', '\\Patient\\Age\\', 'Age', 39.0, 2, 'P2', np.nan, 'TEST'],
-            [np.nan, 'D1', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
-             np.nan, 2, 'P2', 'Diagnosis 1 Name 2', 'TEST'],
-            ['BS2', 'D1', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
+            [np.nan, 'D2', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
+             np.nan, 2, 'P2', 'Diagnosis 2 Name', 'TEST'],
+            ['BS2', 'D2', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
              np.nan, 2, 'P2', 'Liver', 'TEST']
             ]
         observations_df = pd.DataFrame(self.test_data, columns=['PMC Biosource ID', 'PMC Diagnosis ID',
@@ -69,7 +73,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 'BS1', 42., 'Skin', 'Diagnosis 1 Name'],
-            ['P2', 'D1', 'BS2', 39., 'Liver', 'Diagnosis 1 Name 2'],
+            ['P2', 'D2', 'BS2', 39., 'Liver', 'Diagnosis 2 Name'],
         ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Biosource\\Cell type\\',
                     '\\Patient\\Diagnosis\\Diagnosis Name\\']))
@@ -80,8 +84,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['D1', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
              np.nan, 1, 'P1', 'Diagnosis 1 Name', 'TEST'],
             [np.nan, 'patient_concept_1', '\\Patient\\Age\\', 'Age', 39.0, 2, 'P2', np.nan, 'TEST'],
-            ['D1', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
-             np.nan, 2, 'P2', 'Diagnosis 1 Name 2', 'TEST'],
+            ['D2', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
+             np.nan, 2, 'P2', 'Diagnosis 2 Name', 'TEST'],
             ]
         observations_df = pd.DataFrame(self.test_data, columns=['PMC Diagnosis ID',
                                                                 'concept.conceptCode', 'concept.conceptPath',
@@ -93,7 +97,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 42., 'Diagnosis 1 Name'],
-            ['P2', 'D1', 39., 'Diagnosis 1 Name 2'],
+            ['P2', 'D2', 39., 'Diagnosis 2 Name'],
         ], columns=['patient.trial', 'PMC Diagnosis ID',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Diagnosis Name\\']))
 
@@ -125,11 +129,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['BM2', 'BS1', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 1, 'P1', '2018-03-07T01:00:00Z', 'TEST'],
             [np.nan, np.nan, np.nan, 'patient_concept_1', '\\01.Patient\\Age\\', 'Age', 39.0, 2, 'P2', np.nan, 'TEST'],
-            [np.nan, 'BS2', 'D1', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
+            [np.nan, 'BS2', 'D2', 'biosource_concept_1', '\\03.Biosource\\Cell type\\', 'Cell type',
              np.nan, 2, 'P2', 'Liver', 'TEST'],
-            ['BM3', 'BS2', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+            ['BM3', 'BS2', 'D2', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 2, 'P2', '2018-01-19T01:00:00Z', 'TEST'],
-            ['BM4', 'BS2', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+            ['BM4', 'BS2', 'D2', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', np.nan, 2, 'P2', '2011-06-05T02:00:00Z', 'TEST']]
         observations_df = pd.DataFrame(self.test_data, columns=['PMC Biomaterial ID', 'PMC Biosource ID',
                                                                 'PMC Diagnosis ID', 'concept.conceptCode',
@@ -143,8 +147,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         pdt.assert_frame_equal(df, pd.DataFrame([
             ['P1', 'D1', 'BS1', 'BM1', 42., 'Skin', '2018-04-24T02:00:00Z'],
             ['P1', 'D1', 'BS1', 'BM2', 42., 'Skin', '2018-03-07T01:00:00Z'],
-            ['P2', 'D1', 'BS2', 'BM3', 39., 'Liver', '2018-01-19T01:00:00Z'],
-            ['P2', 'D1', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
+            ['P2', 'D2', 'BS2', 'BM3', 39., 'Liver', '2018-01-19T01:00:00Z'],
+            ['P2', 'D2', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
         ], columns=['patient.trial', 'PMC Diagnosis ID', 'PMC Biosource ID', 'PMC Biomaterial ID',
                     '\\01.Patient\\Age\\', '\\03.Biosource\\Cell type\\', '\\04.Biomaterial\\Date\\']))
 
