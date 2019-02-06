@@ -18,7 +18,7 @@ SEP = '\t'
 @app.task(bind=True, base=BaseDataTask)
 def basic_export(self: BaseDataTask, constraint, **custom_name):
     """
-    Example task that does basic additions of two integers.
+    Task that export transmart api client observation dataframe to tsv file.
 
     :param self: Required for bind to BaseDataTask
     :param constraint: should be in job_parameters.

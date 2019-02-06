@@ -17,7 +17,7 @@ IDENTIFYING_COLUMN_DICT = {'patient.trial': 'Patient Id',
                            'PMC Biomaterial ID': 'Biomaterial Id'}
 
 
-def from_obs_json_to_formatted_pdbb_df(obs_json):
+def from_obs_json_to_export_pdbb_df(obs_json):
     """
     :param obs_json: json returned by transmart v2/observations call
     :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
@@ -26,8 +26,10 @@ def from_obs_json_to_formatted_pdbb_df(obs_json):
 
     obs = ObservationSet(obs_json).dataframe
     pdbb_df = from_obs_df_to_pdbb_df(obs)
-    format_pdbb_df = format_columns(pdbb_df)
-    return format_pdbb_df
+    renamded_pdbb_df = rename_columns(pdbb_df, concept_path_to_name = _concept_path_to_name(obs))
+    indexed_pdbb_df = set_index(renamded_pdbb_df)
+    formated_pdbb_df = format_columns(indexed_pdbb_df)
+    return formated_pdbb_df
 
 
 def from_obs_df_to_pdbb_df(obs):
@@ -38,27 +40,41 @@ def from_obs_df_to_pdbb_df(obs):
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_path_col = obs['concept.conceptPath']
-    concept_path_to_name = dict(zip(concept_path_col, obs['concept.name']))
     unq_concept_paths_ord = concept_path_col.unique().tolist()
-    id_column_dict = _get_identifying_columns(obs)
-    logger.info(f'Renaming columns: {id_column_dict}')
-    id_columns = list(id_column_dict.keys())
+    transmart_id_columns = _transmart_id_field_names(obs)
 
     logger.info('Reformatting columns...')
-    obs = _reformat_columns(obs, id_columns)
+    obs = _reformat_columns(obs, transmart_id_columns)
     # transform concept rows to column headers
     obs_pivot = _concepts_row_to_columns(obs)
     # propagate data to lower levels and display only rows that represent the lowest level
-    obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
+    obs_pivot = _merge_redundant_rows(obs_pivot, transmart_id_columns)
     # fix columns order
-    obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
-    obs_pivot = obs_pivot.rename(index=str, columns=dict(id_column_dict,  **concept_path_to_name))
-    obs_pivot.reset_index(drop=True, inplace=True)
-    obs_pivot = obs_pivot.rename_axis(None)
-
-    obs_pivot.columns.name = None
+    obs_pivot = obs_pivot[transmart_id_columns + unq_concept_paths_ord]
 
     return obs_pivot
+
+
+def rename_columns(df, concept_path_to_name = {}):
+    id_column_dict = _get_identifying_columns(df)
+    rename_dict = dict(id_column_dict, **concept_path_to_name)
+    logger.debug(f'Renaming columns: {rename_dict}')
+    return df.rename(index=str, columns=rename_dict)
+
+
+def _concept_path_to_name(df):
+    return dict(zip(df['concept.conceptPath'], df['concept.name']))
+
+
+def set_index(df):
+    present_id_columns = []
+    for new_id_column_name in IDENTIFYING_COLUMN_DICT.values():
+        if new_id_column_name in df:
+            present_id_columns.append(new_id_column_name)
+    logger.info(f'Following id columns are found: {present_id_columns}')
+    if present_id_columns:
+        return df.set_index(present_id_columns)
+    return df
 
 
 def format_columns(df):
@@ -163,6 +179,10 @@ def _concepts_row_to_columns(obs):
     obs_pivot.reset_index(inplace=True)
     obs_pivot.drop(obs_pivot.columns[[0]], axis=1, inplace=True)
     return obs_pivot
+
+
+def _transmart_id_field_names(obs):
+    return list(_get_identifying_columns(obs).keys())
 
 
 def _get_identifying_columns(obs):
