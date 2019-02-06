@@ -81,6 +81,23 @@ the function to the jobs registry. See the ./packer/jobs/example.py to learn how
 
 ## Existing jobs
 
+### Basic export job
+
+Export transmart api client observation dataframe to tsv file
+
+```json
+{
+	"job_type":"basic_export",
+	"job_parameters": {
+		"constraint": {
+			"type":"study_name",
+			"studyId":"CSR"
+
+		}
+	}
+}
+```
+
 ### Patient, diagnosis, biosource and biomaterial export
 
 Exports patient > diagnosis > biosource > biomaterial hierarchy as first 4 columns of the file.
@@ -88,8 +105,6 @@ The rest of the columns are concepts. Higher level concepts (e.g Age that is spe
 get distributed to all rows specific to lower levels (e.g. Diagnosis)
 
 See [the CSR](https://github.com/thehyve/transmart-core/tree/dev/transmart-data/test_studies/CSR) test study as an example.
-
-#### Complete request body example
 
 ```json
 {
@@ -114,8 +129,8 @@ where:
  - `job_parameters.constraint` - any [transmart v2 api constraint](https://github.com/thehyve/transmart-core/blob/dev/open-api/swagger.yaml)
 or composition of them that used to get data from transmart.
 
- - `custom_name` - name of the export job and the output `tsv` file.
- - `row_filter` (optional) - any [transmart v2 api constraint](https://github.com/thehyve/transmart-core/blob/dev/open-api/swagger.yaml)
+ - `job_parameters.custom_name`(optional) - name of the export job and the output `tsv` file.
+ - `job_parameters.row_filter` (optional) - any [transmart v2 api constraint](https://github.com/thehyve/transmart-core/blob/dev/open-api/swagger.yaml)
  or composition of them to fetch keys ([[[[patient], diagnosis], biosource], biomaterial]) that will make it to the end result.
  e.g. Given the `CSR` study and query above only rows specific to `P2` and `P6` patients will end up to the result table such as `P2`, `D2`, `BS2`, `BM2`, ... row.
  Please note that keys do not have to be equals in length. A row gets selected if only part of keys matches. e.g. `P1` vs `P1`, `D1`
