@@ -284,6 +284,25 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'] , inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
+    def test_case_insensitive_id_columns_detection(self):
+        self.test_data = [['BM1', 'BS1', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
+             '01. Date of biomaterial', None, 2, 'P1', 'Sun Jun 05 02:00:00 CEST 2011', 'TEST']]
+        observations_df = pd.DataFrame(self.test_data, columns=['BIOMATERIAL ID', 'biosource id',
+                                                                'Diagnosis ID', 'concept.conceptCode',
+                                                                'concept.conceptPath', 'concept.name',
+                                                                'numericValue', 'patient.id', 'patient.trial',
+                                                                'stringValue', 'study.name'])
+
+        df = from_obs_df_to_pdbb_df(observations_df)
+
+        self.assertIsNotNone(df)
+        expected_df = pd.DataFrame([
+            ['P1', 'D1', 'BS1', 'BM1', 'Sun Jun 05 02:00:00 CEST 2011'],
+        ], columns=['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID',
+                    '\\04.Biomaterial\\Date\\'])
+        expected_df.set_index(['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID'] , inplace=True)
+        pdt.assert_frame_equal(df, expected_df)
+
 
 if __name__ == '__main__':
     unittest.main()

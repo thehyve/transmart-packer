@@ -56,8 +56,8 @@ def _concept_path_to_name(df):
 
 
 def _detect_index_columns(df):
-    columns = list(df.columns.values)
-    return [id_column for id_column in ID_COLUMNS if id_column in columns]
+    lc_col_name_to_orig = {column.lower(): column for column in df.columns.values}
+    return [lc_col_name_to_orig[id_column.lower()] for id_column in ID_COLUMNS if id_column.lower() in lc_col_name_to_orig]
 
 def format_columns(df):
     """
