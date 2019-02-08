@@ -1,0 +1,3890 @@
+{
+    "dimensionDeclarations": [
+        {
+            "name": "study",
+            "type": "Object",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "name": "Biomaterial ID",
+            "type": "String"
+        },
+        {
+            "name": "Biosource ID",
+            "type": "String"
+        },
+        {
+            "name": "concept",
+            "type": "Object",
+            "fields": [
+                {
+                    "name": "conceptPath",
+                    "type": "String"
+                },
+                {
+                    "name": "conceptCode",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "name": "Diagnosis ID",
+            "type": "String"
+        },
+        {
+            "name": "patient",
+            "type": "Object",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Int"
+                },
+                {
+                    "name": "trial",
+                    "type": "String"
+                },
+                {
+                    "name": "inTrialId",
+                    "type": "String"
+                },
+                {
+                    "name": "subjectIds",
+                    "type": "Object"
+                },
+                {
+                    "name": "birthDate",
+                    "type": "Timestamp"
+                },
+                {
+                    "name": "deathDate",
+                    "type": "Timestamp"
+                },
+                {
+                    "name": "age",
+                    "type": "Int"
+                },
+                {
+                    "name": "race",
+                    "type": "String"
+                },
+                {
+                    "name": "maritalStatus",
+                    "type": "String"
+                },
+                {
+                    "name": "religion",
+                    "type": "String"
+                },
+                {
+                    "name": "sexCd",
+                    "type": "String"
+                },
+                {
+                    "name": "sex",
+                    "type": "String"
+                }
+            ]
+        }
+    ],
+    "sort": [
+        {
+            "dimension": "concept",
+            "sortOrder": "asc"
+        },
+        {
+            "dimension": "provider",
+            "sortOrder": "asc"
+        },
+        {
+            "dimension": "patient",
+            "sortOrder": "asc"
+        },
+        {
+            "dimension": "visit",
+            "sortOrder": "asc"
+        },
+        {
+            "dimension": "start time",
+            "sortOrder": "asc"
+        }
+    ],
+    "cells": [
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "stringValue": "9"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ],
+            "stringValue": "BM9"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                2,
+                1,
+                0,
+                1,
+                1
+            ],
+            "stringValue": "BM6"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                0
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                2
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                3
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                4
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                5
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                6
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                1
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                1,
+                null,
+                7
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                2,
+                null,
+                0
+            ],
+            "stringValue": "STD1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                2,
+                null,
+                2
+            ],
+            "stringValue": "STD1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                2,
+                null,
+                3
+            ],
+            "stringValue": "STD1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                2,
+                null,
+                4
+            ],
+            "stringValue": "STD1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                2,
+                null,
+                8
+            ],
+            "stringValue": "STD1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                3,
+                2,
+                0
+            ],
+            "stringValue": "2017-03-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                0,
+                3,
+                0,
+                0
+            ],
+            "stringValue": "2017-06-10T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                3,
+                3,
+                3,
+                3
+            ],
+            "stringValue": "2017-04-01T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                4,
+                3,
+                null,
+                4
+            ],
+            "stringValue": "2017-05-14T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                5,
+                3,
+                4,
+                8
+            ],
+            "stringValue": "2017-06-21T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                6,
+                3,
+                5,
+                8
+            ],
+            "stringValue": "2017-07-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                3,
+                4,
+                8
+            ],
+            "stringValue": "2016-08-11T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                8,
+                3,
+                6,
+                5
+            ],
+            "stringValue": "2017-07-10T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                9,
+                3,
+                6,
+                5
+            ],
+            "stringValue": "2017-05-10T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                10,
+                3,
+                7,
+                6
+            ],
+            "stringValue": "2017-08-21T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                1,
+                3,
+                1,
+                1
+            ],
+            "stringValue": "2017-03-10T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                3,
+                8,
+                7
+            ],
+            "stringValue": "2017-04-30T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                3,
+                2,
+                4,
+                2,
+                0
+            ],
+            "stringValue": "2017-10-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                0,
+                0,
+                4,
+                0,
+                0
+            ],
+            "stringValue": "2017-12-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                1,
+                0,
+                4,
+                0,
+                0
+            ],
+            "stringValue": "2017-12-02T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                4,
+                3,
+                4,
+                3,
+                3
+            ],
+            "stringValue": "2017-11-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                5,
+                4,
+                4,
+                null,
+                4
+            ],
+            "stringValue": "2017-12-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                6,
+                5,
+                4,
+                4,
+                8
+            ],
+            "stringValue": "2017-10-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                7,
+                6,
+                4,
+                5,
+                8
+            ],
+            "stringValue": "2017-10-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                8,
+                7,
+                4,
+                4,
+                8
+            ],
+            "stringValue": "2017-11-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                9,
+                5,
+                4,
+                4,
+                8
+            ],
+            "stringValue": "2017-12-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                10,
+                8,
+                4,
+                6,
+                5
+            ],
+            "stringValue": "2017-11-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                11,
+                9,
+                4,
+                6,
+                5
+            ],
+            "stringValue": "2017-08-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                12,
+                8,
+                4,
+                6,
+                5
+            ],
+            "stringValue": "2017-07-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                2,
+                1,
+                4,
+                1,
+                1
+            ],
+            "stringValue": "2017-09-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                13,
+                1,
+                4,
+                1,
+                1
+            ],
+            "stringValue": "2017-11-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                14,
+                11,
+                4,
+                8,
+                7
+            ],
+            "stringValue": "2017-10-12T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                0
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                2
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                4
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                5
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                6
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                5,
+                null,
+                7
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                6,
+                2,
+                0
+            ],
+            "stringValue": "Yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                5,
+                6,
+                4,
+                8
+            ],
+            "stringValue": "No"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                6,
+                4,
+                8
+            ],
+            "stringValue": "Yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                6,
+                8,
+                7
+            ],
+            "stringValue": "No"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                0
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                2
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                3
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                4
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                8
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                5
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                6
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                1
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                7,
+                null,
+                7
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                2,
+                0
+            ],
+            "stringValue": "liver"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                0,
+                0
+            ],
+            "stringValue": "liver"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                9,
+                2
+            ],
+            "stringValue": "kidney"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                10,
+                3
+            ],
+            "stringValue": "bone marrow"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                3,
+                3
+            ],
+            "stringValue": "liver"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                4,
+                8
+            ],
+            "stringValue": "kidney"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                5,
+                8
+            ],
+            "stringValue": "bone marrow"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                6,
+                5
+            ],
+            "stringValue": "bone marrow"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                7,
+                6
+            ],
+            "stringValue": "liver"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                11,
+                6
+            ],
+            "stringValue": "kidney"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                1,
+                1
+            ],
+            "stringValue": "liver"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                8,
+                8,
+                7
+            ],
+            "stringValue": "kidney"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                2,
+                0
+            ],
+            "stringValue": "neuroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                0,
+                0
+            ],
+            "stringValue": "neuroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                9,
+                2
+            ],
+            "stringValue": "nephroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                10,
+                3
+            ],
+            "stringValue": "hepatoblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                3,
+                3
+            ],
+            "stringValue": "nephroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                4,
+                8
+            ],
+            "stringValue": "nephroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                5,
+                8
+            ],
+            "stringValue": "hepatoblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                6,
+                5
+            ],
+            "stringValue": "hepatoblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                7,
+                6
+            ],
+            "stringValue": "neuroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                11,
+                6
+            ],
+            "stringValue": "neuroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                1,
+                1
+            ],
+            "stringValue": "nephroblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                9,
+                8,
+                7
+            ],
+            "stringValue": "hepatoblastoma"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                10,
+                2,
+                0
+            ],
+            "stringValue": "ST1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                0,
+                10,
+                0,
+                0
+            ],
+            "stringValue": "ST4"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                3,
+                10,
+                3,
+                3
+            ],
+            "stringValue": "ST2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                4,
+                10,
+                null,
+                4
+            ],
+            "stringValue": "ST1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                5,
+                10,
+                4,
+                8
+            ],
+            "stringValue": "ST2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                6,
+                10,
+                5,
+                8
+            ],
+            "stringValue": "ST3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                10,
+                4,
+                8
+            ],
+            "stringValue": "ST4"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                8,
+                10,
+                6,
+                5
+            ],
+            "stringValue": "ST2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                9,
+                10,
+                6,
+                5
+            ],
+            "stringValue": "ST3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                10,
+                10,
+                7,
+                6
+            ],
+            "stringValue": "ST3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                1,
+                10,
+                1,
+                1
+            ],
+            "stringValue": "ST2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                10,
+                8,
+                7
+            ],
+            "stringValue": "ST3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                0
+            ],
+            "stringValue": "1993-02-01T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                2
+            ],
+            "stringValue": "1992-03-02T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                3
+            ],
+            "stringValue": "1994-04-03T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                4
+            ],
+            "stringValue": "1993-05-04T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                8
+            ],
+            "stringValue": "1995-06-05T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                5
+            ],
+            "stringValue": "1993-07-06T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                6
+            ],
+            "stringValue": "1993-08-07T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                1
+            ],
+            "stringValue": "1997-09-08T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                11,
+                null,
+                7
+            ],
+            "stringValue": "1993-10-09T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                12,
+                2,
+                0
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                0,
+                12,
+                0,
+                0
+            ],
+            "stringValue": "cortex"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                3,
+                12,
+                3,
+                3
+            ],
+            "stringValue": "cortex"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                4,
+                12,
+                null,
+                4
+            ],
+            "stringValue": "cortex"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                5,
+                12,
+                4,
+                8
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                6,
+                12,
+                5,
+                8
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                12,
+                4,
+                8
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                8,
+                12,
+                6,
+                5
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                9,
+                12,
+                6,
+                5
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                10,
+                12,
+                7,
+                6
+            ],
+            "stringValue": "cortex"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                1,
+                12,
+                1,
+                1
+            ],
+            "stringValue": "cortex"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                12,
+                8,
+                7
+            ],
+            "stringValue": "medula"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                13,
+                null,
+                0
+            ],
+            "stringValue": "STUDY1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                13,
+                null,
+                2
+            ],
+            "stringValue": "STUDY1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                13,
+                null,
+                3
+            ],
+            "stringValue": "STUDY1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                13,
+                null,
+                4
+            ],
+            "stringValue": "STUDY1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                13,
+                null,
+                8
+            ],
+            "stringValue": "STUDY1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                2,
+                0
+            ],
+            "stringValue": "IV"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                0,
+                0
+            ],
+            "stringValue": "III"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                9,
+                2
+            ],
+            "stringValue": "III"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                10,
+                3
+            ],
+            "stringValue": "IV"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                3,
+                3
+            ],
+            "stringValue": "II"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                4,
+                8
+            ],
+            "stringValue": "I"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                5,
+                8
+            ],
+            "stringValue": "I"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                6,
+                5
+            ],
+            "stringValue": "II"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                7,
+                6
+            ],
+            "stringValue": "III"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                11,
+                6
+            ],
+            "stringValue": "II"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                1,
+                1
+            ],
+            "stringValue": "IV"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                14,
+                8,
+                7
+            ],
+            "stringValue": "II"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                15,
+                null,
+                3
+            ],
+            "stringValue": "not applicable"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                16,
+                2,
+                0
+            ],
+            "stringValue": "BS1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                0,
+                16,
+                0,
+                0
+            ],
+            "stringValue": "BS10"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                3,
+                2,
+                16,
+                2,
+                0
+            ],
+            "stringValue": "BS1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                0,
+                0,
+                16,
+                0,
+                0
+            ],
+            "stringValue": "BS10"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                1,
+                0,
+                16,
+                0,
+                0
+            ],
+            "stringValue": "BS10"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                3,
+                16,
+                3,
+                3
+            ],
+            "stringValue": "BS2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                4,
+                3,
+                16,
+                3,
+                3
+            ],
+            "stringValue": "BS2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                4,
+                16,
+                null,
+                4
+            ],
+            "stringValue": "BS3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                5,
+                4,
+                16,
+                null,
+                4
+            ],
+            "stringValue": "BS3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                6,
+                16,
+                5,
+                8
+            ],
+            "stringValue": "BS11"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                16,
+                4,
+                8
+            ],
+            "stringValue": "B4"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                6,
+                5,
+                16,
+                4,
+                8
+            ],
+            "stringValue": "BS4"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                7,
+                6,
+                16,
+                5,
+                8
+            ],
+            "stringValue": "BS11"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                8,
+                7,
+                16,
+                4,
+                8
+            ],
+            "stringValue": "BS12"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                9,
+                5,
+                16,
+                4,
+                8
+            ],
+            "stringValue": "BS4"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                8,
+                16,
+                6,
+                5
+            ],
+            "stringValue": "BS5"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                9,
+                16,
+                6,
+                5
+            ],
+            "stringValue": "BS9"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                10,
+                8,
+                16,
+                6,
+                5
+            ],
+            "stringValue": "BS5"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                11,
+                9,
+                16,
+                6,
+                5
+            ],
+            "stringValue": "BS9"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                12,
+                8,
+                16,
+                6,
+                5
+            ],
+            "stringValue": "BS5"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                10,
+                16,
+                7,
+                6
+            ],
+            "stringValue": "BS6"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                1,
+                16,
+                1,
+                1
+            ],
+            "stringValue": "BS7"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                2,
+                1,
+                16,
+                1,
+                1
+            ],
+            "stringValue": "BS7"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                13,
+                1,
+                16,
+                1,
+                1
+            ],
+            "stringValue": "BS7"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                16,
+                8,
+                7
+            ],
+            "stringValue": "BS8"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                14,
+                11,
+                16,
+                8,
+                7
+            ],
+            "stringValue": "BS8"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                2,
+                17,
+                2,
+                0
+            ],
+            "numericValue": 5
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                0,
+                17,
+                0,
+                0
+            ],
+            "numericValue": 3
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                3,
+                17,
+                3,
+                3
+            ],
+            "numericValue": 3
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                4,
+                17,
+                null,
+                4
+            ],
+            "numericValue": 2
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                5,
+                17,
+                4,
+                8
+            ],
+            "numericValue": 1
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                6,
+                17,
+                5,
+                8
+            ],
+            "numericValue": 5
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                7,
+                17,
+                4,
+                8
+            ],
+            "numericValue": 1
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                8,
+                17,
+                6,
+                5
+            ],
+            "numericValue": 4
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                9,
+                17,
+                6,
+                5
+            ],
+            "numericValue": 2
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                10,
+                17,
+                7,
+                6
+            ],
+            "numericValue": 3
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                1,
+                17,
+                1,
+                1
+            ],
+            "numericValue": 1
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                11,
+                17,
+                8,
+                7
+            ],
+            "numericValue": 1
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                2,
+                0
+            ],
+            "stringValue": "2016-05-01T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                0,
+                0
+            ],
+            "stringValue": "2016-08-10T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                9,
+                2
+            ],
+            "stringValue": "2016-07-02T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                10,
+                3
+            ],
+            "stringValue": "2016-11-03T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                3,
+                3
+            ],
+            "stringValue": "2016-03-11T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                4,
+                8
+            ],
+            "stringValue": "2016-09-05T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                5,
+                8
+            ],
+            "stringValue": "2016-05-01T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                6,
+                5
+            ],
+            "stringValue": "2016-12-06T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                7,
+                6
+            ],
+            "stringValue": "2017-02-01T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                11,
+                6
+            ],
+            "stringValue": "2016-07-22T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                1,
+                1
+            ],
+            "stringValue": "2017-04-02T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                18,
+                8,
+                7
+            ],
+            "stringValue": "2016-05-09T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                2,
+                0
+            ],
+            "stringValue": "Center 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                0,
+                0
+            ],
+            "stringValue": "Center 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                9,
+                2
+            ],
+            "stringValue": "Center 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                10,
+                3
+            ],
+            "stringValue": "Center 3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                3,
+                3
+            ],
+            "stringValue": "Center 3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                4,
+                8
+            ],
+            "stringValue": "Center 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                5,
+                8
+            ],
+            "stringValue": "Center 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                6,
+                5
+            ],
+            "stringValue": "Center 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                7,
+                6
+            ],
+            "stringValue": "Center 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                11,
+                6
+            ],
+            "stringValue": "Center 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                1,
+                1
+            ],
+            "stringValue": "Center 3"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                19,
+                8,
+                7
+            ],
+            "stringValue": "Center 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                0
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                2
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                3
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                4
+            ],
+            "stringValue": "no"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                8
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                5
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                6
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                1
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                20,
+                null,
+                7
+            ],
+            "stringValue": "yes"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                21,
+                null,
+                8
+            ],
+            "stringValue": "STD2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                21,
+                null,
+                5
+            ],
+            "stringValue": "STD2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                21,
+                null,
+                6
+            ],
+            "stringValue": "STD2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                21,
+                null,
+                1
+            ],
+            "stringValue": "STD2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                21,
+                null,
+                7
+            ],
+            "stringValue": "STD2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                22,
+                null,
+                0
+            ],
+            "numericValue": 1
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                22,
+                null,
+                2
+            ],
+            "numericValue": 2
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                22,
+                null,
+                3
+            ],
+            "numericValue": 3
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                22,
+                null,
+                4
+            ],
+            "numericValue": 4
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                22,
+                null,
+                8
+            ],
+            "numericValue": 5
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                2,
+                0
+            ],
+            "stringValue": "chemo"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                0,
+                0
+            ],
+            "stringValue": "chemo"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                9,
+                2
+            ],
+            "stringValue": "surgery"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                10,
+                3
+            ],
+            "stringValue": "Protocol 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                3,
+                3
+            ],
+            "stringValue": "Protocol 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                4,
+                8
+            ],
+            "stringValue": "chemo"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                5,
+                8
+            ],
+            "stringValue": "surgery"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                6,
+                5
+            ],
+            "stringValue": "chemo"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                7,
+                6
+            ],
+            "stringValue": "surgery"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                11,
+                6
+            ],
+            "stringValue": "surgery"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                1,
+                1
+            ],
+            "stringValue": "chemo"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                23,
+                8,
+                7
+            ],
+            "stringValue": "surgery"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                0
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                2
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                3
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                4
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                8
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                5
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                6
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                1
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                24,
+                null,
+                7
+            ],
+            "stringValue": "Human"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                3,
+                2,
+                25,
+                2,
+                0
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                0,
+                0,
+                25,
+                0,
+                0
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                1,
+                0,
+                25,
+                0,
+                0
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                4,
+                3,
+                25,
+                3,
+                3
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                5,
+                4,
+                25,
+                null,
+                4
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                6,
+                5,
+                25,
+                4,
+                8
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                7,
+                6,
+                25,
+                5,
+                8
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                8,
+                7,
+                25,
+                4,
+                8
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                9,
+                5,
+                25,
+                4,
+                8
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                10,
+                8,
+                25,
+                6,
+                5
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                11,
+                9,
+                25,
+                6,
+                5
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                12,
+                8,
+                25,
+                6,
+                5
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                2,
+                1,
+                25,
+                1,
+                1
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                13,
+                1,
+                25,
+                1,
+                1
+            ],
+            "stringValue": "DNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                14,
+                11,
+                25,
+                8,
+                7
+            ],
+            "stringValue": "RNA"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                26,
+                null,
+                5
+            ],
+            "stringValue": "2017-10-14T00:00:00Z"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                0
+            ],
+            "stringValue": "f"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                2
+            ],
+            "stringValue": "m"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                3
+            ],
+            "stringValue": "f"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                4
+            ],
+            "stringValue": "m"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                8
+            ],
+            "stringValue": "f"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                5
+            ],
+            "stringValue": "m"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                6
+            ],
+            "stringValue": "f"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                1
+            ],
+            "stringValue": "m"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                27,
+                null,
+                7
+            ],
+            "stringValue": "f"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                28,
+                null,
+                8
+            ],
+            "stringValue": "Study 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                28,
+                null,
+                5
+            ],
+            "stringValue": "Study 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                28,
+                null,
+                6
+            ],
+            "stringValue": "Study 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                28,
+                null,
+                1
+            ],
+            "stringValue": "Study 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                28,
+                null,
+                7
+            ],
+            "stringValue": "Study 2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                29,
+                null,
+                8
+            ],
+            "numericValue": 6
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                29,
+                null,
+                5
+            ],
+            "numericValue": 7
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                29,
+                null,
+                6
+            ],
+            "numericValue": 8
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                29,
+                null,
+                1
+            ],
+            "numericValue": 9
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                29,
+                null,
+                7
+            ],
+            "numericValue": 10
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                30,
+                null,
+                0
+            ],
+            "stringValue": "Study 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                30,
+                null,
+                2
+            ],
+            "stringValue": "Study 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                30,
+                null,
+                3
+            ],
+            "stringValue": "Study 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                30,
+                null,
+                4
+            ],
+            "stringValue": "Study 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                30,
+                null,
+                8
+            ],
+            "stringValue": "Study 1"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                31,
+                null,
+                8
+            ],
+            "stringValue": "STUDY2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                31,
+                null,
+                5
+            ],
+            "stringValue": "STUDY2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                31,
+                null,
+                6
+            ],
+            "stringValue": "STUDY2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                31,
+                null,
+                1
+            ],
+            "stringValue": "STUDY2"
+        },
+        {
+            "inlineDimensions": [],
+            "dimensionIndexes": [
+                0,
+                null,
+                null,
+                31,
+                null,
+                7
+            ],
+            "stringValue": "STUDY2"
+        }
+    ],
+    "dimensionElements": {
+        "study": [
+            {
+                "name": "CSR"
+            }
+        ],
+        "Biomaterial ID": [
+            "BM9",
+            "BM15",
+            "BM6",
+            "BM1",
+            "BM2",
+            "BM3",
+            "BM4",
+            "BM10",
+            "BM11",
+            "BM12",
+            "BM5",
+            "BM8",
+            "BM13",
+            "BM14",
+            "BM7"
+        ],
+        "Biosource ID": [
+            "BS10",
+            "BS7",
+            "BS1",
+            "BS2",
+            "BS3",
+            "BS4",
+            "BS11",
+            "BS12",
+            "BS5",
+            "BS9",
+            "BS6",
+            "BS8"
+        ],
+        "concept": [
+            {
+                "conceptPath": "\\Public Studies\\CSR\\04. Biomaterial information\\01. Biomaterial parent\\",
+                "conceptCode": "08e58306d0b4cf7e9b10dfe47135ef607d2bae3a",
+                "name": "01. Biomaterial parent"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\04. Informed consent material\\",
+                "conceptCode": "0e87b77f99a0e9d444cf4729e88301231334630d",
+                "name": "04. Informed consent material"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD1\\02. Study acronym\\",
+                "conceptCode": "1cbd83e436976dee45dd5c446290b2cb508b801e",
+                "name": "02. Study acronym"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\02. Date of biosource\\",
+                "conceptCode": "1ce3fc1098b2b8179e5b486b8349a5c08f807898",
+                "name": "02. Date of biosource"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\04. Biomaterial information\\02. Date of biomaterial\\",
+                "conceptCode": "1d92eaf563dcb89a4beca0698e983acf9b7c37a6",
+                "name": "02. Date of biomaterial"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\05. Informed consent data\\",
+                "conceptCode": "246e7915066ee4a150322518b213181a7f3903d9",
+                "name": "05. Informed consent data"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\06. Biosource dedicated for specific study\\",
+                "conceptCode": "309c81ae7e5f3fdcb3d32721460fb1796d4b24c3",
+                "name": "06. Biosource dedicated for specific study"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\07. Report heriditary susceptibility\\",
+                "conceptCode": "480736dfd7cc2d85ec65223382b7c480b32f455c",
+                "name": "07. Report heriditary susceptibility"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\03. Topography\\",
+                "conceptCode": "4f33eeb399622afda11f16c40a3e87dea82d6414",
+                "name": "03. Topography"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\02. Tumor type\\",
+                "conceptCode": "4fc4afd045e321c824da01fae5c679cb34d71cac",
+                "name": "02. Tumor type"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\04. Disease status\\",
+                "conceptCode": "584786ca0ff21ee8ceb22dc1e0d7d6ca7b2a90e3",
+                "name": "04. Disease status"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\01. Date of birth\\",
+                "conceptCode": "60da92e9c0229b8ce64785ce3060f2ac7a2ce8ac",
+                "name": "01. Date of birth"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\03. Tissue\\",
+                "conceptCode": "640e439053c924ca78f5ec339e4f6fe26bd4073d",
+                "name": "03. Tissue"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD1\\01. Study ID\\",
+                "conceptCode": "6b74b1eda880cca4473e2793e13e88869c0a03a5",
+                "name": "01. Study ID"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\04. Tumor stage\\",
+                "conceptCode": "7043ff91b2bd050feca89996be82eb1421a3372b",
+                "name": "04. Tumor stage"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\06. Informed concent linking external database\\",
+                "conceptCode": "7816a9fbf89154bdbfadda6daded4b6c58dd37b3",
+                "name": "06. Informed concent linking external database"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\01. Biosource parent\\",
+                "conceptCode": "82fe43990271eabe4266c0392e99327f7b68d9a8",
+                "name": "01. Biosource parent"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\03. Biosource information\\05. Tumor percentage\\",
+                "conceptCode": "83faa63b282f9ff2e97312309b3b18760a6db97b",
+                "name": "05. Tumor percentage"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\01. Date of diagnosis\\",
+                "conceptCode": "9a35d3ffc12c75bbd93a8804e27d31ea1ee20c93",
+                "name": "01. Date of diagnosis"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\05. Center of treatment\\",
+                "conceptCode": "a7cfe8e9c9d0ee7d282ee4bc579d9ea2d2f5f167",
+                "name": "05. Center of treatment"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\01. Informed consent type\\",
+                "conceptCode": "b64e4f7183e7b75a6faedb430285e326c5a30fde",
+                "name": "01. Informed consent type"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD2\\02. Study acronym\\",
+                "conceptCode": "bb02b2fe41e213d2f2511228236e63c8144c2bd9",
+                "name": "02. Study acronym"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD1\\04. Individual Study ID\\",
+                "conceptCode": "c18ba4a966d996090e78993dc087b24dfaeea87a",
+                "name": "04. Individual Study ID"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\02. Diagnosis information\\Treatment\\",
+                "conceptCode": "c3bb4810113fc3daa877a2109c1a9c1358955021",
+                "name": "Treatment"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Taxonomy\\",
+                "conceptCode": "debae43031f4a461b0e7a7fa0a0d89c793573df6",
+                "name": "Taxonomy"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\04. Biomaterial information\\03. Biomaterial type\\",
+                "conceptCode": "e0e1f2c1393ba80effa972e6f395566104fcce8e",
+                "name": "03. Biomaterial type"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\Informed consent\\03. Date informed consent withdrawn\\",
+                "conceptCode": "e1ee31813ba7572cfd8ac3a36ec5a22a3d22512e",
+                "name": "03. Date informed consent withdrawn"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\01. Patient information\\02. Gender\\",
+                "conceptCode": "e24277e1af6ded3d1a0b231f32e7723c566d5e67",
+                "name": "02. Gender"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD2\\03. Study title\\",
+                "conceptCode": "e2823a4ea40466a199a724b967a1cd8f9f28b533",
+                "name": "03. Study title"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD2\\04. Individual Study ID\\",
+                "conceptCode": "eecc1d9cbd2b8ac72e1fc9771e574b248931328c",
+                "name": "04. Individual Study ID"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD1\\03. Study title\\",
+                "conceptCode": "f79e5c3b50c3c3f889281a8567ba2db15c657a18",
+                "name": "03. Study title"
+            },
+            {
+                "conceptPath": "\\Public Studies\\CSR\\05. Study information\\STD2\\01. Study ID\\",
+                "conceptCode": "f997c8d7bffdc73544e76688094f42b347fc8dac",
+                "name": "01. Study ID"
+            }
+        ],
+        "Diagnosis ID": [
+            "D10",
+            "D8",
+            "D1",
+            "D11",
+            "D5",
+            "D12",
+            "D6",
+            "D7",
+            "D9",
+            "D2",
+            "D3",
+            "D13"
+        ],
+        "patient": [
+            {
+                "id": 101,
+                "trial": "P1",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P1"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 108,
+                "trial": "P8",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P8"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 102,
+                "trial": "P2",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P2"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 103,
+                "trial": "P3",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P3"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 104,
+                "trial": "P4",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P4"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 106,
+                "trial": "P6",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P6"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 107,
+                "trial": "P7",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P7"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 109,
+                "trial": "P9",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P9"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            },
+            {
+                "id": 105,
+                "trial": "P5",
+                "inTrialId": null,
+                "subjectIds": {
+                    "SUBJ_ID": "P5"
+                },
+                "birthDate": null,
+                "deathDate": null,
+                "age": null,
+                "race": null,
+                "maritalStatus": null,
+                "religion": null,
+                "sexCd": null,
+                "sex": "unknown"
+            }
+        ]
+    }
+}

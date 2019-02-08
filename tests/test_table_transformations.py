@@ -1,8 +1,9 @@
 import unittest
 from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_df_to_pdbb_df, format_columns
+    from_obs_df_to_pdbb_df, format_columns, from_obs_json_to_export_pdbb_df
 import pandas as pd
 import pandas.testing as pdt
+import os
 
 
 class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
@@ -302,6 +303,14 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                     '\\04.Biomaterial\\Date\\'])
         expected_df.set_index(['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID'] , inplace=True)
         pdt.assert_frame_equal(df, expected_df)
+
+    def test_from_json_to_export_pdbb_df(self):
+        csr_obs_path = os.path.join(os.path.dirname(__file__), 'csr_observations.json') 
+        input_json = open(csr_obs_path).read()
+
+        df = from_obs_json_to_export_pdbb_df(input_json)
+
+        self.assertIsNotNone(df)
 
 
 if __name__ == '__main__':
