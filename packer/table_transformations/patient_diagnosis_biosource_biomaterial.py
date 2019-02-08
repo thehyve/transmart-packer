@@ -21,11 +21,12 @@ def from_obs_json_to_export_pdbb_df(obs_json):
     The rest of columns represent concepts (aka variables)
     """
 
-    obs = ObservationSet(obs_json).dataframe
-    pdbb_df = from_obs_df_to_pdbb_df(obs)
-    renamded_pdbb_df = pdbb_df.raname(index=str, columns=_concept_path_to_name(obs))
-    formated_pdbb_df = format_columns(indexed_pdbb_df)
-    return formated_pdbb_df
+    df = ObservationSet(obs_json).dataframe
+    concept_pat_to_name = _concept_path_to_name(df)
+    df = from_obs_df_to_pdbb_df(df)
+    df = df.rename(index=str, columns=concept_pat_to_name)
+    df = format_columns(df)
+    return df
 
 
 def from_obs_df_to_pdbb_df(obs):
@@ -56,8 +57,8 @@ def _concept_path_to_name(df):
 
 
 def _detect_index_columns(df):
-    columns = list(df.columns.values)
-    return [id_column for id_column in ID_COLUMNS if id_column in columns]
+    lc_col_name_to_orig = {column.lower(): column for column in df.columns.values}
+    return [lc_col_name_to_orig[id_column.lower()] for id_column in ID_COLUMNS if id_column.lower() in lc_col_name_to_orig]
 
 def format_columns(df):
     """
