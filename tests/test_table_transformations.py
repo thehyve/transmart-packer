@@ -1,8 +1,10 @@
 import unittest
 from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_df_to_pdbb_df, format_columns
+    from_obs_df_to_pdbb_df, format_columns, from_obs_json_to_export_pdbb_df
 import pandas as pd
 import pandas.testing as pdt
+import os
+import json
 
 
 class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
@@ -220,8 +222,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P1', 'D1', 'BS1', 'BM1', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', 25., 'Biomaterial #1'],
             ['P1', 'D1', 'BS1', 'BM2', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', None,
              'Biomaterial #2'],
-            ['P1', 'D2', 'BS2', None, 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
-            ['P2', 'D3', None, None, 30., None, 35., None, None, None, None, None],
+            ['P1', 'D2', 'BS2', '', 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
+            ['P2', 'D3', '', '', 30., None, 35., None, None, None, None, None],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\', '\\02. Diagnosis\\Text\\',
                     '\\03. Biosource\\Number\\', '\\03. Biosource\\Text\\', '\\04. Biomaterial\\Number\\',
@@ -278,7 +280,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
             ['P1', 'D1', 'BS1', 'Skin'],
-            ['P2', None, 'BS2', 'Liver'],
+            ['P2', '', 'BS2', 'Liver'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
                     '\\Patient\\Diagnosis\\Biosource\\Cell type\\'])
         expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'] , inplace=True)
@@ -302,6 +304,76 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                     '\\04.Biomaterial\\Date\\'])
         expected_df.set_index(['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID'] , inplace=True)
         pdt.assert_frame_equal(df, expected_df)
+
+    def test_from_json_to_export_pdbb_df(self):
+        csr_obs_path = os.path.join(os.path.dirname(__file__), 'csr_observations.json')
+        input_json = json.loads(open(csr_obs_path).read())
+
+        df = from_obs_json_to_export_pdbb_df(input_json)
+
+        self.assertIsNotNone(df)
+        actual_ids = list(df.index.values)
+        self.assertEqual(actual_ids, [
+            ('P1', 'D1', 'BS1', 'BM1'),
+            ('P1', 'D10', 'BS10', 'BM15'),
+            ('P1', 'D10', 'BS10', 'BM9'),
+            ('P2', 'D2', '', ''),
+            ('P3', 'D11', 'BS2', 'BM2'),
+            ('P3', 'D3', '', ''),
+            ('P4', '', 'BS3', 'BM3'),
+            ('P5', 'D12', 'BS11', 'BM10'),
+            ('P5', 'D5', 'BS12', 'BM11'),
+            ('P5', 'D5', 'BS4', 'BM12'),
+            ('P5', 'D5', 'BS4', 'BM4'),
+            ('P6', 'D6', 'BS5', 'BM13'),
+            ('P6', 'D6', 'BS5', 'BM5'),
+            ('P6', 'D6', 'BS9', 'BM8'),
+            ('P7', 'D13', '', ''),
+            ('P7', 'D7', 'BS6', ''),
+            ('P8', 'D8', 'BS7', 'BM14'),
+            ('P8', 'D8', 'BS7', 'BM6'),
+            ('P9', 'D9', 'BS8', 'BM7')])
+        columns = list(df.columns.values)
+        self.assertEqual(columns, [
+            # patient
+            '01. Date of birth',
+            '02. Gender',
+            '01. Informed consent type',
+            '03. Date informed consent withdrawn',
+            '04. Informed consent material',
+            '05. Informed consent data',
+            '06. Informed concent linking external database',
+            '07. Report heriditary susceptibility',
+            'Taxonomy',
+            # diagnosis
+            '01. Date of diagnosis',
+            '02. Tumor type',
+            '03. Topography',
+            '04. Tumor stage',
+            '05. Center of treatment',
+            'Treatment',
+            # biosource
+            '01. Biosource parent',
+            '02. Date of biosource',
+            '03. Tissue',
+            '04. Disease status',
+            '05. Tumor percentage',
+            '06. Biosource dedicated for specific study',
+            # biomaterial
+            '01. Biomaterial parent',
+            '02. Date of biomaterial',
+            '03. Biomaterial type',
+            # STD1
+            '01. Study ID',
+            '02. Study acronym',
+            '03. Study title',
+            '04. Individual Study ID',
+            # STD2
+            '01. Study ID',
+            '02. Study acronym',
+            '03. Study title',
+            '04. Individual Study ID'])
+
 
 
 if __name__ == '__main__':

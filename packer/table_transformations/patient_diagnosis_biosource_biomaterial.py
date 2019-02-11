@@ -48,6 +48,9 @@ def from_obs_df_to_pdbb_df(obs):
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
     # fix columns order
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
+    # Replace NAs and NANs in index columns with empty string
+    for id_column in id_columns:
+        obs_pivot[id_column] = obs_pivot[id_column].fillna('')
     obs_pivot.set_index(id_columns, inplace=True)
     return obs_pivot
 
