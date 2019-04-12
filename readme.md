@@ -93,7 +93,8 @@ Export transmart api client observation dataframe to tsv file
 			"type":"study_name",
 			"studyId":"CSR"
 
-		}
+		},
+		"custom_name":"name of the export"
 	}
 }
 ```
