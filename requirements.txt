@@ -1,4 +1,4 @@
-PyYAML == 3.13
+PyYAML == 5.1
 transmart[full] == 0.2.4
 redis == 2.10.6
 celery == 4.2.1
