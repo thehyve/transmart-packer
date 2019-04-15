@@ -5,11 +5,13 @@ import os
 import json
 
 from celery import Celery, Task
-from celery.exceptions import SoftTimeLimitExceeded
+from celery.exceptions import SoftTimeLimitExceeded, Ignore
 
 from packer.task_status import Status, TaskStatus
-from .config import redis_config, task_config, celery_config
+from .config import redis_config, task_config, celery_config, transmart_config
 from .redis_client import redis
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -139,3 +141,27 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
                 'message': message
             })
         )
+
+    def observations_json(self, constraint):
+        '''
+        :param self: Required for bind to BaseDataTask
+        :param constraint: transmart API constraint to request
+        :return: response body (json) of the observation call of transmart API
+        '''
+        handle = f'{transmart_config.get("host")}/v2/observations'
+        self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r}')
+        r = requests.post(url=handle,
+                          json={'type': 'clinical', 'constraint': constraint},
+                          headers={
+                              'Authorization': self.request.get('Authorization')
+                          })
+        if r.status_code == 401:
+            logger.error('Export failed. Unauthorized.')
+            self.update_status(Status.FAILED, 'Unauthorized.')
+            raise Ignore()
+        if r.status_code != 200:
+            logger.error('Export failed. Error occurred.')
+            self.update_status(Status.FAILED, f'Connection error occurred when fetching {handle}. '
+            f'Response status {r.status_code}')
+            raise Ignore()
+        return r.json()
