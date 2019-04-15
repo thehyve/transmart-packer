@@ -1,6 +1,6 @@
 PyYAML == 5.1
 transmart[full] == 0.2.4
-redis == 2.10.6
+redis == 3.2.1
 celery == 4.2.1
 tornado == 5.1.1
 aioredis == 1.2.0
