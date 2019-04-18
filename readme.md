@@ -135,3 +135,19 @@ or composition of them that used to get data from transmart.
  or composition of them to fetch keys ([[[[patient], diagnosis], biosource], biomaterial]) that will make it to the end result.
  e.g. Given the `CSR` study and query above only rows specific to `P2` and `P6` patients will end up to the result table such as `P2`, `D2`, `BS2`, `BM2`, ... row.
  Please note that keys do not have to be equals in length. A row gets selected if only part of keys matches. e.g. `P1` vs `P1`, `D1`
+
+## License
+Copyright &copy; 2019 The Hyve B.V.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the [GNU Affero General Public License](LICENSE)
+along with this program. If not, see https://www.gnu.org/licenses/.
