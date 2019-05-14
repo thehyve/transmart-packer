@@ -1,13 +1,29 @@
 language: python
 matrix:
   include:
-    - python: 3.7
+    - python: "3.6"
+    - python: "3.7"
       dist: xenial
       sudo: true
 
+# command to install dependencies
 install:
-    - pip install -r requirements.txt
+  - pip install -r requirements.txt
+  - pip install codecov
 
-script:
-#test patient_diagnosis_biosource_biomaterial_export tranformations
-    - python -m unittest tests/test_table_transformations.py
+# command to run tests
+script: python setup.py test
+
+deploy:
+  provider: pypi
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
+  user: gijskant
+  password:
+    secure: WIHOpeDc4RenSJMY1N/Wenpji+yOvaeTG/rl9Qj7XfGiqmPILx0F/K5+zbmKH9saWbnVHWLO95yYc4ZdpG6wlv67GI2oW/G6d05ZxjWKGdLJAp7bnmqHqf/4DE90d8ZXxNkAs+NXeJ377IrZRoXmyh4BQOeY1cc2AMJMLLpyxVpG0xc1qH1/v0XaDCZpVn70MV7cqX++oNXJqJ8IG5Q/mxSgY0DTm1BDKjPN1xe8hF3/3kYDNvqekFdtCGB3L6xHLe9WYwe9tQDzeTtYu9+e4d9jjSDXvSgPfav6iuF+DAwzLraXiAeU1w5o0Yxm0Zj7zj1GklThUWNmXO1YixEP0T/grI/OaZk+HyMp7ZyuN91BBTovdVB1OaQuxICuDJh0w1miRSQNJS9Y94N5ToXV+1maLI2KEYCNFydJQAFbgTWecKiic69Hr/VjwO6XxBselQw3UsAkut8eR/ftzV2RbE8QOnSi4St3Qpk0DGYyBmvhDFBUD1H5bqcR5KrZaHB2/dYsOSDNNSfeZgic5svBT1q6mYEFMKI6VwkZLqBAzpTYAV2srdti2+uTOeFS/o91HcCXpjOhJucL8yVq6Cs7rrV0W+58WPUFsAxFRvs1m9nbGDj3EHMMn76pgtYocDw1S0dNcYkfqMOjCllweQtS+zohemOTJpewQIHtoGsTj3U=
+  on:
+    tags: true
+    branch: master
+
+after_success:
+  - codecov
