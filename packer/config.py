@@ -16,7 +16,7 @@ transmart_config = dict(
 )
 
 app_config = dict(
-    host=os.environ.get('CLIENT_ORIGIN_URL', 'http://localhost:4200')
+    host=os.environ.get('CLIENT_ORIGIN_URL', '*')
 )
 
 redis_config = dict(
