@@ -6,13 +6,16 @@ matrix:
       dist: xenial
       sudo: true
 
+services:
+  - redis-server
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
   - pip install codecov
 
 # command to run tests
-script: python setup.py test
+script: celery -A packer.tasks worker & sleep 5; python setup.py test; killall celery
 
 deploy:
   provider: pypi

@@ -56,7 +56,7 @@ From root dir run:
 
   celery -A packer.tasks worker --loglevel=info
 
-  python -m packer
+  transmart-packer
 
 
 Alternatively, you could build and run the stack from code using ``docker-compose``. This
@@ -105,7 +105,7 @@ Then you can run:
 
 .. code-block:: bash
 
-    python -m unittest discover -s ./tests
+    python setup.py test
 
 Extending
 ^^^^^^^^^
