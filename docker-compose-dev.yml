@@ -19,7 +19,9 @@ services:
             - redis
         environment:
           TRANSMART_URL: 'http://localhost:8081'
-          KEYCLOAK_URL: 'http://localhost:8080/auth/realms/dev'
+          KEYCLOAK_SERVER_URL: 'http://localhost:8080'
+          KEYCLOAK_REALM: 'dev'
+          KEYCLOAK_CLIENT_ID: 'transmart'
           CLIENT_ORIGIN_URL: 'http://localhost:4200'
 
     worker:
