@@ -10,7 +10,7 @@ EXPOSE 8999
 COPY entrypoint.sh /entrypoint.sh
 COPY docker-logging.yaml /docker-logging.yaml
 
-RUN pip install --upgrade "transmart-packer == ${TRANSMART_PACKER_VERSION}" &&\
+RUN pip install --no-cache-dir --upgrade "transmart-packer == ${TRANSMART_PACKER_VERSION}" &&\
     groupadd -r tornado && useradd -r -g tornado tornado &&\
     sed -i 's/\r//' /entrypoint.sh &&\
     chmod +x /entrypoint.sh
