@@ -14,6 +14,7 @@ from ..tasks import BaseDataTask, app
 
 logger = logging.getLogger(__name__)
 
+
 @app.task(bind=True, base=BaseDataTask)
 def basic_export(self: BaseDataTask, constraint, **params):
     """
@@ -36,4 +37,3 @@ def basic_export(self: BaseDataTask, constraint, **params):
     self.update_status(Status.RUNNING, 'Writing export to disk.')
     obs_df = ObservationSet(obs_json).dataframe
     save(obs_df, self.task_id, custom_name)
-
