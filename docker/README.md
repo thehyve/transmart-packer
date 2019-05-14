@@ -31,3 +31,15 @@ Value    | Type  | Description
 ## Volumes
 
 `/app/tmp_data_dir`: the export data directory.
+
+
+## Build and publish
+
+```bash
+# Build image
+TRANSMART_PACKER_VERSION=$(python print_version.py)
+docker build --build-arg "TRANSMART_PACKER_VERSION=${TRANSMART_PACKER_VERSION}" -t "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}" docker/
+# Publish image to Docker Hub
+docker login
+docker push "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}"
+```

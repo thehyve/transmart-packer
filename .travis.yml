@@ -30,12 +30,12 @@ deploy:
 
 after_deploy:
   - TRANSMART_PACKER_VERSION=`python print_version.py`
-  - docker build -t "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}" docker/
+  - docker build --build-arg "TRANSMART_PACKER_VERSION=${TRANSMART_PACKER_VERSION}" -t "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}" docker/
   # To have `DOCKER_USERNAME` and `DOCKER_PASSWORD`
   # use `travis env set DOCKER_USERNAME ...`
   # use `travis env set DOCKER_PASSWORD ...`
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - echo "docker push "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}"
+  - docker push "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}"
 
 after_success:
   - codecov
