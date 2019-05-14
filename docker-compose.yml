@@ -17,9 +17,10 @@ services:
             - redis
         environment:
           TRANSMART_URL: 'https://transmart-dev.thehyve.net'
-          KEYCLOAK_URL: 'https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev'
+          KEYCLOAK_SERVER_URL: 'https://keycloak-dwh-test.thehyve.net'
+          KEYCLOAK_REALM: 'transmart-dev'
+          KEYCLOAK_CLIENT_ID: 'transmart-client'
           CLIENT_ORIGIN_URL: '*'
-          CLIENT_ID: 'transmart-client'
 
     worker:
         image: thehyve/transmart-packer
