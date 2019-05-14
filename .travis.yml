@@ -28,5 +28,11 @@ deploy:
     tags: true
     branch: master
 
+after_deploy:
+  - TRANSMART_PACKER_VERSION=`python print_version.py`
+  - docker build -t "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}" docker/
+  - echo "docker login"
+  - echo "docker push "thehyve/transmart-packer:${TRANSMART_PACKER_VERSION}"
+
 after_success:
   - codecov
