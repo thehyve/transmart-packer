@@ -30,7 +30,7 @@ def get_current_user(self):
     """ output of this is accessible in requests as self.current_user """
     token = get_request_token(self)
     try:
-        if len(token) == 0:
+        if token is None or len(token) == 0:
             error_msg = 'No authorisation token found in the request'
             log.error(error_msg)
             raise HTTPError(401, 'Unauthorized.')
@@ -58,7 +58,7 @@ def get_keycloak_public_key_and_algorithm(token_kid):
     log.info(f'Getting public key for the kid={token_kid} from the keycloak...')
     r = requests.get(handle)
     if r.status_code != 200:
-        error = "Could not get certificates from the keycloak. " \
+        error = "Could not get certificates from Keycloak. " \
                 "Reason: [{}]: {}".format(r.status_code, r.text)
         logging.error(error)
         raise ValueError(error)
@@ -66,11 +66,15 @@ def get_keycloak_public_key_and_algorithm(token_kid):
         json_response = r.json()
     except Exception:
         error = "Could not retrieve the public key. " \
-                 "Got unexpected response: '{}'".format(r.text)
+                "Got unexpected response: '{}'".format(r.text)
         logging.error(error)
         raise ValueError(error)
     try:
         matching_key = next((item for item in json_response.get('keys') if item['kid'] == token_kid), None)
+        if matching_key is None:
+            error = "No public key found for kid {}".format(token_kid)
+            logging.error(error)
+            raise ValueError(error)
         matching_key_json = json.dumps(matching_key)
         public_key = RSAAlgorithm.from_jwk(matching_key_json)
     except Exception as e:

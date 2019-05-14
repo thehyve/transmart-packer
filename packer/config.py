@@ -7,8 +7,8 @@ tornado_config = dict(
 )
 
 keycloak_config = dict(
-    oidc_server_url=os.environ.get('KEYCLOAK_SERVER_URL')+'/auth/realms/'+os.environ.get('KEYCLOAK_REALM'),
-    client_id=os.environ.get('KEYCLOAK_CLIENT_ID', 'transmart'),
+    oidc_server_url='{}/auth/realms/{}'.format(os.environ.get('KEYCLOAK_SERVER_URL'), os.environ.get('KEYCLOAK_REALM')),
+    client_id=os.environ.get('KEYCLOAK_CLIENT_ID', 'transmart-client'),
 )
 
 transmart_config = dict(
@@ -16,7 +16,7 @@ transmart_config = dict(
 )
 
 app_config = dict(
-    host=os.environ.get('CLIENT_ORIGIN_URL', 'http://localhost:4200')
+    host=os.environ.get('CLIENT_ORIGIN_URL', '*')
 )
 
 redis_config = dict(

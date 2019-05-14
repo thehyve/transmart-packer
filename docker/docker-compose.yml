@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  redis:
+    image: redis:alpine
+    command: ['redis-server', '--appendonly', 'yes']
+    hostname: redis
+    volumes:
+      - redis-data:/data
+
+  transmart-packer-webapp:
+    image: thehyve/transmart-packer
+    command: ['transmart-packer']
+    ports:
+      - 8999:8999
+    depends_on:
+      - redis
+    links:
+      - redis
+    environment:
+      TRANSMART_URL: ${TRANSMART_URL:-https://transmart-dev.thehyve.net}
+      KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL:-https://keycloak-dwh-test.thehyve.net/auth}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-transmart-dev}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-transmart-client}
+      CLIENT_ORIGIN_URL: '*'
+    volumes:
+      - transmart-packer-webapp-data:/app/tmp_data_dir
+
+  transmart-packer-worker:
+    image: thehyve/transmart-packer
+    command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
+    depends_on:
+      - redis
+    links:
+      - redis
+    environment:
+      TRANSMART_URL: ${TRANSMART_URL:-https://transmart-dev.thehyve.net}
+    volumes:
+      - transmart-packer-worker-data:/app/tmp_data_dir
+
+volumes:
+  redis-data:
+  transmart-packer-webapp-data:
+  transmart-packer-worker-data:

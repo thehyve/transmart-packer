@@ -2,9 +2,10 @@ import json
 import os.path
 import sys
 import time
-import uuid
 
 import jwt
+import packer
+import pytest
 import tornado.ioloop
 import tornado.websocket
 from tornado import httpclient
@@ -28,10 +29,26 @@ def get_mock_auth(user_id=None):
     claims = {
         'sub': user_id,
         'name': 'John Doe',
-        'iat': 1516239022
+        'iat': 1516239022,
+        'aud': 'transmart'
     }
     token = jwt.encode(claims, key='secret?')
     return {'Authorization': f'Bearer {token.decode()}'}
+
+
+mock_user = '1234567890'
+
+
+def get_mock_user(self):
+    return mock_user
+
+
+@pytest.fixture(autouse=True)
+def current_user_fixture(monkeypatch):
+    global mock_user
+    mock_user = '1234567890'
+    monkeypatch.setattr(packer.main.BaseHandler, 'get_current_user', get_mock_user)
+    monkeypatch.setattr(packer.main.StatusWebSocket, 'get_current_user', get_mock_user)
 
 
 class TestHandlerBase(AsyncHTTPTestCase):
@@ -52,6 +69,7 @@ class TestHandlerBase(AsyncHTTPTestCase):
         return
 
 
+@pytest.mark.skipif('os.environ.get("SKIP_TORNADO_TESTS")')
 class TestWebAppHandlers(TestHandlerBase):
     post_args = {
         "job_type": "add",
@@ -220,20 +238,22 @@ class TestWebAppHandlers(TestHandlerBase):
         calculated_value = response.body
         self.assertEqual(10, int.from_bytes(calculated_value, byteorder='big'))
 
+        global mock_user
+        mock_user = 'other user'
+
         response = self.get(f'/jobs/data/{task_id}')
         self.assertEqual(404, response.code)
 
     @tornado.testing.gen_test
     async def test_ws_listen(self):
-        user_id = str(uuid.uuid4())
-        auth_header = get_mock_auth(user_id)
+        auth_header = get_mock_auth()
         port = tornado_config.get("port")
         ws_url = f"ws://localhost:{port}/jobs/subscribe"
         request = httpclient.HTTPRequest(ws_url, headers=auth_header)
         ws_client = await tornado.websocket.websocket_connect(request)
 
         response = await ws_client.read_message()
-        self.assertEqual(f"Listening to channel: 'channel:{user_id}'", response)
+        self.assertEqual(f"Listening to channel: 'channel:1234567890'", response)
 
         client = httpclient.AsyncHTTPClient()
         r = await client.fetch(

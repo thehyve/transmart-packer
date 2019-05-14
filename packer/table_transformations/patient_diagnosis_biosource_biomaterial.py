@@ -31,7 +31,7 @@ def from_obs_json_to_export_pdbb_df(obs_json):
 
 def from_obs_df_to_pdbb_df(obs):
     if obs.empty:
-        logger.warn('Retrieved hypercube is empty! Exporting empty result.')
+        logger.warning('Retrieved hypercube is empty! Exporting empty result.')
         return obs
     # order rows by concept_paths:
     # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
@@ -62,6 +62,7 @@ def _concept_path_to_name(df):
 def _detect_index_columns(df):
     lc_col_name_to_orig = {column.lower(): column for column in df.columns.values}
     return [lc_col_name_to_orig[id_column.lower()] for id_column in ID_COLUMNS if id_column.lower() in lc_col_name_to_orig]
+
 
 def format_columns(df):
     """
