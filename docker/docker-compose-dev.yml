@@ -8,8 +8,8 @@ services:
             - redis-data:/data
     webapp:
         build:
-            context: .
-            dockerfile: ./Dockerfile
+            context: ..
+            dockerfile: Dockerfile
         command: ['python', '-m', 'packer']
         ports:
             - 8999:8999
@@ -26,8 +26,8 @@ services:
 
     worker:
         build:
-            context: .
-            dockerfile: ./Dockerfile
+            context: ..
+            dockerfile: Dockerfile
         command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
         depends_on:
             - redis
