@@ -42,7 +42,10 @@ setup(
     include_package_data=True,
     license="GNU General Public License v3 or later",
     zip_safe=False,
-    keywords='ontology2transmart',
+    keywords=[
+        'transmart-packer',
+        'transmart'
+    ],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
