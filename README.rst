@@ -97,6 +97,15 @@ make call to ``http://localhost:8999/jobs/create?job_type=add&job_parameters={%2
 Development
 -----------
 
+Components
+^^^^^^^^^^
+
+.. figure:: images/transmart-packer.svg
+    :alt: Overview of the components of transmart-packer and the interaction with external components.
+
+    Overview of the components of transmart-packer and the interaction with external components.
+
+
 Testing
 ^^^^^^^
 
