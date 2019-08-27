@@ -8,7 +8,7 @@ from celery import Celery, Task
 from celery.exceptions import SoftTimeLimitExceeded, Ignore
 
 from packer.task_status import Status, TaskStatus
-from .config import redis_config, task_config, celery_config, transmart_config
+from .config import redis_config, task_config, celery_config, transmart_config, http_config
 from .redis_client import redis
 
 import requests
@@ -154,7 +154,8 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
                           json={'type': 'clinical', 'constraint': constraint},
                           headers={
                               'Authorization': self.request.get('Authorization')
-                          })
+                          },
+                          verify=http_config.get('verify_cert'))
         if r.status_code == 401:
             logger.error('Export failed. Unauthorized.')
             self.update_status(Status.FAILED, 'Unauthorized.')

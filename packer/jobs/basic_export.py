@@ -1,7 +1,5 @@
 import logging
 
-import requests
-
 from packer.export import save
 
 try:

@@ -25,6 +25,7 @@ services:
       CLIENT_ORIGIN_URL: '*'
     volumes:
       - transmart-packer-webapp-data:/app/tmp_data_dir
+      - ./ssl/certs.pem:/ssl/certs.pem
 
   transmart-packer-worker:
     image: thehyve/transmart-packer:${TRANSMART_PACKER_VERSION:-0.1.2}
@@ -37,6 +38,7 @@ services:
       TRANSMART_URL: ${TRANSMART_URL:-https://transmart-dev.thehyve.net}
     volumes:
       - transmart-packer-worker-data:/app/tmp_data_dir
+      - ./ssl/certs.pem:/ssl/certs.pem
 
 volumes:
   redis-data:
