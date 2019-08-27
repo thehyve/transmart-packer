@@ -18,6 +18,9 @@ Variable              | Description
 `KEYCLOAK_REALM`      | The Keycloak realm, e.g., `transmart-dev`
 `KEYCLOAK_CLIENT_ID`  | The Keycloak client ID, e.g., `transmart-client`
 
+An optional variable `VERIFY_CERT` can be used to specify the path of a certificate collection file (`.pem`)
+used to verify HTTP requests.
+
 
 ## Ports
 

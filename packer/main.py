@@ -20,7 +20,7 @@ import requests
 import packer.jobs as jobs
 from packer.file_handling import FSHandler
 from packer.task_status import Status, TaskStatusAsync
-from .config import tornado_config, app_config, logging_config, keycloak_config
+from .config import tornado_config, app_config, logging_config, keycloak_config, http_config
 from .redis_client import get_async_redis
 from .tasks import app
 import functools
@@ -56,7 +56,7 @@ def get_request_token(request_holder):
 def get_keycloak_public_key_and_algorithm(token_kid):
     handle = f'{keycloak_config.get("oidc_server_url")}/protocol/openid-connect/certs'
     log.info(f'Getting public key for the kid={token_kid} from the keycloak...')
-    r = requests.get(handle)
+    r = requests.get(handle, verify=http_config.get('verify_cert'))
     if r.status_code != 200:
         error = "Could not get certificates from Keycloak. " \
                 "Reason: [{}]: {}".format(r.status_code, r.text)

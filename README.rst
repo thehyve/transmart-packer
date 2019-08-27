@@ -59,8 +59,26 @@ From root dir run:
   transmart-packer
 
 
-Alternatively, you could build and run the stack from code using ``docker-compose``. This
-has only been tested using Docker for Mac, but should work regardless.
+*Environment variables:*
+
+==============================  =================
+Variable                        Description
+==============================  =================
+``TRANSMART_URL``               The URL of the TranSMART API server
+``KEYCLOAK_SERVER_URL``         Keycloak server URL, e.g., ``https://keycloak-dwh-test.thehyve.net``
+``KEYCLOAK_REALM``              The Keycloak realm, e.g., ``transmart-dev``
+``KEYCLOAK_CLIENT_ID``          The Keycloak client ID (default: ``transmart-client``)
+``REDIS_URL``                   Redis server URL (default: ``redis://localhost:6379``)
+``DATA_DIR``                    Directory to write export data (default: ``/tmp/packer/``)
+``LOG_CFG``                     Logging configuration (default: ``packer/logging.yaml``)
+``CLIENT_ORIGIN_URL``           URLs to restrict cross-origin requests to (CORS) (default: ``*``)
+==============================  =================
+
+An optional variable `VERIFY_CERT` can be used to specify the path of a certificate collection file (`.pem`)
+used to verify HTTP requests.
+
+
+Alternatively, you could build and run the stack from code using ``docker-compose``.
 
 .. code-block:: bash
 

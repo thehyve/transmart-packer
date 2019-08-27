@@ -1,4 +1,12 @@
 import os
+from typing import Union
+
+
+def read_verify_cert(value: str) -> Union[bool, str]:
+    return True if value is None or value == '' or value.lower() == 'true' \
+        else False if value.lower() == 'false' \
+        else value
+
 
 tornado_config = dict(
     cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
@@ -13,6 +21,10 @@ keycloak_config = dict(
 
 transmart_config = dict(
     host=os.environ.get('TRANSMART_URL')
+)
+
+http_config = dict(
+    verify_cert=read_verify_cert(os.environ.get('VERIFY_CERT'))
 )
 
 app_config = dict(

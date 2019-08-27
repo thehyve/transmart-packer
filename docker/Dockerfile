@@ -1,6 +1,6 @@
 FROM python:3.6-slim
 
-ARG TRANSMART_PACKER_VERSION="0.1.2"
+ARG TRANSMART_PACKER_VERSION="0.1.4"
 
 ENV PYTHONUNBUFFERED 1
 ENV LOG_CFG docker-logging.yaml
@@ -21,4 +21,3 @@ WORKDIR /app
 USER tornado
 
 ENTRYPOINT ["/entrypoint.sh"]
-
