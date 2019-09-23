@@ -11,11 +11,11 @@
             ]
         },
         {
-            "name": "Biomaterial ID",
+            "name": "Biomaterial",
             "type": "String"
         },
         {
-            "name": "Biosource ID",
+            "name": "Biosource",
             "type": "String"
         },
         {
@@ -37,7 +37,7 @@
             ]
         },
         {
-            "name": "Diagnosis ID",
+            "name": "Diagnosis",
             "type": "String"
         },
         {
@@ -3533,7 +3533,7 @@
                 "name": "CSR"
             }
         ],
-        "Biomaterial ID": [
+        "Biomaterial": [
             "BM9",
             "BM15",
             "BM6",
@@ -3550,7 +3550,7 @@
             "BM14",
             "BM7"
         ],
-        "Biosource ID": [
+        "Biosource": [
             "BS10",
             "BS7",
             "BS1",
@@ -3726,7 +3726,7 @@
                 "name": "01. Study ID"
             }
         ],
-        "Diagnosis ID": [
+        "Diagnosis": [
             "D10",
             "D8",
             "D1",
@@ -3743,7 +3743,7 @@
         "patient": [
             {
                 "id": 101,
-                "trial": "P1",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P1"
@@ -3759,7 +3759,7 @@
             },
             {
                 "id": 108,
-                "trial": "P8",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P8"
@@ -3775,7 +3775,7 @@
             },
             {
                 "id": 102,
-                "trial": "P2",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P2"
@@ -3791,7 +3791,7 @@
             },
             {
                 "id": 103,
-                "trial": "P3",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P3"
@@ -3807,7 +3807,7 @@
             },
             {
                 "id": 104,
-                "trial": "P4",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P4"
@@ -3823,7 +3823,7 @@
             },
             {
                 "id": 106,
-                "trial": "P6",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P6"
@@ -3839,7 +3839,7 @@
             },
             {
                 "id": 107,
-                "trial": "P7",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P7"
@@ -3855,7 +3855,7 @@
             },
             {
                 "id": 109,
-                "trial": "P9",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P9"
@@ -3871,7 +3871,7 @@
             },
             {
                 "id": 105,
-                "trial": "P5",
+                "trial": null,
                 "inTrialId": null,
                 "subjectIds": {
                     "SUBJ_ID": "P5"
