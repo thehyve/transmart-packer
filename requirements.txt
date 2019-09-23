@@ -1,11 +1,11 @@
-PyYAML == 5.1
-transmart[full] == 0.2.4
+PyYAML >= 5.1,<5.2
+transmart[full] == 0.2.6
 redis == 3.2.1
 celery == 4.3.0
 tornado == 6.0.2
 aioredis == 1.2.0
 cryptography == 2.6.1
 pyjwt == 1.7.1
-requests == 2.21.0
-pandas == 0.24.2
-numpy == 1.16.3
+requests == 2.22.0
+pandas>=0.25.1,<0.26.0
+numpy==1.17.1
