@@ -33,10 +33,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
              '01. Date of biomaterial', None, 2, 'P2', 'Fri Jan 19 01:00:00 CET 2018', 'TEST'],
             ['BM4', 'BS3', 'D3', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', None, 2, 'P2', 'Sun Jun 05 02:00:00 CEST 2011', 'TEST']]
-        observations_df = pd.DataFrame(self.test_data, columns=['Biomaterial Id', 'Biosource Id',
-                                                                'Diagnosis Id', 'concept.conceptCode',
+        observations_df = pd.DataFrame(self.test_data, columns=['Biomaterial', 'Biosource',
+                                                                'Diagnosis', 'concept.conceptCode',
                                                                 'concept.conceptPath', 'concept.name',
-                                                                'numericValue', 'patient.id', 'patient.trial',
+                                                                'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
@@ -48,7 +49,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P2', 'D3', 'BS3', 'BM3', 39., 'Diagnosis 3 Name', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
             ['P2', 'D3', 'BS3', 'BM4', 39., 'Diagnosis 3 Name', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
-                    '\\01.Patient\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
+                    '\\01.Patient\\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
                     '\\04.Biomaterial\\Date\\'])
         expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'] , inplace=True)
         pdt.assert_frame_equal(df, expected_df)
@@ -67,10 +68,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['BS2', 'D2', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
              None, 2, 'P2', 'Liver', 'TEST']
             ]
-        observations_df = pd.DataFrame(self.test_data, columns=['Biosource Id', 'Diagnosis Id',
+        observations_df = pd.DataFrame(self.test_data, columns=['Biosource', 'Diagnosis',
                                                                 'concept.conceptCode', 'concept.conceptPath',
-                                                                'concept.name', 'numericValue', 'patient.id',
-                                                                'patient.trial', 'stringValue', 'study.name'])
+                                                                'concept.name', 'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
+                                                                'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
@@ -93,10 +95,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['D2', 'diagnosis_concept_1', '\\Patient\\Diagnosis\\Diagnosis Name\\', 'Diagnosis Name',
              None, 2, 'P2', 'Diagnosis 2 Name', 'TEST'],
             ]
-        observations_df = pd.DataFrame(self.test_data, columns=['Diagnosis Id',
+        observations_df = pd.DataFrame(self.test_data, columns=['Diagnosis',
                                                                 'concept.conceptCode', 'concept.conceptPath',
-                                                                'concept.name', 'numericValue', 'patient.id',
-                                                                'patient.trial', 'stringValue', 'study.name'])
+                                                                'concept.name', 'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
+                                                                'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
@@ -115,8 +118,9 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['patient_concept_1', '\\Patient\\Age\\', 'Age', 39.0, 2, 'P2', None, 'TEST'],
             ]
         observations_df = pd.DataFrame(self.test_data, columns=['concept.conceptCode', 'concept.conceptPath',
-                                                                'concept.name', 'numericValue', 'patient.id',
-                                                                'patient.trial', 'stringValue', 'study.name'])
+                                                                'concept.name', 'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
+                                                                'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
@@ -145,10 +149,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
              '01. Date of biomaterial', None, 2, 'P2', '2018-01-19T01:00:00Z', 'TEST'],
             ['BM4', 'BS2', 'D2', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
              '01. Date of biomaterial', None, 2, 'P2', '2011-06-05T02:00:00Z', 'TEST']]
-        observations_df = pd.DataFrame(self.test_data, columns=['Biomaterial Id', 'Biosource Id',
-                                                                'Diagnosis Id', 'concept.conceptCode',
+        observations_df = pd.DataFrame(self.test_data, columns=['Biomaterial', 'Biosource',
+                                                                'Diagnosis', 'concept.conceptCode',
                                                                 'concept.conceptPath', 'concept.name',
-                                                                'numericValue', 'patient.id', 'patient.trial',
+                                                                'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
@@ -181,7 +186,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         ]
         observations_df = pd.DataFrame(self.test_data, columns=['concept.conceptCode', 'concept.conceptPath',
                                                                 'concept.name', 'numericValue', 'patient.id',
-                                                                'patient.trial', 'stringValue', 'study.name'])
+                                                                'patient.subjectIds.SUBJ_ID', 'stringValue',
+                                                                'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
@@ -190,7 +196,8 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
             ['P2', 'Patient 2', None, None, None],
         ], columns=['Patient Id',
-                    '\\01. Patient\\Name\\', '\\02. Diagnosis\\Name\\', '\\03. Biosource\\Name\\', '\\04. Biomaterial\\Name\\'])
+                    '\\01. Patient\\Name\\', '\\02. Diagnosis\\Name\\', '\\03. Biosource\\Name\\',
+                    '\\04. Biomaterial\\Name\\'])
         expected_df.set_index(['Patient Id'] , inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
@@ -212,23 +219,25 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             [2, 'P2', 'D3', None, None, 'dnum', '\\02. Diagnosis\\Number\\', 'Number', 35., None, 'T'],
         ]
         observations_df = pd.DataFrame(self.test_data, columns=[
-            'patient.id', 'patient.trial', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+            'patient.id', 'patient.subjectIds.SUBJ_ID', 'Diagnosis', 'Biosource', 'Biomaterial',
             'concept.conceptCode', 'concept.conceptPath', 'concept.name', 'numericValue', 'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', 25., 'Biomaterial #1'],
+            ['P1', 'D1', 'BS1', 'BM1', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', 25.,
+             'Biomaterial #1'],
             ['P1', 'D1', 'BS1', 'BM2', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', None,
              'Biomaterial #2'],
             ['P1', 'D2', 'BS2', '', 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
             ['P2', 'D3', '', '', 30., None, 35., None, None, None, None, None],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
-                    '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\', '\\02. Diagnosis\\Text\\',
+                    '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\',
+                    '\\02. Diagnosis\\Text\\',
                     '\\03. Biosource\\Number\\', '\\03. Biosource\\Text\\', '\\04. Biomaterial\\Number\\',
                     '\\04. Biomaterial\\Text\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_format_columns(self):
@@ -270,10 +279,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['BS2', None, 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
              None, 2, 'P2', 'Liver', 'TEST']
             ]
-        observations_df = pd.DataFrame(self.test_data, columns=['Biosource Id', 'Diagnosis Id',
+        observations_df = pd.DataFrame(self.test_data, columns=['Biosource', 'Diagnosis',
                                                                 'concept.conceptCode', 'concept.conceptPath',
-                                                                'concept.name', 'numericValue', 'patient.id',
-                                                                'patient.trial', 'stringValue', 'study.name'])
+                                                                'concept.name', 'numericValue',
+                                                                'patient.id', 'patient.subjectIds.SUBJ_ID',
+                                                                'stringValue', 'study.name'])
 
         df = from_obs_df_to_pdbb_df(observations_df)
 
@@ -283,26 +293,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P2', '', 'BS2', 'Liver'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
                     '\\Patient\\Diagnosis\\Biosource\\Cell type\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'] , inplace=True)
-        pdt.assert_frame_equal(df, expected_df)
-
-    def test_case_insensitive_id_columns_detection(self):
-        self.test_data = [['BM1', 'BS1', 'D1', 'biomaterial_concept_1', '\\04.Biomaterial\\Date\\',
-             '01. Date of biomaterial', None, 2, 'P1', 'Sun Jun 05 02:00:00 CEST 2011', 'TEST']]
-        observations_df = pd.DataFrame(self.test_data, columns=['BIOMATERIAL ID', 'biosource id',
-                                                                'Diagnosis ID', 'concept.conceptCode',
-                                                                'concept.conceptPath', 'concept.name',
-                                                                'numericValue', 'patient.id', 'patient.trial',
-                                                                'stringValue', 'study.name'])
-
-        df = from_obs_df_to_pdbb_df(observations_df)
-
-        self.assertIsNotNone(df)
-        expected_df = pd.DataFrame([
-            ['P1', 'D1', 'BS1', 'BM1', 'Sun Jun 05 02:00:00 CEST 2011'],
-        ], columns=['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID',
-                    '\\04.Biomaterial\\Date\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis ID', 'biosource id', 'BIOMATERIAL ID'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_from_json_to_export_pdbb_df(self):
@@ -373,7 +364,6 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             '02. Study acronym',
             '03. Study title',
             '04. Individual Study ID'])
-
 
 
 if __name__ == '__main__':

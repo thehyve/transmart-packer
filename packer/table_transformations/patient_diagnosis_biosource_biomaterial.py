@@ -34,8 +34,13 @@ def from_obs_df_to_pdbb_df(obs):
         logger.warning('Retrieved hypercube is empty! Exporting empty result.')
         return obs
     # order rows by concept_paths:
-    # 1)Patient -> 2)Diagnosis -> 3)Biosource -> 4)Biomaterial -> 5)Studies
-    obs.rename(index=str, columns={'patient.trial': 'Patient Id'}, inplace=True)
+    # 1) Patient -> 2) Diagnosis -> 3) Biosource -> 4) Biomaterial -> 5) Studies
+    obs.rename(index=str, columns={
+        'patient.subjectIds.SUBJ_ID': 'Patient Id',
+        'Diagnosis': 'Diagnosis Id',
+        'Biosource': 'Biosource Id',
+        'Biomaterial': 'Biomaterial Id'
+    }, inplace=True)
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_path_col = obs['concept.conceptPath']
     unq_concept_paths_ord = concept_path_col.unique().tolist()
