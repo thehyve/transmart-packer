@@ -140,7 +140,7 @@ Extending
 New jobs can be added by adding a new Celery function to the jobs folder and adding
 the function to the jobs registry. See the `packer/jobs/example.py`_ to learn how.
 
-.. _packer/jobs/example.py: packer/jobs/example.py
+.. _packer/jobs/example.py: https://github.com/thehyve/transmart-packer/blob/master/packer/jobs/example.py
 
 
 Existing jobs
