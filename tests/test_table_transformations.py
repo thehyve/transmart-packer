@@ -166,7 +166,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             ['P2', 'D2', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01.Patient\\Age\\', '\\03.Biosource\\Cell type\\', '\\04.Biomaterial\\Date\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_empty_data(self):
@@ -272,7 +272,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                 ['', '2'],
             ], columns=['Number', 'Number']))
 
-    def test_diagnossless_biosources(self):
+    def test_diagnoseless_biosources(self):
         self.test_data = [
             ['BS1', 'D1', 'biosource_concept_1', '\\Patient\\Diagnosis\\Biosource\\Cell type\\', 'Cell type',
              None, 1, 'P1', 'Skin', 'TEST'],

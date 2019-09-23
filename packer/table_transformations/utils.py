@@ -9,7 +9,7 @@ def filter_rows(df: pd.DataFrame, filter_row_df: pd.DataFrame) -> pd.DataFrame:
     """
     df_indx_names = df.index.names
     filter_row_df_indx_names = filter_row_df.index.names
-    common_indx_names = list(set(df_indx_names) & set(filter_row_df_indx_names))
+    common_indx_names = [name for name in df_indx_names if name in set(filter_row_df_indx_names)]
     if not common_indx_names:
         raise ValueError('No index columns in common to filter rows.')
     df_common_indx = df.reset_index().set_index(common_indx_names).index

@@ -50,7 +50,7 @@ class UtilsTestCase(unittest.TestCase):
         filter_row_df = filter_row_df.set_index(['letter'])
 
         # when
-        fitlered_df = filter_rows(src_df, filter_row_df)
+        filtered_df = filter_rows(src_df, filter_row_df)
 
         # then
         expected_df = pd.DataFrame(
@@ -60,7 +60,7 @@ class UtilsTestCase(unittest.TestCase):
             ],
             columns=['letter', 'row', 'number'])
         expected_df = expected_df.set_index(['letter', 'row'])
-        pdt.assert_frame_equal(fitlered_df, expected_df)
+        pdt.assert_frame_equal(filtered_df, expected_df)
 
     def test_filter_rows_with_wider_filter_indx(self):
         # given
@@ -78,7 +78,7 @@ class UtilsTestCase(unittest.TestCase):
         filter_row_df = filter_row_df.set_index(['letter', 'row'])
 
         # when
-        fitlered_df = filter_rows(src_df, filter_row_df)
+        filtered_df = filter_rows(src_df, filter_row_df)
 
         # then
         expected_df = pd.DataFrame(
@@ -88,7 +88,7 @@ class UtilsTestCase(unittest.TestCase):
             ],
             columns=['letter', 'number'])
         expected_df = expected_df.set_index(['letter'])
-        pdt.assert_frame_equal(fitlered_df, expected_df)
+        pdt.assert_frame_equal(filtered_df, expected_df)
 
     def test_filter_no_index_columns_in_common(self):
         # given
