@@ -166,21 +166,25 @@ Export transmart api client observation dataframe to tsv file
     }
 
 
-Patient, diagnosis, biosource and biomaterial export
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+CSR export
+^^^^^^^^^^
 
-Exports patient > diagnosis > biosource > biomaterial hierarchy as first 4 columns of the file.
-The rest of the columns are concepts. Higher level concepts (e.g Age that is specific to Patient level)
+`The Central Subject Registry (CSR) data model` specific export.
+The model contains individual, diagnosis, biosource and biomaterial entities,
+following the hierarchy: patient > diagnosis > biosource > biomaterial.
+The entities IDs are first 4 columns of the export file. The rest of the columns are concepts.
+Higher level concepts (e.g Age that is specific to Patient level)
 get distributed to all rows specific to lower levels (e.g. Diagnosis)
 
 See the CSR_ test study as an example.
 
 .. _CSR: https://github.com/thehyve/transmart-core/tree/dev/transmart-data/test_studies/CSR
+.. _The Central Subject Registry (CSR) data model: https://github.com/thehyve/python_csr2transmart/blob/master/csr/csr.py
 
 .. code-block:: json
 
     {
-        "job_type":"patient_diagnosis_biosource_biomaterial_export",
+        "job_type":"csr_export",
         "job_parameters": {
             "constraint": {
                 "type":"study_name",
