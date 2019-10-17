@@ -116,7 +116,7 @@ Development
 -----------
 
 Components
-^^^^^^^^^^
+++++++++++
 
 .. figure:: images/transmart-packer.svg
     :alt: Overview of the components of transmart-packer and the interaction with external components.
@@ -125,7 +125,7 @@ Components
 
 
 Testing
-^^^^^^^
++++++++
 
 To run the test suite, we have to start redis-server and celery workers with the commands above.
 Then you can run:
@@ -135,7 +135,7 @@ Then you can run:
     python setup.py test
 
 Extending
-^^^^^^^^^
++++++++++
 
 New jobs can be added by adding a new Celery function to the jobs folder and adding
 the function to the jobs registry. See the `packer/jobs/example.py`_ to learn how.
@@ -147,7 +147,7 @@ Existing jobs
 -------------
 
 Basic export job
-^^^^^^^^^^^^^^^^
+++++++++++++++++
 
 Export transmart api client observation dataframe to tsv file
 
@@ -167,9 +167,9 @@ Export transmart api client observation dataframe to tsv file
 
 
 CSR export
-^^^^^^^^^^
+++++++++++
 
-`The Central Subject Registry (CSR) data model` specific export.
+`The Central Subject Registry (CSR) data model`_ specific export.
 The model contains individual, diagnosis, biosource and biomaterial entities,
 following the hierarchy: patient > diagnosis > biosource > biomaterial.
 The entities IDs are first 4 columns of the export file. The rest of the columns are concepts.
@@ -211,6 +211,21 @@ where:
   Please note that keys do not have to be equals in length. A row gets selected if only part of keys matches. e.g. `P1` vs `P1`, `D1`
 
 .. _`transmart v2 api constraint`: https://github.com/thehyve/transmart-core/blob/dev/open-api/swagger.yaml
+
+
+Adding new entity to CSR data model:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When the CSR data model is extended with new entities, the export transformation code
+has to be changed as well in order to include a column with the ID of the new entity as one of the identifying columns.
+
+In order to do this, `<table_transformations/csr_transformations.py>`_ file has to be modified.
+Required changes:
+
+1) extend the ``ID_COLUMNS`` list,
+
+2) modify ``from_obs_df_to_csr_df(obs: DataFrame)`` function in order to properly rename columns.
+
 
 License
 -------
