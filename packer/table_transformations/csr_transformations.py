@@ -16,7 +16,7 @@ DATE_FORMAT = '%Y-%m-%d'
 ID_COLUMNS = ['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id']
 
 
-def from_obs_json_to_export_pdbb_df(obs_json: Dict) -> DataFrame:
+def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     """
     :param obs_json: json returned by transmart v2/observations call
     :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
@@ -25,13 +25,13 @@ def from_obs_json_to_export_pdbb_df(obs_json: Dict) -> DataFrame:
 
     df = ObservationSet(obs_json).dataframe
     concept_pat_to_name = _concept_path_to_name(df)
-    df = from_obs_df_to_pdbb_df(df)
+    df = from_obs_df_to_csr_df(df)
     df = df.rename(index=str, columns=concept_pat_to_name)
     df = format_columns(df)
     return df
 
 
-def from_obs_df_to_pdbb_df(obs: DataFrame) -> DataFrame:
+def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     if obs.empty:
         logger.warning('Retrieved hypercube is empty! Exporting empty result.')
         return obs

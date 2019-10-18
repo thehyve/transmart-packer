@@ -1,13 +1,13 @@
 import unittest
-from packer.table_transformations.patient_diagnosis_biosource_biomaterial import \
-    from_obs_df_to_pdbb_df, format_columns, from_obs_json_to_export_pdbb_df
+from packer.table_transformations.csr_transformations import \
+    from_obs_df_to_csr_df, format_columns, from_obs_json_to_export_csr_df
 import pandas as pd
 import pandas.testing as pdt
 import os
 import json
 
 
-class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
+class CsrTranformations(unittest.TestCase):
 
     def test_result_data_shape_basic_with_sorting(self):
         self.test_data = [
@@ -40,7 +40,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -74,7 +74,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -101,7 +101,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -122,7 +122,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -156,7 +156,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -171,7 +171,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
 
     def test_empty_data(self):
         test_obs = pd.DataFrame()
-        result_obs = from_obs_df_to_pdbb_df(test_obs)
+        result_obs = from_obs_df_to_csr_df(test_obs)
         self.assertIsNotNone(result_obs)
         self.assertTrue(result_obs.empty)
         self.assertEqual(result_obs.size, 0)
@@ -189,7 +189,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.subjectIds.SUBJ_ID', 'stringValue',
                                                                 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -222,7 +222,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
             'patient.id', 'patient.subjectIds.SUBJ_ID', 'Diagnosis', 'Biosource', 'Biomaterial',
             'concept.conceptCode', 'concept.conceptPath', 'concept.name', 'numericValue', 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -285,7 +285,7 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
                                                                 'patient.id', 'patient.subjectIds.SUBJ_ID',
                                                                 'stringValue', 'study.name'])
 
-        df = from_obs_df_to_pdbb_df(observations_df)
+        df = from_obs_df_to_csr_df(observations_df)
 
         self.assertIsNotNone(df)
         expected_df = pd.DataFrame([
@@ -296,11 +296,11 @@ class PatientDiagnosisBiosourceBiomaterialTranformations(unittest.TestCase):
         expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
-    def test_from_json_to_export_pdbb_df(self):
+    def test_from_json_to_export_csr_df(self):
         csr_obs_path = os.path.join(os.path.dirname(__file__), 'csr_observations.json')
         input_json = json.loads(open(csr_obs_path).read())
 
-        df = from_obs_json_to_export_pdbb_df(input_json)
+        df = from_obs_json_to_export_csr_df(input_json)
 
         self.assertIsNotNone(df)
         actual_ids = list(df.index.values)

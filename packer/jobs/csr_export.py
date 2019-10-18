@@ -1,6 +1,6 @@
 import logging
 
-from ..table_transformations.patient_diagnosis_biosource_biomaterial import from_obs_json_to_export_pdbb_df
+from ..table_transformations.csr_transformations import from_obs_json_to_export_csr_df
 from ..table_transformations.utils import filter_rows
 
 from packer.task_status import Status
@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 @app.task(bind=True, base=BaseDataTask)
-def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constraint, **params):
+def csr_export(self: BaseDataTask, constraint, **params):
     """
     Reformat hypercube data into a specific export file.
-    Export table with the following IDs: Patient, Diagnosis, Biosource, Biomaterial
+    Export table with ID columns being CSR entities IDs
 
     :param self: Required for bind to BaseDataTask
     :param constraint: mandatory tranmsart api constraint to get data for.
@@ -24,12 +24,12 @@ def patient_diagnosis_biosource_biomaterial_export(self: BaseDataTask, constrain
     """
     obs_json = self.observations_json(constraint)
     self.update_status(Status.RUNNING, 'Observations gotten, transforming.')
-    export_df = from_obs_json_to_export_pdbb_df(obs_json)
+    export_df = from_obs_json_to_export_csr_df(obs_json)
     if 'row_filter' in params:
         self.update_status(Status.RUNNING, 'Observations for the row filter gotten, transforming.')
         row_filter_constraint = params['row_filter']
         row_filter_obs_json = self.observations_json(row_filter_constraint)
-        row_export_df = from_obs_json_to_export_pdbb_df(row_filter_obs_json)
+        row_export_df = from_obs_json_to_export_csr_df(row_filter_obs_json)
         self.update_status(Status.RUNNING, 'Removing extra rows based on the row filter.')
         export_df = filter_rows(export_df, row_export_df)
 
