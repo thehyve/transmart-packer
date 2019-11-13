@@ -17,6 +17,7 @@ tornado_config = dict(
 keycloak_config = dict(
     oidc_server_url='{}/auth/realms/{}'.format(os.environ.get('KEYCLOAK_SERVER_URL'), os.environ.get('KEYCLOAK_REALM')),
     client_id=os.environ.get('KEYCLOAK_CLIENT_ID', 'transmart-client'),
+    offline_token=os.environ.get('KEYCLOAK_OFFLINE_TOKEN')
 )
 
 transmart_config = dict(

@@ -1,43 +1,33 @@
 import json
 import logging
 import logging.config
-import yaml
 import os
 import uuid
 from datetime import datetime
 
-import jwt
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-from jwt.algorithms import RSAAlgorithm
+import yaml
 from tornado import iostream, gen
 from tornado.log import app_log as log
 from tornado.options import define
 from tornado.web import HTTPError
-import requests
 
 import packer.jobs as jobs
+from packer import auth
 from packer.file_handling import FSHandler
 from packer.task_status import Status, TaskStatusAsync
-from .config import tornado_config, app_config, logging_config, keycloak_config, http_config
+from .config import tornado_config, app_config, logging_config
 from .redis_client import get_async_redis
 from .tasks import app
-import functools
 
 
 def get_current_user(self):
     """ output of this is accessible in requests as self.current_user """
     token = get_request_token(self)
     try:
-        if token is None or len(token) == 0:
-            error_msg = 'No authorisation token found in the request'
-            log.error(error_msg)
-            raise HTTPError(401, 'Unauthorized.')
-        decoded_token_header = jwt.get_unverified_header(token)
-        token_kid = decoded_token_header.get('kid')
-        algorithm, public_key = get_keycloak_public_key_and_algorithm(token_kid)
-        user_token = jwt.decode(token, public_key, algorithms=algorithm, audience=keycloak_config.get("client_id"))
+        user_token = auth.authorize(token)
         subject = user_token.get('sub')
         log.info(f'Connected: {user_token.get("email")!r}, user id (sub): {subject!r}')
         return subject
@@ -45,44 +35,11 @@ def get_current_user(self):
         raise HTTPError(401, f'Access unauthorized. {str(e)}')
 
 
-def get_request_token(request_holder):
+def get_request_token(request_holder) -> str:
     token = request_holder.request.headers.get("Authorization")
     if token:
         return token.split('Bearer ')[-1]
     return None
-
-
-@functools.lru_cache(maxsize=2)
-def get_keycloak_public_key_and_algorithm(token_kid):
-    handle = f'{keycloak_config.get("oidc_server_url")}/protocol/openid-connect/certs'
-    log.info(f'Getting public key for the kid={token_kid} from the keycloak...')
-    r = requests.get(handle, verify=http_config.get('verify_cert'))
-    if r.status_code != 200:
-        error = "Could not get certificates from Keycloak. " \
-                "Reason: [{}]: {}".format(r.status_code, r.text)
-        logging.error(error)
-        raise ValueError(error)
-    try:
-        json_response = r.json()
-    except Exception:
-        error = "Could not retrieve the public key. " \
-                "Got unexpected response: '{}'".format(r.text)
-        logging.error(error)
-        raise ValueError(error)
-    try:
-        matching_key = next((item for item in json_response.get('keys') if item['kid'] == token_kid), None)
-        if matching_key is None:
-            error = "No public key found for kid {}".format(token_kid)
-            logging.error(error)
-            raise ValueError(error)
-        matching_key_json = json.dumps(matching_key)
-        public_key = RSAAlgorithm.from_jwk(matching_key_json)
-    except Exception as e:
-        error = f'Invalid public key!. Reason: {e}'
-        logging.error(error)
-        raise ValueError(error)
-    log.info(f'The public key for the kid={token_kid} has been fetched.')
-    return matching_key.get('alg'), public_key
 
 
 def setup_logging(default_level=logging.INFO):

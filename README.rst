@@ -66,8 +66,9 @@ Variable                        Description
 ==============================  =================
 ``TRANSMART_URL``               The URL of the TranSMART API server
 ``KEYCLOAK_SERVER_URL``         Keycloak server URL, e.g., ``https://keycloak-dwh-test.thehyve.net``
-``KEYCLOAK_REALM``              The Keycloak realm, e.g., ``transmart-dev``
+``KEYCLOAK_REALM``              The Keycloak realm (default: ``transmart``)
 ``KEYCLOAK_CLIENT_ID``          The Keycloak client ID (default: ``transmart-client``)
+``KEYCLOAK_OFFLINE_TOKEN``      The Keycloak offline token.
 ``REDIS_URL``                   Redis server URL (default: ``redis://localhost:6379``)
 ``DATA_DIR``                    Directory to write export data (default: ``/tmp/packer/``)
 ``LOG_CFG``                     Logging configuration (default: ``packer/logging.yaml``)
@@ -77,8 +78,28 @@ Variable                        Description
 An optional variable `VERIFY_CERT` can be used to specify the path of a certificate collection file (`.pem`)
 used to verify HTTP requests.
 
+`KEYCLOAK_OFFLINE_TOKEN` should be generated for a user that has the following `realm-management` roles:
 
-Alternatively, you could build and run the stack from code using ``docker-compose``.
+- ``offline_access`` - to be able to get the offline token.
+- ``impersonation`` - to support running tranSMART queries on behalf of task users.
+
+To get the token, run:
+
+.. code-block:: bash
+
+    curl \
+      -d 'client_id=KEYCLOAK_CLIENT_ID' \
+      -d 'username=OFFLINE_USERNAME' \
+      -d 'password=OFFLINE_USERNAME_PASSWORD' \
+      -d 'grant_type=password' \
+      -d 'scope=offline_access' \
+      'https://KEYCLOAK_SERVER_URL/auth/realms/KEYCLOAK_REALM/protocol/openid-connect/token'
+
+
+The value of the `refresh_token` field in the response is the offline token.
+
+
+To run the stack using ``docker-compose`` follow the commands below:
 
 .. code-block:: bash
 
