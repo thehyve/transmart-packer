@@ -240,7 +240,7 @@ Adding new entity to CSR data model:
 When the CSR data model is extended with new entities, the export transformation code
 has to be changed as well in order to include a column with the ID of the new entity as one of the identifying columns.
 
-In order to do this, `<table_transformations/csr_transformations.py>`_ file has to be modified.
+In order to do this, `<packer/table_transformations/csr_transformations.py>`_ file has to be modified.
 Required changes:
 
 1) extend the ``ID_COLUMNS`` list,
