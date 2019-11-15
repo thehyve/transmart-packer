@@ -8,6 +8,7 @@ from celery import Celery, Task
 from celery.exceptions import SoftTimeLimitExceeded, Ignore
 
 from packer.task_status import Status, TaskStatus
+from packer import auth
 from .config import redis_config, task_config, celery_config, transmart_config, http_config
 from .redis_client import redis
 
@@ -148,19 +149,21 @@ class BaseDataTask(Task, metaclass=abc.ABCMeta):
         :param constraint: transmart API constraint to request
         :return: response body (json) of the observation call of transmart API
         """
+        user = self.task_status.get().get('user')
+        token = auth.get_impersonated_token_for_user(user)
         handle = f'{transmart_config.get("host")}/v2/observations'
         self.update_status(Status.FETCHING, f'Getting data from observations from {handle!r}')
         r = requests.post(url=handle,
                           json={'type': 'clinical', 'constraint': constraint},
                           headers={
-                              'Authorization': self.request.get('Authorization')
+                              'Authorization': f'Bearer {token}'
                           },
                           verify=http_config.get('verify_cert'))
         if r.status_code == 401:
             logger.error('Export failed. Unauthorized.')
             self.update_status(Status.FAILED, 'Unauthorized.')
             raise Ignore()
-        if r.status_code != 200:
+        if not r.ok:
             logger.error('Export failed. Error occurred.')
             self.update_status(Status.FAILED, f'Connection error occurred when fetching {handle}. '
                                               f'Response status {r.status_code}')

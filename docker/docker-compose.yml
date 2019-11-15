@@ -18,10 +18,11 @@ services:
     links:
       - redis
     environment:
-      TRANSMART_URL: ${TRANSMART_URL:-https://transmart-dev.thehyve.net}
-      KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL:-https://keycloak-dwh-test.thehyve.net}
-      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-transmart-dev}
+      TRANSMART_URL: ${TRANSMART_URL:?Please configure TRANSMART_URL}
+      KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL:?Please configure KEYCLOAK_SERVER_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:?Please configure KEYCLOAK_REALM}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-transmart-client}
+      KEYCLOAK_OFFLINE_TOKEN: ${KEYCLOAK_OFFLINE_TOKEN:?Please configure KEYCLOAK_OFFLINE_TOKEN}
       CLIENT_ORIGIN_URL: '*'
     volumes:
       - transmart-packer-webapp-data:/app/tmp_data_dir
@@ -36,6 +37,10 @@ services:
       - redis
     environment:
       TRANSMART_URL: ${TRANSMART_URL:-https://transmart-dev.thehyve.net}
+      KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL:?Please configure KEYCLOAK_SERVER_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:?Please configure KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-transmart-client}
+      KEYCLOAK_OFFLINE_TOKEN: ${KEYCLOAK_OFFLINE_TOKEN:?Please configure KEYCLOAK_OFFLINE_TOKEN}
     volumes:
       - transmart-packer-worker-data:/app/tmp_data_dir
       - ./ssl/certs.pem:/ssl/certs.pem
