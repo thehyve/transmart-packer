@@ -13,7 +13,7 @@ except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 DATE_FORMAT = '%Y-%m-%d'
-ID_COLUMNS = ['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id']
+ID_COLUMNS = ['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id', 'Study Id']
 
 
 def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
@@ -25,7 +25,31 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
 
     df = ObservationSet(obs_json).dataframe
     concept_pat_to_name = _concept_path_to_name(df)
-    df = from_obs_df_to_csr_df(df)
+
+    # Transform sample and study data separately
+    sample_df = df
+    study_df = None
+    if 'Study' in df.columns:
+        sample_df = df[df['Study'].isnull()]
+        sample_df.drop(columns=['Study'], inplace=True)
+        study_df = df[df['Study'].notnull()]
+        study_df.drop(columns=['Diagnosis', 'Biosource', 'Biomaterial'], inplace=True)
+    sample_df = from_obs_df_to_csr_df(sample_df)
+    df = sample_df
+    if study_df is not None:
+        study_df = from_obs_df_to_csr_df(study_df)
+        study_df['Study Id'] = study_df.index.get_level_values('Study Id')
+        # Merge sample and study data, creating a cross-product
+        df = sample_df.merge(study_df,
+                             on='Patient Id',
+                             how='outer',
+                             right_index=True
+                             )
+        # Create combined index with sample and study identifiers
+        id_columns = df.index.names + [column for column in ID_COLUMNS if column in set(df.columns)]
+        df.reset_index(inplace=True)
+        df.set_index(id_columns, inplace=True)
+
     df = df.rename(index=str, columns=concept_pat_to_name)
     df = format_columns(df)
     return df
@@ -35,24 +59,26 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     if obs.empty:
         logger.warning('Retrieved hypercube is empty! Exporting empty result.')
         return obs
-    # order rows by concept_paths:
-    # 1) Patient -> 2) Diagnosis -> 3) Biosource -> 4) Biomaterial -> 5) Studies
+    # Rename the identifier columns
     obs.rename(index=str, columns={'patient.subjectIds.SUBJ_ID': 'Patient Id',
                                    'Diagnosis': 'Diagnosis Id',
                                    'Biosource': 'Biosource Id',
-                                   'Biomaterial': 'Biomaterial Id'
+                                   'Biomaterial': 'Biomaterial Id',
+                                   'Study': 'Study Id'
                                    }, inplace=True)
+    # Sort data by concept path, compute the list concepts for the column headers
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_path_col = obs['concept.conceptPath']
     unq_concept_paths_ord = concept_path_col.unique().tolist()
     logger.info('Reformatting columns...')
     id_columns = [column for column in ID_COLUMNS if column in set(obs.columns)]
     obs = _reformat_columns(obs, id_columns)
-    # transform concept rows to column headers
+    # Transform concept rows to column headers
     obs_pivot = _concepts_row_to_columns(obs)
-    # propagate data to lower levels and display only rows that represent the lowest level
+    # Propagate data to lower levels and display only rows that represent the lowest level,
+    # e.g., add patient-level data to diagnosis rows and remove the patient-level row
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
-    # fix columns order
+    # Set columns order to identifiers first and then concepts
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
     # Replace NAs and NANs in index columns with empty string
     for id_column in id_columns:

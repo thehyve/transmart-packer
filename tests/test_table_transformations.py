@@ -51,7 +51,7 @@ class CsrTranformations(unittest.TestCase):
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01.Patient\\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
                     '\\04.Biomaterial\\Date\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
 
@@ -83,7 +83,7 @@ class CsrTranformations(unittest.TestCase):
         ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Biosource\\Cell type\\',
                     '\\Patient\\Diagnosis\\Diagnosis Name\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_no_biosource_no_biomaterial_columns(self):
@@ -109,7 +109,7 @@ class CsrTranformations(unittest.TestCase):
             ['P2', 'D2', 39., 'Diagnosis 2 Name'],
         ], columns=['Patient Id', 'Diagnosis Id',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Diagnosis Name\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id'] , inplace=True)
+        expected_df.set_index(['Patient Id', 'Diagnosis Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_patient_column_only(self):
@@ -130,7 +130,7 @@ class CsrTranformations(unittest.TestCase):
             ['P2', 39.],
         ], columns=['Patient Id',
                     '\\Patient\\Age\\'])
-        expected_df.set_index(['Patient Id'] , inplace=True)
+        expected_df.set_index(['Patient Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_no_diagnosis_observations_with_sorting(self):
@@ -198,7 +198,7 @@ class CsrTranformations(unittest.TestCase):
         ], columns=['Patient Id',
                     '\\01. Patient\\Name\\', '\\02. Diagnosis\\Name\\', '\\03. Biosource\\Name\\',
                     '\\04. Biomaterial\\Name\\'])
-        expected_df.set_index(['Patient Id'] , inplace=True)
+        expected_df.set_index(['Patient Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_values_propagation(self):
@@ -305,25 +305,29 @@ class CsrTranformations(unittest.TestCase):
         self.assertIsNotNone(df)
         actual_ids = list(df.index.values)
         self.assertEqual(actual_ids, [
-            ('P1', 'D1', 'BS1', 'BM1'),
-            ('P1', 'D10', 'BS10', 'BM15'),
-            ('P1', 'D10', 'BS10', 'BM9'),
-            ('P2', 'D2', '', ''),
-            ('P3', 'D11', 'BS2', 'BM2'),
-            ('P3', 'D3', '', ''),
-            ('P4', '', 'BS3', 'BM3'),
-            ('P5', 'D12', 'BS11', 'BM10'),
-            ('P5', 'D5', 'BS12', 'BM11'),
-            ('P5', 'D5', 'BS4', 'BM12'),
-            ('P5', 'D5', 'BS4', 'BM4'),
-            ('P6', 'D6', 'BS5', 'BM13'),
-            ('P6', 'D6', 'BS5', 'BM5'),
-            ('P6', 'D6', 'BS9', 'BM8'),
-            ('P7', 'D13', '', ''),
-            ('P7', 'D7', 'BS6', ''),
-            ('P8', 'D8', 'BS7', 'BM14'),
-            ('P8', 'D8', 'BS7', 'BM6'),
-            ('P9', 'D9', 'BS8', 'BM7')])
+            ('P1', 'D1', 'BS1', 'BM1', 'STUDY1'),
+            ('P1', 'D10', 'BS10', 'BM15', 'STUDY1'),
+            ('P1', 'D10', 'BS10', 'BM9', 'STUDY1'),
+            ('P2', 'D2', '', '', 'STUDY1'),
+            ('P3', 'D11', 'BS2', 'BM2', 'STUDY1'),
+            ('P3', 'D3', '', '', 'STUDY1'),
+            ('P4', '', 'BS3', 'BM3', 'STUDY1'),
+            ('P5', 'D12', 'BS11', 'BM10', 'STUDY1'),
+            ('P5', 'D12', 'BS11', 'BM10', 'STUDY2'),
+            ('P5', 'D5', 'BS12', 'BM11', 'STUDY1'),
+            ('P5', 'D5', 'BS12', 'BM11', 'STUDY2'),
+            ('P5', 'D5', 'BS4', 'BM12', 'STUDY1'),
+            ('P5', 'D5', 'BS4', 'BM12', 'STUDY2'),
+            ('P5', 'D5', 'BS4', 'BM4', 'STUDY1'),
+            ('P5', 'D5', 'BS4', 'BM4', 'STUDY2'),
+            ('P6', 'D6', 'BS5', 'BM13', 'STUDY2'),
+            ('P6', 'D6', 'BS5', 'BM5', 'STUDY2'),
+            ('P6', 'D6', 'BS9', 'BM8', 'STUDY2'),
+            ('P7', 'D13', '', '', 'STUDY2'),
+            ('P7', 'D7', 'BS6', '', 'STUDY2'),
+            ('P8', 'D8', 'BS7', 'BM14', 'STUDY2'),
+            ('P8', 'D8', 'BS7', 'BM6', 'STUDY2'),
+            ('P9', 'D9', 'BS8', 'BM7', 'STUDY2')])
         columns = list(df.columns.values)
         self.assertEqual(columns, [
             # patient
@@ -354,16 +358,19 @@ class CsrTranformations(unittest.TestCase):
             '01. Biomaterial parent',
             '02. Date of biomaterial',
             '03. Biomaterial type',
-            # STD1
-            '01. Study ID',
-            '02. Study acronym',
-            '03. Study title',
-            '04. Individual Study ID',
-            # STD2
+            # study
             '01. Study ID',
             '02. Study acronym',
             '03. Study title',
             '04. Individual Study ID'])
+        p5_study1_data = list(df.loc[
+            ('P5', 'D12', 'BS11', 'BM10', 'STUDY1'),
+            ['01. Study ID', '02. Study acronym', '03. Study title', '04. Individual Study ID']].values)
+        self.assertEqual(p5_study1_data, ['STUDY1', 'STD1', 'Study 1', '5'])
+        p5_study2_data = list(df.loc[
+            ('P5', 'D12', 'BS11', 'BM10', 'STUDY2'),
+            ['01. Study ID', '02. Study acronym', '03. Study title', '04. Individual Study ID']].values)
+        self.assertEqual(p5_study2_data, ['STUDY2', 'STD2', 'Study 2', '6'])
 
 
 if __name__ == '__main__':
