@@ -24,7 +24,7 @@ Run data transformation jobs for TranSMART_.
 Install
 -------
 
-First make virtual environment to install dependencies using `Python3.6+`
+First make virtual environment to install dependencies using `Python 3.6+`
 
 .. code-block:: bash
 
@@ -191,10 +191,11 @@ CSR export
 ++++++++++
 
 `The Central Subject Registry (CSR) data model`_ specific export.
-The model contains individual, diagnosis, biosource and biomaterial entities,
-following the hierarchy: patient > diagnosis > biosource > biomaterial.
-The entities IDs are first 4 columns of the export file. The rest of the columns are concepts.
-Higher level concepts (e.g Age that is specific to Patient level)
+The model contains individual, diagnosis, biosource, biomaterial and study entities,
+following the hierarchy for sample data: patient > diagnosis > biosource > biomaterial.
+Studies are orthogonal to samples, i.e., patients are linked to studies independent of samples.
+The entities IDs are first 5 columns of the export file. The rest of the columns are concepts.
+Higher level concepts (e.g., Age that is specific to Patient level)
 get distributed to all rows specific to lower levels (e.g. Diagnosis)
 
 See the CSR_ test study as an example.
@@ -228,8 +229,8 @@ where:
 - ``job_parameters.custom_name`` (optional) - name of the export job and the output ``tsv`` file.
 - ``job_parameters.row_filter`` (optional) - any `transmart v2 api constraint`_
   or composition of them to fetch keys (``[[[[patient], diagnosis], biosource], biomaterial]``) that will make it to the end result.
-  e.g. Given the `CSR` study and query above only rows specific to `P2` and `P6` patients will end up to the result table such as `P2`, `D2`, `BS2`, `BM2`, ... row.
-  Please note that keys do not have to be equals in length. A row gets selected if only part of keys matches. e.g. `P1` vs `P1`, `D1`
+  E.g., given the `CSR` study and query above only rows specific to `P2` and `P6` patients will end up to the result table such as `P2`, `D2`, `BS2`, `BM2`, ... row.
+  Please note that keys do not have to be equal in length. A row gets also selected if only part of keys matches. e.g. `P1` vs `P1`, `D1`
 
 .. _`transmart v2 api constraint`: https://github.com/thehyve/transmart-core/blob/dev/open-api/swagger.yaml
 
@@ -237,15 +238,17 @@ where:
 Adding new entity to CSR data model:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When the CSR data model is extended with new entities, the export transformation code
+When the CSR data model is extended with new sample related entities, the export transformation code
 has to be changed as well in order to include a column with the ID of the new entity as one of the identifying columns.
 
 In order to do this, `<packer/table_transformations/csr_transformations.py>`_ file has to be modified.
 Required changes:
 
-1) extend the ``ID_COLUMNS`` list,
+1) extend the ``ID_COLUMNS`` list (the order does matter),
 
-2) modify ``from_obs_df_to_csr_df(obs: DataFrame)`` function in order to properly rename columns.
+2) modify the ``from_obs_df_to_csr_df(obs: DataFrame)`` function in order to properly rename columns.
+
+3) modify the ``from_obs_json_to_export_csr_df(obs_json: Dict)`` function to drop the entity column for study data.
 
 
 License
