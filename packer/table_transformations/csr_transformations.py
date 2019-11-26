@@ -45,13 +45,16 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     df = sample_df
     if study_df is not None:
         study_df = from_obs_df_to_csr_df(study_df)
-        study_df['Study Id'] = study_df.index.get_level_values('Study Id')
-        # Merge sample and study data, creating a cross-product
-        df = sample_df.merge(study_df,
-                             on='Patient Id',
-                             how='outer',
-                             right_index=True
-                             )
+        if sample_df.empty:
+            df = study_df
+        else:
+            # Merge sample and study data, creating a cross-product
+            study_df['Study Id'] = study_df.index.get_level_values('Study Id')
+            df = sample_df.merge(study_df,
+                                 on='Patient Id',
+                                 how='outer',
+                                 right_index=True
+                                 )
         # Create combined index with sample and study identifiers
         id_columns = df.index.names + [column for column in ID_COLUMNS if column in set(df.columns)]
         df.reset_index(inplace=True)
@@ -64,7 +67,7 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
 
 def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     if obs.empty:
-        logger.warning('Retrieved hypercube is empty! Exporting empty result.')
+        logger.warning('Hypercube is empty! Returning empty result.')
         return obs
     # Rename the identifier columns
     obs.rename(index=str, columns=ID_COLUMN_MAPPING, inplace=True)
