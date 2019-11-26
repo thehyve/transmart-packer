@@ -242,13 +242,8 @@ When the CSR data model is extended with new sample related entities, the export
 has to be changed as well in order to include a column with the ID of the new entity as one of the identifying columns.
 
 In order to do this, `<packer/table_transformations/csr_transformations.py>`_ file has to be modified.
-Required changes:
-
-1) extend the ``ID_COLUMNS`` list (the order does matter),
-
-2) modify the ``from_obs_df_to_csr_df(obs: DataFrame)`` function in order to properly rename columns.
-
-3) modify the ``from_obs_json_to_export_csr_df(obs_json: Dict)`` function to drop the entity column for study data.
+The ``ID_COLUMN_MAPPING`` map needs to be extended with the new dimension name of the new entity
+as key and the column name that should appear in the export as value.
 
 
 License

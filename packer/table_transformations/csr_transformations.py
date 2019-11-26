@@ -13,7 +13,13 @@ except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 DATE_FORMAT = '%Y-%m-%d'
-ID_COLUMNS = ['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id', 'Study Id']
+PATIENT_ID_FIELD = 'patient.subjectIds.SUBJ_ID'
+ID_COLUMN_MAPPING = {PATIENT_ID_FIELD: 'Patient Id',
+                     'Diagnosis': 'Diagnosis Id',
+                     'Biosource': 'Biosource Id',
+                     'Biomaterial': 'Biomaterial Id',
+                     'Study': 'Study Id'}
+ID_COLUMNS = ID_COLUMN_MAPPING.values()
 
 
 def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
@@ -33,7 +39,8 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
         sample_df = df[df['Study'].isnull()]
         sample_df.drop(columns=['Study'], inplace=True)
         study_df = df[df['Study'].notnull()]
-        study_df.drop(columns=['Diagnosis', 'Biosource', 'Biomaterial'], inplace=True)
+        sample_columns = [c for c in ID_COLUMN_MAPPING.keys() - [PATIENT_ID_FIELD, 'Study'] if c in df.columns]
+        study_df.drop(columns=sample_columns, inplace=True)
     sample_df = from_obs_df_to_csr_df(sample_df)
     df = sample_df
     if study_df is not None:
@@ -60,12 +67,7 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
         logger.warning('Retrieved hypercube is empty! Exporting empty result.')
         return obs
     # Rename the identifier columns
-    obs.rename(index=str, columns={'patient.subjectIds.SUBJ_ID': 'Patient Id',
-                                   'Diagnosis': 'Diagnosis Id',
-                                   'Biosource': 'Biosource Id',
-                                   'Biomaterial': 'Biomaterial Id',
-                                   'Study': 'Study Id'
-                                   }, inplace=True)
+    obs.rename(index=str, columns=ID_COLUMN_MAPPING, inplace=True)
     # Sort data by concept path, compute the list concepts for the column headers
     obs.sort_values(by=['concept.conceptPath'], inplace=True)
     concept_path_col = obs['concept.conceptPath']
