@@ -65,7 +65,7 @@ From root dir run:
 Variable                        Description
 ==============================  =================
 ``TRANSMART_URL``               The URL of the TranSMART API server
-``KEYCLOAK_SERVER_URL``         Keycloak server URL, e.g., ``https://keycloak-dwh-test.thehyve.net``
+``KEYCLOAK_SERVER_URL``         Keycloak server URL, e.g., ``https://keycloak-dwh-test.thehyve.net/auth``
 ``KEYCLOAK_REALM``              The Keycloak realm (default: ``transmart``)
 ``KEYCLOAK_CLIENT_ID``          The Keycloak client ID (default: ``transmart-client``)
 ``KEYCLOAK_OFFLINE_TOKEN``      The Keycloak offline token.
@@ -75,28 +75,33 @@ Variable                        Description
 ``CLIENT_ORIGIN_URL``           URLs to restrict cross-origin requests to (CORS) (default: ``*``)
 ==============================  =================
 
-An optional variable `VERIFY_CERT` can be used to specify the path of a certificate collection file (`.pem`)
+An optional variable ``VERIFY_CERT`` can be used to specify the path of a certificate collection file (``.pem``)
 used to verify HTTP requests.
 
-`KEYCLOAK_OFFLINE_TOKEN` should be generated for a user that has the following `realm-management` roles:
+``KEYCLOAK_OFFLINE_TOKEN`` should be generated for a system user that has the following roles:
 
-- ``offline_access`` - to be able to get the offline token.
-- ``impersonation`` - to support running tranSMART queries on behalf of task users.
+- realm role ``offline_access`` – to be able to get the offline token.
+- client role ``impersonation`` on the ``realm-management`` client – to support running tranSMART queries on behalf of task users.
 
 To get the token, run:
 
 .. code-block:: bash
 
-    curl \
-      -d 'client_id=KEYCLOAK_CLIENT_ID' \
-      -d 'username=OFFLINE_USERNAME' \
-      -d 'password=OFFLINE_USERNAME_PASSWORD' \
-      -d 'grant_type=password' \
-      -d 'scope=offline_access' \
-      'https://KEYCLOAK_SERVER_URL/auth/realms/KEYCLOAK_REALM/protocol/openid-connect/token'
+    KEYCLOAK_CLIENT_ID=transmart-client
+    SYSTEM_USERNAME=system
+    SYSTEM_PASSWORD=choose-a-strong-system-password # CHANGE ME
+    KEYCLOAK_SERVER_URL=https://keycloak.example.com/auth
+    KEYCLOAK_REALM=example
+    curl -f --no-progress-meter \
+      -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+      -d "username=${SYSTEM_USERNAME}" \
+      -d "password=${SYSTEM_PASSWORD}" \
+      -d "grant_type=password" \
+      -d "scope=offline_access" \
+      "${KEYCLOAK_SERVER_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token" | jq -r '.refresh_token'
 
 
-The value of the `refresh_token` field in the response is the offline token.
+The value of the ``refresh_token`` field in the response is the offline token.
 
 
 To run the stack using ``docker-compose`` follow the commands below:
