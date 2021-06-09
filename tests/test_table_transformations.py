@@ -48,10 +48,10 @@ class CsrTranformations(unittest.TestCase):
             ['P1', 'D2', 'BS2', 'BM2', 42., 'Diagnosis 2 Name', 'Tissue 2', 'Wed Mar 07 01:00:00 CET 2018'],
             ['P2', 'D3', 'BS3', 'BM3', 39., 'Diagnosis 3 Name', 'Liver', 'Fri Jan 19 01:00:00 CET 2018'],
             ['P2', 'D3', 'BS3', 'BM4', 39., 'Diagnosis 3 Name', 'Liver', 'Sun Jun 05 02:00:00 CEST 2011'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01.Patient\\Age\\', '\\02.Diagnosis\\Diagnosis Name\\', '\\03.Biosource\\Cell type\\',
                     '\\04.Biomaterial\\Date\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
 
@@ -80,10 +80,10 @@ class CsrTranformations(unittest.TestCase):
         expected_df = pd.DataFrame([
             ['P1', 'D1', 'BS1', 42., 'Skin', 'Diagnosis 1 Name'],
             ['P2', 'D2', 'BS2', 39., 'Liver', 'Diagnosis 2 Name'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Biosource\\Cell type\\',
                     '\\Patient\\Diagnosis\\Diagnosis Name\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_no_biosource_no_biomaterial_columns(self):
@@ -107,9 +107,9 @@ class CsrTranformations(unittest.TestCase):
         expected_df = pd.DataFrame([
             ['P1', 'D1', 42., 'Diagnosis 1 Name'],
             ['P2', 'D2', 39., 'Diagnosis 2 Name'],
-        ], columns=['Patient Id', 'Diagnosis Id',
+        ], columns=['Subject Id', 'Diagnosis Id',
                     '\\Patient\\Age\\', '\\Patient\\Diagnosis\\Diagnosis Name\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_patient_column_only(self):
@@ -128,9 +128,9 @@ class CsrTranformations(unittest.TestCase):
         expected_df = pd.DataFrame([
             ['P1', 42.],
             ['P2', 39.],
-        ], columns=['Patient Id',
+        ], columns=['Subject Id',
                     '\\Patient\\Age\\'])
-        expected_df.set_index(['Patient Id'], inplace=True)
+        expected_df.set_index(['Subject Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_result_data_shape_no_diagnosis_observations_with_sorting(self):
@@ -164,9 +164,9 @@ class CsrTranformations(unittest.TestCase):
             ['P1', 'D1', 'BS1', 'BM2', 42., 'Skin', '2018-03-07T01:00:00Z'],
             ['P2', 'D2', 'BS2', 'BM3', 39., 'Liver', '2018-01-19T01:00:00Z'],
             ['P2', 'D2', 'BS2', 'BM4', 39., 'Liver', '2011-06-05T02:00:00Z'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01.Patient\\Age\\', '\\03.Biosource\\Cell type\\', '\\04.Biomaterial\\Date\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_empty_data(self):
@@ -195,10 +195,10 @@ class CsrTranformations(unittest.TestCase):
         expected_df = pd.DataFrame([
             ['P1', 'Patient 1', 'Diagnosis 1', 'Biosource 1', 'Biomaterial 1'],
             ['P2', 'Patient 2', None, None, None],
-        ], columns=['Patient Id',
+        ], columns=['Subject Id',
                     '\\01. Patient\\Name\\', '\\02. Diagnosis\\Name\\', '\\03. Biosource\\Name\\',
                     '\\04. Biomaterial\\Name\\'])
-        expected_df.set_index(['Patient Id'], inplace=True)
+        expected_df.set_index(['Subject Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_values_propagation(self):
@@ -232,12 +232,12 @@ class CsrTranformations(unittest.TestCase):
              'Biomaterial #2'],
             ['P1', 'D2', 'BS2', '', 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None],
             ['P2', 'D3', '', '', 30., None, 35., None, None, None, None, None],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
                     '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\',
                     '\\02. Diagnosis\\Text\\',
                     '\\03. Biosource\\Number\\', '\\03. Biosource\\Text\\', '\\04. Biomaterial\\Number\\',
                     '\\04. Biomaterial\\Text\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_format_columns(self):
@@ -291,9 +291,9 @@ class CsrTranformations(unittest.TestCase):
         expected_df = pd.DataFrame([
             ['P1', 'D1', 'BS1', 'Skin'],
             ['P2', '', 'BS2', 'Liver'],
-        ], columns=['Patient Id', 'Diagnosis Id', 'Biosource Id',
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id',
                     '\\Patient\\Diagnosis\\Biosource\\Cell type\\'])
-        expected_df.set_index(['Patient Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
     def test_from_json_to_export_csr_df(self):

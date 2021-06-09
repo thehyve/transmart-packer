@@ -13,8 +13,8 @@ except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 DATE_FORMAT = '%Y-%m-%d'
-PATIENT_ID_FIELD = 'patient.subjectIds.SUBJ_ID'
-ID_COLUMN_MAPPING = {PATIENT_ID_FIELD: 'Patient Id',
+SUBJECT_ID_FIELD = 'patient.subjectIds.SUBJ_ID'
+ID_COLUMN_MAPPING = {SUBJECT_ID_FIELD: 'Subject Id',
                      'Diagnosis': 'Diagnosis Id',
                      'Biosource': 'Biosource Id',
                      'Biomaterial': 'Biomaterial Id',
@@ -25,7 +25,7 @@ ID_COLUMNS = ID_COLUMN_MAPPING.values()
 def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     """
     :param obs_json: json returned by transmart v2/observations call
-    :return: data frame that has 4 (patient, diagnosis, biosource, biomaterial) index columns.
+    :return: data frame that has 4 (subject, diagnosis, biosource, biomaterial) index columns.
     The rest of columns represent concepts (aka variables)
     """
 
@@ -39,7 +39,7 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
         sample_df = df[df['Study'].isnull()]
         sample_df.drop(columns=['Study'], inplace=True)
         study_df = df[df['Study'].notnull()]
-        sample_columns = [c for c in ID_COLUMN_MAPPING.keys() - [PATIENT_ID_FIELD, 'Study'] if c in df.columns]
+        sample_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Study'] if c in df.columns]
         study_df.drop(columns=sample_columns, inplace=True)
     sample_df = from_obs_df_to_csr_df(sample_df)
     df = sample_df
@@ -51,7 +51,7 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
             # Merge sample and study data, creating a cross-product
             study_df['Study Id'] = study_df.index.get_level_values('Study Id')
             df = sample_df.merge(study_df,
-                                 on='Patient Id',
+                                 on='Subject Id',
                                  how='outer',
                                  right_index=True
                                  )
@@ -81,7 +81,7 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     # Transform concept rows to column headers
     obs_pivot = _concepts_row_to_columns(obs)
     # Propagate data to lower levels and display only rows that represent the lowest level,
-    # e.g., add patient-level data to diagnosis rows and remove the patient-level row
+    # e.g., add subject-level data to diagnosis rows and remove the subject-level row
     obs_pivot = _merge_redundant_rows(obs_pivot, id_columns)
     # Set columns order to identifiers first and then concepts
     obs_pivot = obs_pivot[id_columns + unq_concept_paths_ord]
@@ -148,9 +148,9 @@ def _is_ancestor_row(ancestor_row_candidate: Dict[str, Any],
     """
     Checks if the identifier values of the row equal the identifier values
     of the candidate ancestor row, ignoring missing values in the ancestor.
-    E.g., {PatientId: 1, DiagnosisId: None} is an ancestor of {PatientId: 1, DiagnosisId: 3},
-      {PatientId: 1, DiagnosisId: None, BiosourceId: None} is an ancestor of
-      {PatientId: 1, DiagnosisId: None, BiosourceId: 5}.
+    E.g., {SubjectId: 1, DiagnosisId: None} is an ancestor of {SubjectId: 1, DiagnosisId: 3},
+      {SubjectId: 1, DiagnosisId: None, BiosourceId: None} is an ancestor of
+      {SubjectId: 1, DiagnosisId: None, BiosourceId: 5}.
     :param ancestor_row_candidate: the row to check if it is an ancestor
     :param row: the row to compare against, which should be more specific but not conflicting with the ancestor
     :param id_columns: the id columns to compare (in order)
