@@ -332,7 +332,7 @@ class CsrTranformations(unittest.TestCase):
         self.assertEqual(columns, [
             # patient
             '01. Date of birth',
-            '02. Gender',
+            '02. Sex',
             '01. Informed consent type',
             '03. Date informed consent withdrawn',
             '04. Informed consent material',
