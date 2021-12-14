@@ -50,14 +50,9 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
         else:
             # Merge sample and study data, creating a cross-product
             study_df['Study Id'] = study_df.index.get_level_values('Study Id')
-            df = sample_df.merge(study_df,
-                                 on='Subject Id',
-                                 how='outer',
-                                 right_index=True
-                                 )
+            df = sample_df.reset_index().merge(study_df, on='Subject Id', how='outer')
         # Create combined index with sample and study identifiers
-        id_columns = df.index.names + [column for column in ID_COLUMNS if column in set(df.columns)]
-        df.reset_index(inplace=True)
+        id_columns = [column for column in ID_COLUMNS if column in set(df.columns)]
         df.set_index(id_columns, inplace=True)
 
     df = df.rename(index=str, columns=concept_pat_to_name)
