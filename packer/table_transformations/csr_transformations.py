@@ -6,6 +6,8 @@ from pandas import DataFrame
 import numpy
 import logging
 
+from packer.table_transformations.utils import get_index_of_string_prefix
+
 logger = logging.getLogger(__name__)
 try:
     from transmart.api.v2.data_structures import ObservationSet
@@ -18,8 +20,11 @@ ID_COLUMN_MAPPING = {SUBJECT_ID_FIELD: 'Subject Id',
                      'Diagnosis': 'Diagnosis Id',
                      'Biosource': 'Biosource Id',
                      'Biomaterial': 'Biomaterial Id',
-                     'Study': 'Study Id'}
+                     'Radiology': 'Radiology Id',
+                     'Study': 'Study Id',
+                     }
 ID_COLUMNS = ID_COLUMN_MAPPING.values()
+COLUMN_ORDER_BY_CONCEPT_CODE_PREFIX = ['Individual'] + list(ID_COLUMN_MAPPING.keys())[1:]
 
 
 def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
@@ -30,33 +35,50 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     """
 
     df = ObservationSet(obs_json).dataframe
+
+    df.to_csv('origin.tsv', sep='\t')
+
     concept_pat_to_name = _concept_path_to_name(df)
 
-    # Transform sample and study data separately
+    # Transform sample and data outside of the sample hierarchy (study, radiology) separately
     sample_df = df
     study_df = None
+    radiology_df = None
+    if 'Radiology' in df.columns:
+        sample_df = df[df['Radiology'].isnull()]
+        sample_df.drop(columns=['Radiology'], inplace=True)
+        radiology_df = df[df['Radiology'].notnull()]
+        non_radiology_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Diagnosis', 'Radiology'] if
+                                 c in df.columns]
+        radiology_df.drop(columns=non_radiology_columns, inplace=True)
     if 'Study' in df.columns:
+        df = sample_df
         sample_df = df[df['Study'].isnull()]
         sample_df.drop(columns=['Study'], inplace=True)
         study_df = df[df['Study'].notnull()]
-        sample_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Study'] if c in df.columns]
-        study_df.drop(columns=sample_columns, inplace=True)
-    sample_df = from_obs_df_to_csr_df(sample_df)
-    df = sample_df
-    if study_df is not None:
-        study_df = from_obs_df_to_csr_df(study_df)
-        if sample_df.empty:
-            df = study_df
+        non_study_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Study'] if c in df.columns]
+        study_df.drop(columns=non_study_columns, inplace=True)
+
+    df = from_obs_df_to_csr_df(sample_df)
+    df = merge_non_hierarchical_entity_df(df, radiology_df, 'Radiology Id', ['Subject Id', 'Diagnosis Id'])
+    df = merge_non_hierarchical_entity_df(df, study_df, 'Study Id', ['Subject Id'])
+    df = df.rename(index=str, columns=concept_pat_to_name)
+    df = format_columns(df)
+    return df
+
+
+def merge_non_hierarchical_entity_df(df, entity_df, id_column, merge_columns):
+    if entity_df is not None:
+        entity_df = from_obs_df_to_csr_df(entity_df)
+        if df.empty:
+            df = entity_df
         else:
-            # Merge sample and study data, creating a cross-product
-            study_df['Study Id'] = study_df.index.get_level_values('Study Id')
-            df = sample_df.reset_index().merge(study_df, on='Subject Id', how='outer')
+            # Merge radiology data into df, creating a cross-product
+            entity_df[id_column] = entity_df.index.get_level_values(id_column)
+            df = df.reset_index().merge(entity_df, on=merge_columns, how='outer').fillna('')
         # Create combined index with sample and study identifiers
         id_columns = [column for column in ID_COLUMNS if column in set(df.columns)]
         df.set_index(id_columns, inplace=True)
-
-    df = df.rename(index=str, columns=concept_pat_to_name)
-    df = format_columns(df)
     return df
 
 
@@ -66,8 +88,14 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
         return obs
     # Rename the identifier columns
     obs.rename(index=str, columns=ID_COLUMN_MAPPING, inplace=True)
-    # Sort data by concept path, compute the list concepts for the column headers
-    obs.sort_values(by=['concept.conceptPath'], inplace=True)
+
+    # Sort rows to group them by concept and sort each alphabetically by concept name
+    obs['order'] = obs['concept.conceptCode'].map(
+        lambda x: get_index_of_string_prefix(x, COLUMN_ORDER_BY_CONCEPT_CODE_PREFIX))
+    obs.sort_values(['order', 'concept.name'], ascending=[True, True], inplace=True)
+    obs.drop('order', axis='columns', inplace=True)
+
+    # Sort data by concept code prefix order and concept path, compute the list concepts for the column headers
     concept_path_col = obs['concept.conceptPath']
     unq_concept_paths_ord = concept_path_col.unique().tolist()
     logger.info('Reformatting columns...')
