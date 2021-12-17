@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import pandas
 from pandas import DataFrame
@@ -33,13 +33,13 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     :return: data frame that has 4 (subject, diagnosis, biosource, biomaterial) index columns.
     The rest of columns represent concepts (aka variables)
     """
-
     df = ObservationSet(obs_json).dataframe
+    df = transform_obs_df(df)
+    return df
 
-    df.to_csv('origin.tsv', sep='\t')
 
+def transform_obs_df(df: DataFrame) -> DataFrame:
     concept_pat_to_name = _concept_path_to_name(df)
-
     # Transform sample and data outside of the sample hierarchy (study, radiology) separately
     sample_df = df
     study_df = None
@@ -58,7 +58,6 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
         study_df = df[df['Study'].notnull()]
         non_study_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Study'] if c in df.columns]
         study_df.drop(columns=non_study_columns, inplace=True)
-
     df = from_obs_df_to_csr_df(sample_df)
     df = merge_non_hierarchical_entity_df(df, radiology_df, 'Radiology Id', ['Subject Id', 'Diagnosis Id'])
     df = merge_non_hierarchical_entity_df(df, study_df, 'Study Id', ['Subject Id'])
@@ -67,18 +66,21 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     return df
 
 
-def merge_non_hierarchical_entity_df(df, entity_df, id_column, merge_columns):
-    if entity_df is not None:
-        entity_df = from_obs_df_to_csr_df(entity_df)
-        if df.empty:
-            df = entity_df
-        else:
-            # Merge radiology data into df, creating a cross-product
-            entity_df[id_column] = entity_df.index.get_level_values(id_column)
-            df = df.reset_index().merge(entity_df, on=merge_columns, how='outer').fillna('')
-        # Create combined index with sample and study identifiers
-        id_columns = [column for column in ID_COLUMNS if column in set(df.columns)]
-        df.set_index(id_columns, inplace=True)
+def merge_non_hierarchical_entity_df(df: DataFrame, entity_df: Optional[DataFrame], id_column: str, merge_columns: List[str]) -> DataFrame:
+    if entity_df is None:
+        return df
+    existing_merge_columns = [c for c in merge_columns if c in df.index.names]
+    entity_df = from_obs_df_to_csr_df(entity_df)
+    if df.empty:
+        df = entity_df
+    else:
+        # Merge radiology data into df, creating a cross-product
+        entity_df[id_column] = entity_df.index.get_level_values(id_column)
+        df = df.reset_index().merge(entity_df, on=existing_merge_columns, how='outer').fillna('')
+
+    # Create combined index with sample and study identifiers
+    id_columns = [column for column in ID_COLUMNS if column in set(df.columns)]
+    df.set_index(id_columns, inplace=True)
     return df
 
 
@@ -115,11 +117,11 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     return obs_pivot
 
 
-def _concept_path_to_name(df):
+def _concept_path_to_name(df: DataFrame) -> dict:
     return dict(zip(df['concept.conceptPath'], df['concept.name']))
 
 
-def format_columns(df):
+def format_columns(df: DataFrame) -> DataFrame:
     """
     :param df: pandas dataframe with various data types of columns
     :return: modified data frame with all columns converted to formatted string
@@ -220,7 +222,7 @@ def _reformat_columns(obs, id_columns: List[str]):
     elif 'numericValue' in obs:
         obs.rename(columns={"numericValue": "value"}, inplace=True)
     else:
-        obs['value'] = ""
+        obs['value'] = ''
     obs = obs.set_index(headers, append=True)[['value']]
     return obs
 
