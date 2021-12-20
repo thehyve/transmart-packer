@@ -16,3 +16,15 @@ def filter_rows(df: pd.DataFrame, filter_row_df: pd.DataFrame) -> pd.DataFrame:
     filter_df_common_indx = filter_row_df.reset_index().set_index(common_indx_names).index
     filtered_df = df[df_common_indx.isin(filter_df_common_indx)]
     return filtered_df
+
+
+def get_index_of_string_prefix(x: str, indexed_list: list) -> int:
+    """
+    :param x: a string, prefix of which is to be verified
+    :param indexed_list: list of string elements
+    :return: index of an element on the indexed_list that equals to the x prefix
+    """
+    for list_elem in indexed_list:
+        if x.startswith(list_elem + "."):
+            return indexed_list.index(list_elem)
+    return len(indexed_list)
