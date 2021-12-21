@@ -240,6 +240,45 @@ class CsrTranformations(unittest.TestCase):
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
+
+    def test_values_propagation_with_multi_value_merging(self):
+        test_data = [
+            [1, 'P1', 'D1', 'BS1', 'BM1', 'Biomaterial.text', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #1', 'T'],
+            [1, 'P1', None, None, None, 'Individual.text', '\\01. Patient\\Text\\', 'Text', None, 'Patient #1', 'T'],
+            [1, 'P1', None, None, None, 'Individual.number', '\\01. Patient\\Number\\', 'Number', 5., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM2', 'Biomaterial.text', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #2', 'T'],
+            [1, 'P1', 'D1', None, None, 'Diagnosis.text', '\\02. Diagnosis\\Text\\', 'Text', None, 'Diagnosis #1', 'T'],
+            [1, 'P1', 'D2', None, None, 'Diagnosis.number', '\\02. Diagnosis\\Number\\', 'Number', 10., None, 'T'],
+            [1, 'P1', 'D2', None, None, 'Diagnosis.text', '\\02. Diagnosis\\Text\\', 'Text', None, 'Diagnosis #2', 'T'],
+            [1, 'P1', 'D1', 'BS1', None, 'Biosource.number', '\\03. Biosource\\Number\\', 'Number', 15., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', None, 'Biosource.text', '\\03. Biosource\\Text\\', 'Text', None, 'Biosource #1', 'T'],
+            [1, 'P1', 'D2', 'BS2', None, 'Biosource.number', '\\03. Biosource\\Number\\', 'Number', 20., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM1', 'Biomaterial.number', '\\04. Biomaterial\\Number\\', 'Number', 25., None, 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM2', 'Biomaterial.text', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #3', 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM2', 'Biomaterial.text', '\\04. Biomaterial\\Text\\', 'Text', None, 'Biomaterial #3', 'T'],
+            [1, 'P1', 'D1', 'BS1', 'BM2', 'Biomaterial.text', '\\04. Biomaterial\\Text\\', 'Text', None, None, 'T']
+        ]
+        observations_df = pd.DataFrame(test_data, columns=[
+            'patient.id', 'patient.subjectIds.SUBJ_ID', 'Diagnosis', 'Biosource', 'Biomaterial',
+            'concept.conceptCode', 'concept.conceptPath', 'concept.name', 'numericValue', 'stringValue', 'study.name'])
+
+        df = from_obs_df_to_csr_df(observations_df)
+
+        self.assertIsNotNone(df)
+        expected_df = pd.DataFrame([
+            ['P1', 'D1', 'BS1', 'BM1', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', 25.,
+             'Biomaterial #1'],
+            ['P1', 'D1', 'BS1', 'BM2', 5., 'Patient #1', None, 'Diagnosis #1', 15., 'Biosource #1', None,
+             'Biomaterial #2;Biomaterial #3'],
+            ['P1', 'D2', 'BS2', '', 5., 'Patient #1', 10, 'Diagnosis #2', 20, None, None, None]
+        ], columns=['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id',
+                    '\\01. Patient\\Number\\', '\\01. Patient\\Text\\', '\\02. Diagnosis\\Number\\',
+                    '\\02. Diagnosis\\Text\\',
+                    '\\03. Biosource\\Number\\', '\\03. Biosource\\Text\\', '\\04. Biomaterial\\Number\\',
+                    '\\04. Biomaterial\\Text\\'])
+        expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id', 'Biomaterial Id'], inplace=True)
+        pdt.assert_frame_equal(df, expected_df)
+
     def test_format_columns(self):
         src_df = pd.DataFrame(
             {
@@ -298,8 +337,8 @@ class CsrTranformations(unittest.TestCase):
 
     def test_result_data_shape_patient_radiology(self):
         test_data = [
-            ['P1', None, 'Individual.gender', '\\01.Subject\\Gender\\', 'Gender', 'Female', None, 1, 'TEST'],
-            ['P2', None, 'Individual.gender', '\\01.Subject\\Gender\\', 'Gender', 'Male', None, 1, 'TEST'],
+            ['P1', None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Female', None, 1, 'TEST'],
+            ['P2', None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Male', None, 1, 'TEST'],
             ['P1', 'R1', 'Radiology.image_type', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST'],
             ['P1', 'R1', 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'torso', 1, 'TEST'],
             ['P1', 'R2', 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'legs', 1, 'TEST'],
@@ -318,14 +357,14 @@ class CsrTranformations(unittest.TestCase):
             ['P1', 'R2', 'Female', '', 'legs'],
             ['P2', 'R3', 'Male', 'type_1', '']
         ], columns=['Subject Id', 'Radiology Id',
-                    'Gender', 'Image type', 'Body part'])
+                    'Sex', 'Image type', 'Body part'])
         expected_df.set_index(['Subject Id', 'Radiology Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
 
     def test_result_data_shape_patient_diagnosis_radiology(self):
         test_data = [
-            ['P1', None, None, 'Individual.gender', '\\01.Subject\\Gender\\', 'Gender', None, 'Female', 1, 'TEST'],
+            ['P1', None, None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', None, 'Female', 1, 'TEST'],
             ['P1', 'D1', None, 'Diagnosis.name', '\\02.Diagnosis\\Name\\', 'Diagnosis', None, 'Leukemia', 1, 'TEST'],
             ['P1', None, 'R1', 'Radiology.image_type', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST']
         ]
@@ -341,14 +380,14 @@ class CsrTranformations(unittest.TestCase):
             ['P1', '', 'R1', '', 'type_1', ''],
             ['P1', 'D1', '', 'Female', '', 'Leukemia'],
         ], columns=['Subject Id', 'Diagnosis Id', 'Radiology Id',
-                    'Gender', 'Image type', 'Diagnosis'])
+                    'Sex', 'Image type', 'Diagnosis'])
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Radiology Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
 
     def test_result_data_shape_patient_diagnosis_radiology_study(self):
         test_data = [
-            ['P1', None, None, None, 'Individual.gender', '\\01.Subject\\Gender\\', 'Gender', 'Female', None, 1, 'TEST'],
+            ['P1', None, None, None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Female', None, 1, 'TEST'],
             ['P1', 'D1', None, None, 'Diagnosis.name', '\\02.Diagnosis\\Name\\', 'Diagnosis', None, 'Leukemia', 1, 'TEST'],
             ['P1', 'D2', None, None, 'Diagnosis.name', '\\02.Diagnosis\\Name\\', 'Diagnosis', None, 'CRC', 1, 'TEST'],
             ['P1', 'D1', 'R1', None, 'Radiology.examination_date', '\\03.Radiology\\Examination Date\\', 'Radiology date', None, '2021-12-17T00:00:00Z', 1, 'TEST'],
@@ -380,7 +419,7 @@ class CsrTranformations(unittest.TestCase):
             ['P1', '', 'R3', 'Study1', '', '', '', '2021-12-24', 'Study 1', '1'],
             ['P1', '', 'R3', 'Study2', '', '', '', '2021-12-24', 'Study 2', '2'],
         ], columns=['Subject Id', 'Diagnosis Id', 'Radiology Id', 'Study Id',
-                    'Gender', 'Diagnosis', 'Treatment', 'Radiology date', 'Study title', 'Individual study id'])
+                    'Sex', 'Diagnosis', 'Treatment', 'Radiology date', 'Study title', 'Individual study id'])
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Radiology Id', 'Study Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
@@ -447,6 +486,8 @@ class CsrTranformations(unittest.TestCase):
             '01. Biomaterial parent',
             '02. Date of biomaterial',
             '03. Biomaterial type',
+            '04. Library strategy',
+            '05. Analysis type',
             # radiology
             '00. Radiology ID',
             '01. Examination Date',
@@ -470,6 +511,16 @@ class CsrTranformations(unittest.TestCase):
             ('P5', 'D12', 'BS11', 'BM10', '', 'STUDY2'),
             ['01. Study ID', '02. Study acronym', '03. Study title', '04. Individual Study ID']].values)
         self.assertEqual(p5_study2_data, ['STUDY2', 'STD2', 'Study 2', '1'])
+
+        p3_biomaterial_data = list(df.loc[
+            ('P3', 'D11', 'BS2', 'BM2', '', 'STUDY1'),
+            ['03. Biomaterial type', '04. Library strategy', '05. Analysis type']].values)
+        self.assertEqual(p3_biomaterial_data, ['DNA', 'WGS;WXS', 'WGS Germline SNV;WXS Germline SNV;WGS Somatic SNV;WXS Somatic SNV'])
+
+        p1_radiology_data = list(df.loc[
+            ('P1', 'D1', 'BS1', 'BM1', 'R1', 'STUDY1'),
+            ['00. Radiology ID', '01. Examination Date', '02. Image Type', '03. Field Strength', '06. Body Part']].values)
+        self.assertEqual(p1_radiology_data, ['R1', '2016-05-01', 'type_2', '', 'torso'])
 
 
 if __name__ == '__main__':
