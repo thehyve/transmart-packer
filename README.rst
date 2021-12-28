@@ -160,6 +160,29 @@ Then you can run:
 
     python setup.py test
 
+`tests/csr_observation.json` - test data retrieved from TranSMART using the following API call:
+
+.. code-block:: bash
+
+    curl -X POST -H 'Content-type: application/json' -H 'Accept: application/json' -d \
+    '{
+        "type":"clinical",
+        "constraint": {
+            "type":"study_name",
+            "studyId":"CSR"
+        }
+    }' \
+    '<transmart_api_url>/v2/observations'
+
+Current file is created based on `clinical test data of python_csr2transmart`_,
+with ontology_config.json_ and sources_config.json_ as configuration.
+**Note! Do not change csr_observation.json file manually**.
+
+.. _clinical test data of python_csr2transmart: https://github.com/thehyve/python_csr2transmart/tree/master/test_data/input_data/CLINICAL
+.. _sources_config.json: https://github.com/thehyve/python_csr2transmart/blob/master/test_data/input_data/config/sources_config.json
+.. _ontology_config.json: https://github.com/thehyve/python_csr2transmart/blob/master/test_data/input_data/config/ontology_config.json
+
+
 Extending
 +++++++++
 
@@ -196,17 +219,19 @@ CSR export
 ++++++++++
 
 `The Central Subject Registry (CSR) data model`_ specific export.
-The model contains individual, diagnosis, biosource, biomaterial and study entities,
+The model contains individual, diagnosis, biosource, biomaterial, radiology and study entities,
 following the hierarchy for sample data: patient > diagnosis > biosource > biomaterial.
 Studies are orthogonal to samples, i.e., patients are linked to studies independent of samples.
-The entities IDs are first 5 columns of the export file. The rest of the columns are concepts.
+Radiology, same as samples, is linked to patient, but can be also linked to diagnosis (optional).
+The entities IDs are first 6 columns of the export file. The rest of the columns are concepts.
 Higher level concepts (e.g., Age that is specific to Patient level)
 get distributed to all rows specific to lower levels (e.g. Diagnosis)
 
-See the CSR_ test study as an example.
+See the CSR_ test study as an example or `latest sources dataset`_ that can be used for e2e testing.
 
 .. _CSR: https://github.com/thehyve/transmart-core/tree/dev/transmart-data/test_studies/CSR
 .. _The Central Subject Registry (CSR) data model: https://github.com/thehyve/python_csr2transmart/blob/master/csr/csr.py
+.. _latest sources dataset: https://github.com/thehyve/pmc-conversion/blob/master/test_data_e2e
 
 .. code-block:: json
 
@@ -249,6 +274,10 @@ has to be changed as well in order to include a column with the ID of the new en
 In order to do this, `<packer/table_transformations/csr_transformations.py>`_ file has to be modified.
 The ``ID_COLUMN_MAPPING`` map needs to be extended with the new dimension name of the new entity
 as key and the column name that should appear in the export as value.
+
+If the new entity is not a part of the sample hierarchy, but only linked to one or more entities, the
+merging logic has to be added in `transform_obs_df` function in `<packer/table_transformations/csr_transformations.py>`_
+(see the example of Radiology and Sample entities).
 
 
 License
