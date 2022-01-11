@@ -1,124 +1,6 @@
 {
   "dimensionDeclarations": [
     {
-      "name": "Radiology",
-      "dimensionType": "subject",
-      "sortIndex": 5,
-      "valueType": "String",
-      "modifierCode": "Radiology"
-    },
-    {
-      "name": "study",
-      "dimensionType": "attribute",
-      "sortIndex": null,
-      "valueType": "Object",
-      "fields": [
-        {
-          "name": "name",
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Study",
-      "dimensionType": null,
-      "sortIndex": 6,
-      "valueType": "String",
-      "modifierCode": "Study"
-    },
-    {
-      "name": "start time",
-      "dimensionType": "attribute",
-      "sortIndex": null,
-      "valueType": "Timestamp",
-      "inline": true
-    },
-    {
-      "name": "Biomaterial",
-      "dimensionType": "subject",
-      "sortIndex": 4,
-      "valueType": "String",
-      "modifierCode": "Biomaterial"
-    },
-    {
-      "name": "concept",
-      "dimensionType": "attribute",
-      "sortIndex": null,
-      "valueType": "Object",
-      "fields": [
-        {
-          "name": "conceptPath",
-          "type": "String"
-        },
-        {
-          "name": "conceptCode",
-          "type": "String"
-        },
-        {
-          "name": "name",
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Biosource",
-      "dimensionType": "subject",
-      "sortIndex": 3,
-      "valueType": "String",
-      "modifierCode": "Biosource"
-    },
-    {
-      "name": "visit",
-      "dimensionType": "attribute",
-      "sortIndex": null,
-      "valueType": "Object",
-      "fields": [
-        {
-          "name": "id",
-          "type": "Int"
-        },
-        {
-          "name": "patientId",
-          "type": "Int"
-        },
-        {
-          "name": "activeStatusCd",
-          "type": "String"
-        },
-        {
-          "name": "startDate",
-          "type": "Timestamp"
-        },
-        {
-          "name": "endDate",
-          "type": "Timestamp"
-        },
-        {
-          "name": "inoutCd",
-          "type": "String"
-        },
-        {
-          "name": "locationCd",
-          "type": "String"
-        },
-        {
-          "name": "lengthOfStay",
-          "type": "Double"
-        },
-        {
-          "name": "encounterIds",
-          "type": "Object"
-        }
-      ]
-    },
-    {
-      "name": "Diagnosis",
-      "dimensionType": "subject",
-      "sortIndex": 2,
-      "valueType": "String",
-      "modifierCode": "Diagnosis"
-    },
-    {
       "name": "patient",
       "dimensionType": "subject",
       "sortIndex": null,
@@ -173,6 +55,124 @@
           "type": "String"
         }
       ]
+    },
+    {
+      "name": "Biosource",
+      "dimensionType": "subject",
+      "sortIndex": 3,
+      "valueType": "String",
+      "modifierCode": "Biosource"
+    },
+    {
+      "name": "start time",
+      "dimensionType": "attribute",
+      "sortIndex": null,
+      "valueType": "Timestamp",
+      "inline": true
+    },
+    {
+      "name": "Study",
+      "dimensionType": null,
+      "sortIndex": 6,
+      "valueType": "String",
+      "modifierCode": "Study"
+    },
+    {
+      "name": "Diagnosis",
+      "dimensionType": "subject",
+      "sortIndex": 2,
+      "valueType": "String",
+      "modifierCode": "Diagnosis"
+    },
+    {
+      "name": "Radiology",
+      "dimensionType": "subject",
+      "sortIndex": 5,
+      "valueType": "String",
+      "modifierCode": "Radiology"
+    },
+    {
+      "name": "concept",
+      "dimensionType": "attribute",
+      "sortIndex": null,
+      "valueType": "Object",
+      "fields": [
+        {
+          "name": "conceptPath",
+          "type": "String"
+        },
+        {
+          "name": "conceptCode",
+          "type": "String"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "study",
+      "dimensionType": "attribute",
+      "sortIndex": null,
+      "valueType": "Object",
+      "fields": [
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "visit",
+      "dimensionType": "attribute",
+      "sortIndex": null,
+      "valueType": "Object",
+      "fields": [
+        {
+          "name": "id",
+          "type": "Int"
+        },
+        {
+          "name": "patientId",
+          "type": "Int"
+        },
+        {
+          "name": "activeStatusCd",
+          "type": "String"
+        },
+        {
+          "name": "startDate",
+          "type": "Timestamp"
+        },
+        {
+          "name": "endDate",
+          "type": "Timestamp"
+        },
+        {
+          "name": "inoutCd",
+          "type": "String"
+        },
+        {
+          "name": "locationCd",
+          "type": "String"
+        },
+        {
+          "name": "lengthOfStay",
+          "type": "Double"
+        },
+        {
+          "name": "encounterIds",
+          "type": "Object"
+        }
+      ]
+    },
+    {
+      "name": "Biomaterial",
+      "dimensionType": "subject",
+      "sortIndex": 4,
+      "valueType": "String",
+      "modifierCode": "Biomaterial"
     }
   ],
   "sort": [
@@ -203,14 +203,82 @@
         null
       ],
       "dimensionIndexes": [
+        0,
+        0,
+        null,
+        0,
+        null,
+        0,
+        0,
+        null,
+        0
+      ],
+      "stringValue": "WGS Germline SNV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        0,
         null,
         0,
         null,
         0,
         0,
+        null,
+        0
+      ],
+      "stringValue": "WXS Germline SNV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
         0,
         null,
         0,
+        null,
+        0,
+        0,
+        null,
+        0
+      ],
+      "stringValue": "WGS Somatic SNV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        0,
+        null,
+        0,
+        null,
+        0,
+        0,
+        null,
+        0
+      ],
+      "stringValue": "WXS Somatic SNV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        0,
+        null,
+        0,
+        null,
+        1,
+        0,
+        null,
         0
       ],
       "stringValue": "2017-11-22T00:00:00Z"
@@ -220,13 +288,13 @@
         null
       ],
       "dimensionIndexes": [
+        1,
+        1,
         null,
-        0,
+        null,
         null,
         1,
         0,
-        1,
-        null,
         null,
         1
       ],
@@ -237,14 +305,14 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
         2,
-        0,
         2,
         null,
         1,
+        null,
+        1,
+        0,
+        null,
         2
       ],
       "stringValue": "2017-11-22T00:00:00Z"
@@ -254,15 +322,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        3,
-        0,
+        2,
         3,
         null,
         1,
-        2
+        null,
+        1,
+        0,
+        null,
+        3
       ],
       "stringValue": "2017-08-22T00:00:00Z"
     },
@@ -271,15 +339,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        4,
-        0,
+        2,
         2,
         null,
         1,
-        2
+        null,
+        1,
+        0,
+        null,
+        4
       ],
       "stringValue": "2017-07-12T00:00:00Z"
     },
@@ -288,15 +356,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        5,
-        0,
+        3,
         4,
         null,
         2,
-        3
+        null,
+        1,
+        0,
+        null,
+        5
       ],
       "stringValue": "2017-10-12T00:00:00Z"
     },
@@ -305,15 +373,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        6,
-        0,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        1,
+        0,
+        null,
+        6
       ],
       "stringValue": "2017-12-12T00:00:00Z"
     },
@@ -322,15 +390,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        7,
-        0,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        1,
+        0,
+        null,
+        7
       ],
       "stringValue": "2017-12-02T00:00:00Z"
     },
@@ -339,15 +407,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        8,
-        0,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        1,
+        0,
+        null,
+        8
       ],
       "stringValue": "2017-10-12T00:00:00Z"
     },
@@ -356,15 +424,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        9,
-        0,
+        4,
         7,
         null,
         5,
-        4
+        null,
+        1,
+        0,
+        null,
+        9
       ],
       "stringValue": "2017-10-12T00:00:00Z"
     },
@@ -373,15 +441,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        10,
-        0,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        1,
+        0,
+        null,
+        10
       ],
       "stringValue": "2017-11-22T00:00:00Z"
     },
@@ -390,15 +458,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        11,
-        0,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        1,
+        0,
+        null,
+        11
       ],
       "stringValue": "2017-12-12T00:00:00Z"
     },
@@ -407,15 +475,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        12,
-        0,
+        5,
         9,
         null,
         6,
-        5
+        null,
+        1,
+        0,
+        null,
+        12
       ],
       "stringValue": "2017-09-12T00:00:00Z"
     },
@@ -424,15 +492,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        13,
-        0,
+        5,
         9,
         null,
         6,
-        5
+        null,
+        1,
+        0,
+        null,
+        13
       ],
       "stringValue": "2017-11-22T00:00:00Z"
     },
@@ -441,15 +509,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        14,
-        0,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        1,
+        0,
+        null,
+        14
       ],
       "stringValue": "2017-10-12T00:00:00Z"
     },
@@ -458,15 +526,49 @@
         null
       ],
       "dimensionIndexes": [
+        0,
+        0,
         null,
         0,
         null,
-        6,
-        1,
+        2,
+        0,
+        null,
+        0
+      ],
+      "stringValue": "WGS"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        0,
+        null,
+        0,
+        null,
+        2,
+        0,
+        null,
+        0
+      ],
+      "stringValue": "WXS"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
         5,
         null,
         3,
-        3
+        null,
+        3,
+        0,
+        null,
+        6
       ],
       "stringValue": "9"
     },
@@ -475,15 +577,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        7,
-        1,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        3,
+        0,
+        null,
+        7
       ],
       "stringValue": "BM9"
     },
@@ -492,14 +594,14 @@
         null
       ],
       "dimensionIndexes": [
-        null,
+        0,
         0,
         null,
         0,
-        2,
+        null,
+        4,
         0,
         null,
-        0,
         0
       ],
       "stringValue": "DNA"
@@ -509,13 +611,13 @@
         null
       ],
       "dimensionIndexes": [
+        1,
+        1,
         null,
+        null,
+        null,
+        4,
         0,
-        null,
-        1,
-        2,
-        1,
-        null,
         null,
         1
       ],
@@ -526,14 +628,14 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        2,
         2,
         2,
         null,
         1,
+        null,
+        4,
+        0,
+        null,
         2
       ],
       "stringValue": "RNA"
@@ -543,15 +645,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        3,
         2,
         3,
         null,
         1,
-        2
+        null,
+        4,
+        0,
+        null,
+        3
       ],
       "stringValue": "DNA"
     },
@@ -560,32 +662,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        4,
         2,
         2,
         null,
         1,
-        2
-      ],
-      "stringValue": "RNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
         null,
-        0,
-        null,
-        5,
-        2,
         4,
+        0,
         null,
-        2,
-        3
+        4
       ],
       "stringValue": "RNA"
     },
@@ -594,150 +679,31 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        6,
-        2,
-        5,
-        null,
         3,
-        3
-      ],
-      "stringValue": "RNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
+        4,
         null,
-        0,
-        null,
-        7,
         2,
-        5,
-        null,
-        3,
-        3
-      ],
-      "stringValue": "DNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        8,
-        2,
-        6,
         null,
         4,
-        4
-      ],
-      "stringValue": "DNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
         0,
         null,
-        9,
-        2,
-        7,
-        null,
-        5,
-        4
-      ],
-      "stringValue": "DNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        10,
-        2,
-        8,
-        null,
-        4,
-        4
-      ],
-      "stringValue": "RNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        11,
-        2,
-        6,
-        null,
-        4,
-        4
-      ],
-      "stringValue": "DNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        12,
-        2,
-        9,
-        null,
-        6,
         5
       ],
-      "stringValue": "DNA"
+      "stringValue": "RNA"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        3,
+        5,
         null,
+        3,
+        null,
+        4,
         0,
         null,
-        13,
-        2,
-        9,
-        null,
-        6,
-        5
-      ],
-      "stringValue": "DNA"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        14,
-        2,
-        10,
-        null,
-        7,
         6
       ],
       "stringValue": "RNA"
@@ -747,15 +713,151 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
+        3,
+        5,
         null,
         3,
+        null,
+        4,
+        0,
+        null,
+        7
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        6,
+        null,
+        4,
+        null,
+        4,
+        0,
+        null,
+        8
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        7,
+        null,
+        5,
+        null,
+        4,
+        0,
+        null,
+        9
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        8,
+        null,
+        4,
+        null,
+        4,
+        0,
+        null,
+        10
+      ],
+      "stringValue": "RNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        6,
+        null,
+        4,
+        null,
+        4,
+        0,
+        null,
+        11
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        9,
+        null,
+        6,
+        null,
+        4,
+        0,
+        null,
+        12
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        9,
+        null,
+        6,
+        null,
+        4,
+        0,
+        null,
+        13
+      ],
+      "stringValue": "DNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        10,
+        null,
+        7,
+        null,
+        4,
+        0,
+        null,
+        14
+      ],
+      "stringValue": "RNA"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
         0,
         null,
         0,
-        0
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-04-01T00:00:00Z"
     },
@@ -764,15 +866,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        1,
         1,
         null,
         null,
-        1
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-05-14T00:00:00Z"
     },
@@ -781,15 +883,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        2,
         2,
         null,
         1,
-        2
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-07-10T00:00:00Z"
     },
@@ -798,15 +900,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        2,
         3,
         null,
         1,
-        2
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-05-10T00:00:00Z"
     },
@@ -815,15 +917,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         3,
         4,
         null,
         2,
-        3
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-03-12T00:00:00Z"
     },
@@ -832,15 +934,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         3,
         5,
         null,
         3,
-        3
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-06-10T00:00:00Z"
     },
@@ -849,15 +951,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-06-21T00:00:00Z"
     },
@@ -866,15 +968,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        4,
         7,
         null,
         5,
-        4
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-07-22T00:00:00Z"
     },
@@ -883,15 +985,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-08-11T00:00:00Z"
     },
@@ -900,15 +1002,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        7,
         11,
         null,
         8,
-        7
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-08-21T00:00:00Z"
     },
@@ -917,15 +1019,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        5,
         9,
         null,
         6,
-        5
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-03-10T00:00:00Z"
     },
@@ -934,15 +1036,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        3,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        5,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-04-30T00:00:00Z"
     },
@@ -951,15 +1053,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        4,
+        3,
         4,
         null,
         2,
-        3
+        null,
+        6,
+        0,
+        null,
+        null
       ],
       "stringValue": "Yes"
     },
@@ -968,15 +1070,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         4,
         6,
         null,
         4,
-        4
+        null,
+        6,
+        0,
+        null,
+        null
       ],
       "stringValue": "No"
     },
@@ -985,15 +1087,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         4,
         8,
         null,
         4,
-        4
+        null,
+        6,
+        0,
+        null,
+        null
       ],
       "stringValue": "Yes"
     },
@@ -1002,15 +1104,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        4,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        6,
+        0,
+        null,
+        null
       ],
       "stringValue": "No"
     },
@@ -1019,15 +1121,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
-        null,
-        null,
-        5,
         0,
         null,
         0,
-        0
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST2"
     },
@@ -1036,15 +1138,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        1,
         1,
         null,
         null,
-        1
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST1"
     },
@@ -1053,15 +1155,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        2,
         2,
         null,
         1,
-        2
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST2"
     },
@@ -1070,15 +1172,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        2,
         3,
         null,
         1,
-        2
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST3"
     },
@@ -1087,15 +1189,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        3,
         4,
         null,
         2,
-        3
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST1"
     },
@@ -1104,15 +1206,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST4"
     },
@@ -1121,15 +1223,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST2"
     },
@@ -1138,15 +1240,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        4,
         7,
         null,
         5,
-        4
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST3"
     },
@@ -1155,15 +1257,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST4"
     },
@@ -1172,15 +1274,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        7,
         11,
         null,
         8,
-        7
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST3"
     },
@@ -1189,15 +1291,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         5,
         9,
         null,
         6,
-        5
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST2"
     },
@@ -1206,15 +1308,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        5,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        7,
+        0,
+        null,
+        null
       ],
       "stringValue": "ST3"
     },
@@ -1223,15 +1325,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        6,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        8,
+        0,
+        null,
+        null
       ],
       "stringValue": "B4"
     },
@@ -1240,15 +1342,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
-        null,
-        null,
-        7,
         0,
         null,
         0,
-        0
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "cortex"
     },
@@ -1257,15 +1359,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        1,
         1,
         null,
         null,
-        1
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "cortex"
     },
@@ -1274,15 +1376,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        2,
         2,
         null,
         1,
-        2
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1291,15 +1393,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        2,
         3,
         null,
         1,
-        2
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1308,15 +1410,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        3,
         4,
         null,
         2,
-        3
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1325,15 +1427,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "cortex"
     },
@@ -1342,15 +1444,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1359,15 +1461,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        4,
         7,
         null,
         5,
-        4
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1376,15 +1478,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1393,15 +1495,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
         7,
         11,
         null,
         8,
-        7
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "cortex"
     },
@@ -1410,15 +1512,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        5,
         9,
         null,
         6,
-        5
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "cortex"
     },
@@ -1427,15 +1529,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        7,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        9,
+        0,
+        null,
+        null
       ],
       "stringValue": "medula"
     },
@@ -1444,15 +1546,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
-        null,
-        null,
-        8,
         0,
         null,
         0,
-        0
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 3.0
     },
@@ -1461,15 +1563,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        1,
         1,
         null,
         null,
-        1
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 2.0
     },
@@ -1478,15 +1580,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        2,
         2,
         null,
         1,
-        2
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 4.0
     },
@@ -1495,15 +1597,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        2,
         3,
         null,
         1,
-        2
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 2.0
     },
@@ -1512,15 +1614,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        3,
         4,
         null,
         2,
-        3
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 5.0
     },
@@ -1529,15 +1631,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        3,
         5,
         null,
         3,
-        3
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 3.0
     },
@@ -1546,15 +1648,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        4,
         6,
         null,
         4,
-        4
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 1.0
     },
@@ -1563,15 +1665,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        4,
         7,
         null,
         5,
-        4
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 5.0
     },
@@ -1580,15 +1682,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        4,
         8,
         null,
         4,
-        4
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 1.0
     },
@@ -1597,15 +1699,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        7,
         11,
         null,
         8,
-        7
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 3.0
     },
@@ -1614,15 +1716,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        5,
         9,
         null,
         6,
-        5
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 1.0
     },
@@ -1631,15 +1733,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        8,
+        6,
         10,
         null,
         7,
-        6
+        null,
+        10,
+        0,
+        null,
+        null
       ],
       "numericValue": 1.0
     },
@@ -1648,15 +1750,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        9,
+        null,
+        11,
         0,
         null,
-        null,
-        9,
-        null,
-        null,
-        9,
-        8
+        null
       ],
       "stringValue": "Center 2"
     },
@@ -1665,15 +1767,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
-        null,
-        null,
-        9,
         null,
         null,
         10,
-        0
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 3"
     },
@@ -1682,15 +1784,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        9,
-        null,
-        null,
         0,
-        0
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 3"
     },
@@ -1699,15 +1801,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        2,
         null,
         null,
         1,
-        2
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 1"
     },
@@ -1716,15 +1818,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        3,
         null,
         null,
         2,
-        3
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 1"
     },
@@ -1733,15 +1835,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        3,
         null,
         null,
         3,
-        3
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 2"
     },
@@ -1750,15 +1852,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        4,
         null,
         null,
         4,
-        4
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 2"
     },
@@ -1767,15 +1869,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        4,
         null,
         null,
         5,
-        4
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 1"
     },
@@ -1784,15 +1886,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        7,
         null,
         null,
         8,
-        7
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 2"
     },
@@ -1801,15 +1903,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        7,
         null,
         null,
         11,
-        7
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 2"
     },
@@ -1818,15 +1920,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        5,
         null,
         null,
         6,
-        5
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 3"
     },
@@ -1835,15 +1937,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        9,
+        6,
         null,
         null,
         7,
-        6
+        null,
+        11,
+        0,
+        null,
+        null
       ],
       "stringValue": "Center 1"
     },
@@ -1852,15 +1954,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        8,
         null,
         null,
         9,
-        8
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-07-02T00:00:00Z"
     },
@@ -1869,15 +1971,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
         10,
         null,
+        12,
+        0,
         null,
-        10,
-        0
+        null
       ],
       "stringValue": "2016-11-03T00:00:00Z"
     },
@@ -1886,15 +1988,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        10,
-        null,
-        null,
         0,
-        0
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-03-11T00:00:00Z"
     },
@@ -1903,15 +2005,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        2,
         null,
         null,
         1,
-        2
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-12-06T00:00:00Z"
     },
@@ -1920,15 +2022,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        3,
         null,
         null,
         2,
-        3
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-05-01T00:00:00Z"
     },
@@ -1937,15 +2039,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        3,
         null,
         null,
         3,
-        3
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-08-10T00:00:00Z"
     },
@@ -1954,15 +2056,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        4,
         null,
         null,
         4,
-        4
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-09-05T00:00:00Z"
     },
@@ -1971,15 +2073,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        4,
         null,
         null,
         5,
-        4
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-05-01T00:00:00Z"
     },
@@ -1988,15 +2090,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        7,
         null,
         null,
         8,
-        7
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-02-01T00:00:00Z"
     },
@@ -2005,15 +2107,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        7,
         null,
         null,
         11,
-        7
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-07-22T00:00:00Z"
     },
@@ -2022,15 +2124,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        5,
         null,
         null,
         6,
-        5
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2017-04-02T00:00:00Z"
     },
@@ -2039,15 +2141,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        10,
+        6,
         null,
         null,
         7,
-        6
+        null,
+        12,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-05-09T00:00:00Z"
     },
@@ -2056,15 +2158,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        8,
         null,
         null,
         9,
-        8
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "kidney"
     },
@@ -2073,15 +2175,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
-        null,
-        null,
-        11,
         null,
         null,
         10,
-        0
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "bone marrow"
     },
@@ -2090,15 +2192,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        11,
-        null,
-        null,
         0,
-        0
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "liver"
     },
@@ -2107,15 +2209,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        2,
         null,
         null,
         1,
-        2
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "bone marrow"
     },
@@ -2124,15 +2226,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        3,
         null,
         null,
         2,
-        3
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "liver"
     },
@@ -2141,15 +2243,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        3,
         null,
         null,
         3,
-        3
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "liver"
     },
@@ -2158,15 +2260,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        4,
         null,
         null,
         4,
-        4
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "kidney"
     },
@@ -2175,15 +2277,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        4,
         null,
         null,
         5,
-        4
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "bone marrow"
     },
@@ -2192,15 +2294,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        7,
         null,
         null,
         8,
-        7
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "liver"
     },
@@ -2209,15 +2311,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
+        null,
+        11,
+        null,
+        13,
         0,
         null,
-        null,
-        11,
-        null,
-        null,
-        11,
-        7
+        null
       ],
       "stringValue": "kidney"
     },
@@ -2226,15 +2328,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        5,
         null,
         null,
         6,
-        5
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "liver"
     },
@@ -2243,15 +2345,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        11,
+        6,
         null,
         null,
         7,
-        6
+        null,
+        13,
+        0,
+        null,
+        null
       ],
       "stringValue": "kidney"
     },
@@ -2260,15 +2362,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        8,
         null,
         null,
         9,
-        8
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "surgery"
     },
@@ -2277,15 +2379,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        12,
-        null,
-        null,
         10,
-        0
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "Protocol 1"
     },
@@ -2294,15 +2396,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        12,
-        null,
-        null,
         0,
-        0
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "Protocol 1"
     },
@@ -2311,15 +2413,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        2,
         null,
         null,
         1,
-        2
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "chemo"
     },
@@ -2328,15 +2430,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        3,
         null,
         null,
         2,
-        3
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "chemo"
     },
@@ -2345,15 +2447,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        3,
         null,
         null,
         3,
-        3
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "chemo"
     },
@@ -2362,15 +2464,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        4,
         null,
         null,
         4,
-        4
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "chemo"
     },
@@ -2379,15 +2481,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        4,
         null,
         null,
         5,
-        4
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "surgery"
     },
@@ -2396,15 +2498,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        7,
         null,
         null,
         8,
-        7
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "surgery"
     },
@@ -2413,15 +2515,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        7,
         null,
         null,
         11,
-        7
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "surgery"
     },
@@ -2430,15 +2532,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        5,
         null,
         null,
         6,
-        5
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "chemo"
     },
@@ -2447,15 +2549,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        12,
+        6,
         null,
         null,
         7,
-        6
+        null,
+        14,
+        0,
+        null,
+        null
       ],
       "stringValue": "surgery"
     },
@@ -2464,423 +2566,423 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
+        8,
         null,
         null,
         9,
-        8
-      ],
-      "stringValue": "III"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        10,
-        0
-      ],
-      "stringValue": "IV"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        0,
-        0
-      ],
-      "stringValue": "II"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        1,
-        2
-      ],
-      "stringValue": "II"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        2,
-        3
-      ],
-      "stringValue": "IV"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        3,
-        3
-      ],
-      "stringValue": "III"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        4,
-        4
-      ],
-      "stringValue": "I"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        5,
-        4
-      ],
-      "stringValue": "I"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        8,
-        7
-      ],
-      "stringValue": "III"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        11,
-        7
-      ],
-      "stringValue": "II"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        6,
-        5
-      ],
-      "stringValue": "IV"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        13,
-        null,
-        null,
-        7,
-        6
-      ],
-      "stringValue": "II"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        9,
-        8
-      ],
-      "stringValue": "nephroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        10,
-        0
-      ],
-      "stringValue": "hepatoblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        0,
-        0
-      ],
-      "stringValue": "nephroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        1,
-        2
-      ],
-      "stringValue": "hepatoblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        2,
-        3
-      ],
-      "stringValue": "neuroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        3,
-        3
-      ],
-      "stringValue": "neuroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        4,
-        4
-      ],
-      "stringValue": "nephroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        5,
-        4
-      ],
-      "stringValue": "hepatoblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        8,
-        7
-      ],
-      "stringValue": "neuroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        11,
-        7
-      ],
-      "stringValue": "neuroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        6,
-        5
-      ],
-      "stringValue": "nephroblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        14,
-        null,
-        null,
-        7,
-        6
-      ],
-      "stringValue": "hepatoblastoma"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
         null,
         15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "III"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        null,
+        10,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "IV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        null,
+        0,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "II"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        null,
+        1,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "II"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        null,
+        2,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "IV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        null,
+        3,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "III"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        null,
+        4,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "I"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        null,
+        5,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "I"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        null,
+        8,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "III"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        null,
+        11,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "II"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        null,
+        6,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "IV"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        null,
+        7,
+        null,
+        15,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "II"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
+        null,
+        null,
+        9,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "nephroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        null,
+        10,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "hepatoblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        null,
+        0,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "nephroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        null,
+        1,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "hepatoblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        null,
+        2,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "neuroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        null,
+        3,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "neuroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        null,
+        4,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "nephroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        null,
+        5,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "hepatoblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        null,
+        8,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "neuroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        null,
+        11,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "neuroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        null,
+        6,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "nephroblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        null,
+        7,
+        null,
+        16,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "hepatoblastoma"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
         null,
         null,
         null,
-        8
+        null,
+        17,
+        0,
+        null,
+        null
       ],
       "stringValue": "1992-03-02T00:00:00Z"
     },
@@ -2889,15 +2991,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        15,
         null,
         null,
+        17,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "1994-04-03T00:00:00Z"
     },
@@ -2906,15 +3008,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "1993-05-04T00:00:00Z"
     },
@@ -2923,15 +3025,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        2
+        null
       ],
       "stringValue": "1993-07-06T00:00:00Z"
     },
@@ -2940,15 +3042,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "1993-02-01T00:00:00Z"
     },
@@ -2957,15 +3059,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "1995-06-05T00:00:00Z"
     },
@@ -2974,15 +3076,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        7
+        null
       ],
       "stringValue": "1993-08-07T00:00:00Z"
     },
@@ -2991,15 +3093,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        5
+        null
       ],
       "stringValue": "1997-09-08T00:00:00Z"
     },
@@ -3008,15 +3110,15 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
+        null,
+        null,
+        null,
+        17,
         0,
         null,
-        null,
-        15,
-        null,
-        null,
-        null,
-        6
+        null
       ],
       "stringValue": "1993-10-09T00:00:00Z"
     },
@@ -3025,15 +3127,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "male"
     },
@@ -3042,15 +3144,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        16,
         null,
         null,
+        18,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "female"
     },
@@ -3059,15 +3161,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "male"
     },
@@ -3076,15 +3178,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        2
+        null
       ],
       "stringValue": "male"
     },
@@ -3093,15 +3195,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "female"
     },
@@ -3110,15 +3212,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "female"
     },
@@ -3127,15 +3229,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        7
+        null
       ],
       "stringValue": "female"
     },
@@ -3144,15 +3246,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        5
+        null
       ],
       "stringValue": "male"
     },
@@ -3161,15 +3263,15 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
+        null,
+        null,
+        null,
+        18,
         0,
         null,
-        null,
-        16,
-        null,
-        null,
-        null,
-        6
+        null
       ],
       "stringValue": "female"
     },
@@ -3178,15 +3280,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "2017-04-10T00:00:00Z"
     },
@@ -3195,15 +3297,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        17,
         null,
         null,
+        19,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "2017-05-11T00:00:00Z"
     },
@@ -3212,15 +3314,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "2017-06-13T00:00:00Z"
     },
@@ -3229,15 +3331,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        2
+        null
       ],
       "stringValue": "2017-08-20T00:00:00Z"
     },
@@ -3246,15 +3348,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "2017-03-01T00:00:00Z"
     },
@@ -3263,15 +3365,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "2017-07-05T00:00:00Z"
     },
@@ -3280,15 +3382,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        7
+        null
       ],
       "stringValue": "2017-09-12T00:00:00Z"
     },
@@ -3297,15 +3399,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        5
+        null
       ],
       "stringValue": "2017-10-14T00:00:00Z"
     },
@@ -3314,15 +3416,15 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
+        null,
+        null,
+        null,
+        19,
         0,
         null,
-        null,
-        17,
-        null,
-        null,
-        null,
-        6
+        null
       ],
       "stringValue": "2017-11-16T00:00:00Z"
     },
@@ -3331,15 +3433,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "yes"
     },
@@ -3348,15 +3450,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        18,
         null,
         null,
+        20,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "yes"
     },
@@ -3365,15 +3467,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "no"
     },
@@ -3382,15 +3484,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        2
+        null
       ],
       "stringValue": "yes"
     },
@@ -3399,15 +3501,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "yes"
     },
@@ -3416,15 +3518,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "yes"
     },
@@ -3433,15 +3535,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        7
+        null
       ],
       "stringValue": "yes"
     },
@@ -3450,15 +3552,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        5
+        null
       ],
       "stringValue": "yes"
     },
@@ -3467,15 +3569,15 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
+        null,
+        null,
+        null,
+        20,
         0,
         null,
-        null,
-        18,
-        null,
-        null,
-        null,
-        6
+        null
       ],
       "stringValue": "yes"
     },
@@ -3484,15 +3586,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        null,
+        null,
+        21,
         0,
         null,
-        null,
-        19,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "2018-06-02T00:00:00Z"
     },
@@ -3501,15 +3603,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        19,
         null,
         null,
+        21,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "2018-06-03T00:00:00Z"
     },
@@ -3518,15 +3620,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
+        null,
+        null,
+        null,
+        21,
         0,
         null,
-        null,
-        19,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "2018-06-04T00:00:00Z"
     },
@@ -3535,15 +3637,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
+        null,
+        null,
+        null,
+        21,
         0,
         null,
-        null,
-        19,
-        null,
-        null,
-        null,
-        2
+        null
       ],
       "stringValue": "2017-10-14T00:00:00Z"
     },
@@ -3552,15 +3654,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
+        null,
+        null,
+        null,
+        22,
         0,
         null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "yes"
     },
@@ -3569,15 +3671,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
         0,
         null,
         null,
-        20,
         null,
         null,
+        22,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "yes"
     },
@@ -3586,457 +3688,457 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        1
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        2
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        3
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        7
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        5
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        20,
-        null,
-        null,
-        null,
-        6
-      ],
-      "stringValue": "yes"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        21,
-        null,
-        null,
-        null,
-        8
-      ],
-      "stringValue": "2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        21,
-        null,
-        null,
-        null,
-        0
-      ],
-      "stringValue": "3"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        21,
-        null,
-        null,
-        null,
-        1
-      ],
-      "stringValue": "4"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
         1,
         null,
-        21,
         null,
-        null,
-        null,
-        2
-      ],
-      "stringValue": "2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        21,
-        null,
-        null,
-        null,
-        3
-      ],
-      "stringValue": "1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        21,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "5"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        21,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        21,
-        null,
-        null,
-        null,
-        7
-      ],
-      "stringValue": "3"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        21,
-        null,
-        null,
-        null,
-        5
-      ],
-      "stringValue": "4"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        21,
-        null,
-        null,
-        null,
-        6
-      ],
-      "stringValue": "5"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        8
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        0
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        1
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        2
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        3
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        4
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
-        0,
+        null,
         null,
         null,
         22,
+        0,
         null,
-        null,
-        null,
-        7
+        null
       ],
-      "stringValue": "Human"
+      "stringValue": "yes"
     },
     {
       "inlineDimensions": [
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
-        0,
-        null,
-        null,
-        22,
-        null,
-        null,
-        null,
-        5
-      ],
-      "stringValue": "Human"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        null,
-        null,
-        22,
-        null,
-        null,
-        null,
-        6
-      ],
-      "stringValue": "Human"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        0,
         0,
         null,
         null,
         23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        0,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "3"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        1,
+        null,
+        0,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "4"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        1,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        0,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        0,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "5"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        1,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        1,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "3"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        1,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "4"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        1,
+        null,
+        null,
+        23,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "5"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        1,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        null,
+        null,
+        null,
+        24,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "Human"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
         null,
         null,
         9,
-        8
+        0,
+        25,
+        0,
+        null,
+        null
       ],
       "stringValue": "torso"
     },
@@ -4045,15 +4147,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        25,
         0,
         null,
-        null,
-        23,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "legs"
     },
@@ -4062,15 +4164,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        25,
         0,
         null,
-        null,
-        23,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "torso"
     },
@@ -4079,15 +4181,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        24,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        26,
+        0,
+        null,
+        null
       ],
       "stringValue": "D2"
     },
@@ -4096,15 +4198,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        26,
         0,
         null,
-        null,
-        24,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "D1"
     },
@@ -4113,15 +4215,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        25,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        27,
+        0,
+        null,
+        null
       ],
       "stringValue": "2016-07-02T00:00:00Z"
     },
@@ -4130,15 +4232,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        27,
         0,
         null,
-        null,
-        25,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "2016-11-03T00:00:00Z"
     },
@@ -4147,15 +4249,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        27,
         0,
         null,
-        null,
-        25,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "2016-05-01T00:00:00Z"
     },
@@ -4164,15 +4266,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        26,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        28,
+        0,
+        null,
+        null
       ],
       "stringValue": "50"
     },
@@ -4181,15 +4283,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        28,
         0,
         null,
-        null,
-        26,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "20"
     },
@@ -4198,15 +4300,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        27,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        29,
+        0,
+        null,
+        null
       ],
       "stringValue": "type_2"
     },
@@ -4215,15 +4317,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        29,
         0,
         null,
-        null,
-        27,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "type_1"
     },
@@ -4232,15 +4334,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        29,
         0,
         null,
-        null,
-        27,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "type_2"
     },
@@ -4249,15 +4351,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        28,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        30,
+        0,
+        null,
+        null
       ],
       "stringValue": "P2"
     },
@@ -4266,15 +4368,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        30,
         0,
         null,
-        null,
-        28,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "P2"
     },
@@ -4283,15 +4385,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        30,
         0,
         null,
-        null,
-        28,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "P1"
     },
@@ -4300,15 +4402,15 @@
         null
       ],
       "dimensionIndexes": [
-        0,
-        0,
-        null,
-        null,
-        29,
+        8,
         null,
         null,
         9,
-        8
+        0,
+        31,
+        0,
+        null,
+        null
       ],
       "stringValue": "R2"
     },
@@ -4317,15 +4419,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
+        null,
+        null,
+        null,
         1,
+        31,
         0,
         null,
-        null,
-        29,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "R3"
     },
@@ -4334,15 +4436,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
+        null,
+        null,
         2,
+        2,
+        31,
         0,
         null,
-        null,
-        29,
-        null,
-        null,
-        2,
-        3
+        null
       ],
       "stringValue": "R1"
     },
@@ -4351,15 +4453,15 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
         0,
+        null,
+        null,
+        32,
         0,
         null,
-        30,
-        null,
-        null,
-        null,
-        8
+        null
       ],
       "stringValue": "STD1"
     },
@@ -4368,15 +4470,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
         0,
         null,
-        30,
+        0,
         null,
         null,
+        32,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "STD1"
     },
@@ -4385,15 +4487,15 @@
         null
       ],
       "dimensionIndexes": [
+        1,
         null,
         0,
+        null,
+        null,
+        32,
         0,
         null,
-        30,
-        null,
-        null,
-        null,
-        1
+        null
       ],
       "stringValue": "STD1"
     },
@@ -4402,15 +4504,15 @@
         null
       ],
       "dimensionIndexes": [
+        2,
         null,
-        0,
         1,
         null,
-        30,
         null,
+        32,
+        0,
         null,
-        null,
-        2
+        null
       ],
       "stringValue": "STD2"
     },
@@ -4419,15 +4521,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
         0,
+        null,
+        null,
+        32,
         0,
         null,
-        30,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "STD1"
     },
@@ -4436,15 +4538,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
         0,
+        null,
+        null,
+        32,
         0,
         null,
-        30,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "STD1"
     },
@@ -4453,15 +4555,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
-        0,
         1,
         null,
-        30,
         null,
+        32,
+        0,
         null,
-        null,
-        4
+        null
       ],
       "stringValue": "STD2"
     },
@@ -4470,15 +4572,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
-        0,
         1,
         null,
-        30,
         null,
+        32,
+        0,
         null,
-        null,
-        7
+        null
       ],
       "stringValue": "STD2"
     },
@@ -4487,15 +4589,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
-        0,
         1,
         null,
-        30,
         null,
+        32,
+        0,
         null,
-        null,
-        5
+        null
       ],
       "stringValue": "STD2"
     },
@@ -4504,15 +4606,15 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
-        0,
         1,
         null,
-        30,
         null,
+        32,
+        0,
         null,
-        null,
-        6
+        null
       ],
       "stringValue": "STD2"
     },
@@ -4521,355 +4623,355 @@
         null
       ],
       "dimensionIndexes": [
+        8,
         null,
         0,
-        0,
         null,
-        31,
-        null,
-        null,
-        null,
-        8
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        31,
-        null,
-        null,
-        null,
-        0
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        31,
-        null,
-        null,
-        null,
-        1
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        31,
-        null,
-        null,
-        null,
-        2
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        31,
-        null,
-        null,
-        null,
-        3
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        31,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        31,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        31,
-        null,
-        null,
-        null,
-        7
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        31,
-        null,
-        null,
-        null,
-        5
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        31,
-        null,
-        null,
-        null,
-        6
-      ],
-      "stringValue": "http://www.example.com"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        32,
-        null,
-        null,
-        null,
-        8
-      ],
-      "stringValue": "STUDY1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        32,
-        null,
-        null,
-        null,
-        0
-      ],
-      "stringValue": "STUDY1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        32,
-        null,
-        null,
-        null,
-        1
-      ],
-      "stringValue": "STUDY1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        32,
-        null,
-        null,
-        null,
-        2
-      ],
-      "stringValue": "STUDY2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        32,
-        null,
-        null,
-        null,
-        3
-      ],
-      "stringValue": "STUDY1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        32,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "STUDY1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        32,
-        null,
-        null,
-        null,
-        4
-      ],
-      "stringValue": "STUDY2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        32,
-        null,
-        null,
-        null,
-        7
-      ],
-      "stringValue": "STUDY2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        32,
-        null,
-        null,
-        null,
-        5
-      ],
-      "stringValue": "STUDY2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        1,
-        null,
-        32,
-        null,
-        null,
-        null,
-        6
-      ],
-      "stringValue": "STUDY2"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
-        0,
         null,
         33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        0,
         null,
         null,
+        33,
+        0,
         null,
-        8
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        1,
+        null,
+        0,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        1,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        0,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        0,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        1,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        1,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        1,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        1,
+        null,
+        null,
+        33,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "http://www.example.com"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
+        null,
+        0,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        0,
+        null,
+        0,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        1,
+        null,
+        0,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        1,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        3,
+        null,
+        0,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        0,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        4,
+        null,
+        1,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        7,
+        null,
+        1,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        5,
+        null,
+        1,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        6,
+        null,
+        1,
+        null,
+        null,
+        34,
+        0,
+        null,
+        null
+      ],
+      "stringValue": "STUDY2"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        8,
+        null,
+        0,
+        null,
+        null,
+        35,
+        0,
+        null,
+        null
       ],
       "stringValue": "Study 1"
     },
@@ -4878,15 +4980,15 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
         0,
         null,
-        33,
+        0,
         null,
         null,
+        35,
+        0,
         null,
-        0
+        null
       ],
       "stringValue": "Study 1"
     },
@@ -4895,32 +4997,32 @@
         null
       ],
       "dimensionIndexes": [
-        null,
-        0,
-        0,
-        null,
-        33,
-        null,
-        null,
-        null,
-        1
-      ],
-      "stringValue": "Study 1"
-    },
-    {
-      "inlineDimensions": [
-        null
-      ],
-      "dimensionIndexes": [
-        null,
-        0,
         1,
         null,
-        33,
+        0,
         null,
         null,
+        35,
+        0,
         null,
-        2
+        null
+      ],
+      "stringValue": "Study 1"
+    },
+    {
+      "inlineDimensions": [
+        null
+      ],
+      "dimensionIndexes": [
+        2,
+        null,
+        1,
+        null,
+        null,
+        35,
+        0,
+        null,
+        null
       ],
       "stringValue": "Study 2"
     },
@@ -4929,15 +5031,15 @@
         null
       ],
       "dimensionIndexes": [
+        3,
         null,
         0,
+        null,
+        null,
+        35,
         0,
         null,
-        33,
-        null,
-        null,
-        null,
-        3
+        null
       ],
       "stringValue": "Study 1"
     },
@@ -4946,15 +5048,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
         0,
+        null,
+        null,
+        35,
         0,
         null,
-        33,
-        null,
-        null,
-        null,
-        4
+        null
       ],
       "stringValue": "Study 1"
     },
@@ -4963,15 +5065,15 @@
         null
       ],
       "dimensionIndexes": [
+        4,
         null,
-        0,
         1,
         null,
-        33,
         null,
+        35,
+        0,
         null,
-        null,
-        4
+        null
       ],
       "stringValue": "Study 2"
     },
@@ -4980,15 +5082,15 @@
         null
       ],
       "dimensionIndexes": [
+        7,
         null,
-        0,
         1,
         null,
-        33,
         null,
+        35,
+        0,
         null,
-        null,
-        7
+        null
       ],
       "stringValue": "Study 2"
     },
@@ -4997,15 +5099,15 @@
         null
       ],
       "dimensionIndexes": [
+        5,
         null,
-        0,
         1,
         null,
-        33,
         null,
+        35,
+        0,
         null,
-        null,
-        5
+        null
       ],
       "stringValue": "Study 2"
     },
@@ -5014,56 +5116,218 @@
         null
       ],
       "dimensionIndexes": [
+        6,
         null,
-        0,
         1,
         null,
-        33,
         null,
+        35,
+        0,
         null,
-        null,
-        6
+        null
       ],
       "stringValue": "Study 2"
     }
   ],
   "dimensionElements": {
-    "Radiology": [
-      "R2",
-      "R3",
-      "R1"
-    ],
-    "study": [
+    "patient": [
       {
-        "name": "CSR"
+        "id": 2,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P3"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "female",
+        "sex": "female"
+      },
+      {
+        "id": 3,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P4"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "male",
+        "sex": "male"
+      },
+      {
+        "id": 4,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P6"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "male",
+        "sex": "male"
+      },
+      {
+        "id": 5,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P1"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "female",
+        "sex": "female"
+      },
+      {
+        "id": 6,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P5"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "female",
+        "sex": "female"
+      },
+      {
+        "id": 8,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P8"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "male",
+        "sex": "male"
+      },
+      {
+        "id": 9,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P9"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "female",
+        "sex": "female"
+      },
+      {
+        "id": 7,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P7"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "female",
+        "sex": "female"
+      },
+      {
+        "id": 1,
+        "trial": null,
+        "inTrialId": null,
+        "subjectIds": {
+          "SUBJ_ID": "P2"
+        },
+        "birthDate": null,
+        "deathDate": null,
+        "age": null,
+        "race": null,
+        "maritalStatus": null,
+        "religion": null,
+        "sexCd": "male",
+        "sex": "male"
       }
+    ],
+    "Biosource": [
+      "BS2",
+      "BS3",
+      "BS5",
+      "BS9",
+      "BS1",
+      "BS10",
+      "BS4",
+      "BS11",
+      "BS12",
+      "BS7",
+      "BS8",
+      "BS6"
     ],
     "Study": [
       "STUDY1",
       "STUDY2"
     ],
-    "Biomaterial": [
-      "BM2",
-      "BM3",
-      "BM5",
-      "BM8",
-      "BM13",
-      "BM1",
-      "BM9",
-      "BM15",
-      "BM4",
-      "BM10",
-      "BM11",
-      "BM12",
-      "BM6",
-      "BM14",
-      "BM7"
+    "Diagnosis": [
+      "D11",
+      "D6",
+      "D1",
+      "D10",
+      "D5",
+      "D12",
+      "D8",
+      "D9",
+      "D7",
+      "D2",
+      "D3",
+      "D13"
+    ],
+    "Radiology": [
+      "R2",
+      "R3",
+      "R1"
     ],
     "concept": [
+      {
+        "conceptPath": "\\CSR\\Biomaterial.analysis_type",
+        "conceptCode": "Biomaterial.analysis_type",
+        "name": "05. Analysis type"
+      },
       {
         "conceptPath": "\\CSR\\Biomaterial.biomaterial_date",
         "conceptCode": "Biomaterial.biomaterial_date",
         "name": "02. Date of biomaterial"
+      },
+      {
+        "conceptPath": "\\CSR\\Biomaterial.library_strategy",
+        "conceptCode": "Biomaterial.library_strategy",
+        "name": "04. Library strategy"
       },
       {
         "conceptPath": "\\CSR\\Biomaterial.src_biomaterial_id",
@@ -5231,180 +5495,28 @@
         "name": "03. Study title"
       }
     ],
-    "Biosource": [
-      "BS2",
-      "BS3",
-      "BS5",
-      "BS9",
-      "BS1",
-      "BS10",
-      "BS4",
-      "BS11",
-      "BS12",
-      "BS7",
-      "BS8",
-      "BS6"
+    "study": [
+      {
+        "name": "CSR"
+      }
     ],
     "visit": [],
-    "Diagnosis": [
-      "D11",
-      "D6",
-      "D1",
-      "D10",
-      "D5",
-      "D12",
-      "D8",
-      "D9",
-      "D7",
-      "D2",
-      "D3",
-      "D13"
-    ],
-    "patient": [
-      {
-        "id": 2,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P3"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "female",
-        "sex": "female"
-      },
-      {
-        "id": 3,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P4"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "male",
-        "sex": "male"
-      },
-      {
-        "id": 4,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P6"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "male",
-        "sex": "male"
-      },
-      {
-        "id": 5,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P1"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "female",
-        "sex": "female"
-      },
-      {
-        "id": 6,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P5"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "female",
-        "sex": "female"
-      },
-      {
-        "id": 8,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P8"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "male",
-        "sex": "male"
-      },
-      {
-        "id": 9,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P9"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "female",
-        "sex": "female"
-      },
-      {
-        "id": 7,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P7"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "female",
-        "sex": "female"
-      },
-      {
-        "id": 1,
-        "trial": null,
-        "inTrialId": null,
-        "subjectIds": {
-          "SUBJ_ID": "P2"
-        },
-        "birthDate": null,
-        "deathDate": null,
-        "age": null,
-        "race": null,
-        "maritalStatus": null,
-        "religion": null,
-        "sexCd": "male",
-        "sex": "male"
-      }
+    "Biomaterial": [
+      "BM2",
+      "BM3",
+      "BM5",
+      "BM8",
+      "BM13",
+      "BM1",
+      "BM9",
+      "BM15",
+      "BM4",
+      "BM10",
+      "BM11",
+      "BM12",
+      "BM6",
+      "BM14",
+      "BM7"
     ]
   }
 }

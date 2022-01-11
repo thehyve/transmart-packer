@@ -15,6 +15,7 @@ except ImportError as e:
     logging.warning(f'Import errors for {__file__!r}: {str(e)}')
 
 DATE_FORMAT = '%Y-%m-%d'
+MULTI_VALUE_SEPARATOR = ';'
 SUBJECT_ID_FIELD = 'patient.subjectIds.SUBJ_ID'
 ID_COLUMN_MAPPING = {SUBJECT_ID_FIELD: 'Subject Id',
                      'Diagnosis': 'Diagnosis Id',
@@ -74,7 +75,7 @@ def merge_non_hierarchical_entity_df(df: DataFrame, entity_df: Optional[DataFram
     if df.empty:
         df = entity_df
     else:
-        # Merge radiology data into df, creating a cross-product
+        # Merge non-hierarchical entity data into df, creating a cross-product
         entity_df[id_column] = entity_df.index.get_level_values(id_column)
         df = df.reset_index().merge(entity_df, on=existing_merge_columns, how='outer').fillna('')
 
@@ -158,7 +159,7 @@ def _merge_redundant_rows(data: DataFrame, id_columns: List[str]) -> DataFrame:
         row_copied = False
         for result_row in reversed(result_rows):
             if _is_ancestor_row(row, result_row, id_columns):
-                _copy_missing_value_to_descendant_row(row, result_row, id_columns)
+                _propagate_value_to_descendant_row(row, result_row, id_columns)
                 row_copied = True
             else:
                 break
@@ -189,12 +190,17 @@ def _is_ancestor_row(ancestor_row_candidate: Dict[str, Any],
     return True
 
 
-def _copy_missing_value_to_descendant_row(ancestor_row, descendant_row, id_columns: List[str]):
+def _propagate_value_to_descendant_row(ancestor_row, descendant_row, id_columns: List[str]):
     for column, value in ancestor_row.items():
         if column in id_columns or pandas.isnull(value):
+            # skip
             continue
         if column not in descendant_row or pandas.isnull(descendant_row[column]):
-            descendant_row[column] = ancestor_row[column]
+            # copy missing value
+            descendant_row[column] = value
+        elif column in descendant_row and (value not in descendant_row[column].split(MULTI_VALUE_SEPARATOR)):
+            # merge different values with separator
+            descendant_row[column] = descendant_row[column] + MULTI_VALUE_SEPARATOR + value
 
 
 def _to_datetime(date_str, string_format=DATE_FORMAT):
