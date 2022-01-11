@@ -24,7 +24,7 @@ Run data transformation jobs for TranSMART_.
 Install
 -------
 
-First make virtual environment to install dependencies using `Python 3.6+`
+First make virtual environment to install dependencies using `Python 3.7+`
 
 .. code-block:: bash
 
