@@ -385,6 +385,32 @@ class CsrTranformations(unittest.TestCase):
         expected_df.set_index(['Subject Id', 'Radiology Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
+    def test_result_data_shape_patient_radiology_with_diagnosis(self):
+        test_data = [
+            ['P1', None, None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Female', None, 1, 'TEST'],
+            ['P2', None, None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Male', None, 1, 'TEST'],
+            ['P1', 'R1', None, 'Radiology.image_type', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST'],
+            ['P1', 'R1', None, 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'torso', 1, 'TEST'],
+            ['P1', 'R2', 'D2', 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'legs', 1, 'TEST'],
+            ['P2', 'R3', None, 'Radiology.body_part', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST']
+        ]
+        observations_df = pd.DataFrame(test_data, columns=['patient.subjectIds.SUBJ_ID',
+                                                                'Radiology', 'Diagnosis',
+                                                                'concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue',
+                                                                'stringValue', 'patient.id', 'study.name'])
+        df = transform_obs_df(observations_df)
+
+        self.assertIsNotNone(df)
+        expected_df = pd.DataFrame([
+            ['P1', 'R1', 'Female', 'type_1', 'torso'],
+            ['P1', 'R2', 'Female', '', 'legs'],
+            ['P2', 'R3', 'Male', 'type_1', '']
+        ], columns=['Subject Id', 'Radiology Id', 'Sex', 'Image type', 'Body part'])
+        expected_df.set_index(['Subject Id', 'Radiology Id'], inplace=True)
+
+        print(df)
+        pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
     def test_result_data_shape_patient_diagnosis_radiology(self):
         test_data = [
@@ -407,7 +433,6 @@ class CsrTranformations(unittest.TestCase):
                     'Sex', 'Image type', 'Diagnosis'])
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Radiology Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
-
 
     def test_result_data_shape_patient_diagnosis_radiology_study(self):
         test_data = [
@@ -469,7 +494,6 @@ class CsrTranformations(unittest.TestCase):
         ], columns=['Subject Id', 'Study Id', 'Study title', 'Individual study id'])
         expected_df.set_index(['Subject Id', 'Study Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
-
 
     def test_from_json_to_export_csr_df(self):
         csr_obs_path = os.path.join(os.path.dirname(__file__), 'csr_observations.json')
