@@ -74,6 +74,7 @@ def merge_non_hierarchical_entity_df(df: DataFrame, entity_df: Optional[DataFram
     entity_df = from_obs_df_to_csr_df(entity_df)
     if df.empty:
         df = entity_df
+        df.reset_index(inplace=True)
     else:
         # Merge non-hierarchical entity data into df, creating a cross-product
         entity_df[id_column] = entity_df.index.get_level_values(id_column)

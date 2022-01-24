@@ -335,6 +335,30 @@ class CsrTranformations(unittest.TestCase):
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Biosource Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df)
 
+    def test_result_data_shape_radiology_only(self):
+        test_data = [
+            ['P1', 'R1', 'Radiology.image_type', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST'],
+            ['P1', 'R1', 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'torso', 1, 'TEST'],
+            ['P1', 'R2', 'Radiology.body_part', '\\03.Radiology\\Body part\\', 'Body part', None, 'legs', 1, 'TEST'],
+            ['P2', 'R3', 'Radiology.body_part', '\\03.Radiology\\Image type\\', 'Image type', None, 'type_1', 1, 'TEST']
+        ]
+        observations_df = pd.DataFrame(test_data, columns=['patient.subjectIds.SUBJ_ID',
+                                                                'Radiology',
+                                                                'concept.conceptCode', 'concept.conceptPath',
+                                                                'concept.name', 'numericValue',
+                                                                'stringValue', 'patient.id', 'study.name'])
+        df = transform_obs_df(observations_df)
+
+        self.assertIsNotNone(df)
+        expected_df = pd.DataFrame([
+            ['P1', 'R1', 'type_1', 'torso'],
+            ['P1', 'R2', '', 'legs'],
+            ['P2', 'R3', 'type_1', '']
+        ], columns=['Subject Id', 'Radiology Id',
+                    'Image type', 'Body part'])
+        expected_df.set_index(['Subject Id', 'Radiology Id'], inplace=True)
+        pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
+
     def test_result_data_shape_patient_radiology(self):
         test_data = [
             ['P1', None, 'Individual.gender', '\\01.Subject\\Sex\\', 'Sex', 'Female', None, 1, 'TEST'],
@@ -421,6 +445,29 @@ class CsrTranformations(unittest.TestCase):
         ], columns=['Subject Id', 'Diagnosis Id', 'Radiology Id', 'Study Id',
                     'Sex', 'Diagnosis', 'Treatment', 'Radiology date', 'Study title', 'Individual study id'])
         expected_df.set_index(['Subject Id', 'Diagnosis Id', 'Radiology Id', 'Study Id'], inplace=True)
+        pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
+
+    def test_result_data_shape_study_only(self):
+        test_data = [
+            ['P1', 'Study1', 'Study.title', '\\Study\\Title\\', 'Study title',  None, 'Study 1', 1, 'TEST'],
+            ['P1', 'Study2', 'Study.title', '\\Study\\Title\\', 'Study title', None, 'Study 2', 1, 'TEST'],
+            ['P1', 'Study1', 'IndividualStudy.individual_study_id', '\\IndividualStudy\\individual_study_id\\', 'Individual study id', None, '1', 1, 'TEST'],
+            ['P1', 'Study2', 'IndividualStudy.individual_study_id', '\\IndividualStudy\\individual_study_id\\', 'Individual study id', None, '2', 1, 'TEST']
+        ]
+        observations_df = pd.DataFrame(test_data, columns=['patient.subjectIds.SUBJ_ID',
+                                                           'Study',
+                                                           'concept.conceptCode', 'concept.conceptPath',
+                                                           'concept.name', 'numericValue',
+                                                           'stringValue', 'patient.id', 'study.name'])
+
+        df = transform_obs_df(observations_df)
+
+        self.assertIsNotNone(df)
+        expected_df = pd.DataFrame([
+            ['P1', 'Study1', 'Study 1', '1'],
+            ['P1', 'Study2', 'Study 2', '2'],
+        ], columns=['Subject Id', 'Study Id', 'Study title', 'Individual study id'])
+        expected_df.set_index(['Subject Id', 'Study Id'], inplace=True)
         pdt.assert_frame_equal(df, expected_df, check_dtype=False, check_categorical=False, check_like=True)
 
 
