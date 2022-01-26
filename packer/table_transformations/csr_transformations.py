@@ -28,6 +28,10 @@ ID_COLUMNS = ID_COLUMN_MAPPING.values()
 COLUMN_ORDER_BY_CONCEPT_CODE_PREFIX = ['Individual'] + list(ID_COLUMN_MAPPING.keys())[1:]
 
 
+def get_id_columns(df: DataFrame) -> List[str]:
+    return [column for column in ID_COLUMNS if column in set(df.columns)]
+
+
 def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
     """
     :param obs_json: json returned by transmart v2/observations call
@@ -41,10 +45,12 @@ def from_obs_json_to_export_csr_df(obs_json: Dict) -> DataFrame:
 
 def transform_obs_df(df: DataFrame) -> DataFrame:
     concept_pat_to_name = _concept_path_to_name(df)
-    # Transform sample and data outside of the sample hierarchy (study, radiology) separately
+    # Transform sample data and data outside of the sample hierarchy (study, radiology) separately
     sample_df = df
     study_df = None
     radiology_df = None
+
+    # Split Sample data and Radiology data
     if 'Radiology' in df.columns:
         sample_df = df[df['Radiology'].isnull()]
         sample_df.drop(columns=['Radiology'], inplace=True)
@@ -52,6 +58,8 @@ def transform_obs_df(df: DataFrame) -> DataFrame:
         non_radiology_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Diagnosis', 'Radiology'] if
                                  c in df.columns]
         radiology_df.drop(columns=non_radiology_columns, inplace=True)
+
+    # Split Sample data and Study data
     if 'Study' in df.columns:
         df = sample_df
         sample_df = df[df['Study'].isnull()]
@@ -59,30 +67,44 @@ def transform_obs_df(df: DataFrame) -> DataFrame:
         study_df = df[df['Study'].notnull()]
         non_study_columns = [c for c in ID_COLUMN_MAPPING.keys() - [SUBJECT_ID_FIELD, 'Study'] if c in df.columns]
         study_df.drop(columns=non_study_columns, inplace=True)
+
+    # Transform sample data
     df = from_obs_df_to_csr_df(sample_df)
-    df = merge_non_hierarchical_entity_df(df, radiology_df, 'Radiology Id', ['Subject Id', 'Diagnosis Id'])
-    df = merge_non_hierarchical_entity_df(df, study_df, 'Study Id', ['Subject Id'])
+
+    # Transform Radiology data and merge back with Sample data
+    if radiology_df is not None:
+        empty_diagnosis_in_sample_df = 'Diagnosis Id' in df.index.names \
+                                and all(x == '' for x in df.copy().reset_index()['Diagnosis Id'].values)
+        if 'Diagnosis Id' not in df.index.names or empty_diagnosis_in_sample_df:
+            df = merge_non_hierarchical_entity_df(df, radiology_df, 'Radiology Id', ['Subject Id'])
+            # If diagnosis-related concepts are not part of sample data, Diagnosis ID column should not be included in results
+            if empty_diagnosis_in_sample_df is True:
+                df.drop(columns=['Diagnosis Id'], inplace=True)
+            df.set_index(get_id_columns(df), inplace=True)
+        else:
+            df = merge_non_hierarchical_entity_df(df, radiology_df, 'Radiology Id', ['Subject Id', 'Diagnosis Id'])
+            df.set_index(get_id_columns(df), inplace=True)
+
+    # Transform Study data and merge back with Sample data
+    if study_df is not None:
+        df = merge_non_hierarchical_entity_df(df, study_df, 'Study Id', ['Subject Id'])
+        df.set_index(get_id_columns(df), inplace=True)
+
     df = df.rename(index=str, columns=concept_pat_to_name)
     df = format_columns(df)
     return df
 
 
 def merge_non_hierarchical_entity_df(df: DataFrame, entity_df: Optional[DataFrame], id_column: str, merge_columns: List[str]) -> DataFrame:
-    if entity_df is None:
-        return df
-    existing_merge_columns = [c for c in merge_columns if c in df.index.names]
     entity_df = from_obs_df_to_csr_df(entity_df)
     if df.empty:
         df = entity_df
-    else:
-        # Merge non-hierarchical entity data into df, creating a cross-product
-        entity_df[id_column] = entity_df.index.get_level_values(id_column)
-        df = df.reset_index().merge(entity_df, on=existing_merge_columns, how='outer').fillna('')
+        df.reset_index(inplace=True)
+        return df
 
-    # Create combined index with sample and study identifiers
-    id_columns = [column for column in ID_COLUMNS if column in set(df.columns)]
-    df.set_index(id_columns, inplace=True)
-    return df
+    # Merge non-hierarchical entity data into df, creating a cross-product
+    entity_df[id_column] = entity_df.index.get_level_values(id_column)
+    return df.reset_index().merge(entity_df, on=merge_columns, how='outer').fillna('')
 
 
 def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
@@ -102,7 +124,7 @@ def from_obs_df_to_csr_df(obs: DataFrame) -> DataFrame:
     concept_path_col = obs['concept.conceptPath']
     unq_concept_paths_ord = concept_path_col.unique().tolist()
     logger.info('Reformatting columns...')
-    id_columns = [column for column in ID_COLUMNS if column in set(obs.columns)]
+    id_columns = get_id_columns(obs)
     obs = _reformat_columns(obs, id_columns)
     # Transform concept rows to column headers
     obs_pivot = _concepts_row_to_columns(obs)
