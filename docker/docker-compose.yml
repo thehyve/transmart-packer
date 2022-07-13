@@ -9,7 +9,7 @@ services:
       - redis-data:/data
 
   transmart-packer-webapp:
-    image: thehyve/transmart-packer:${TRANSMART_PACKER_VERSION:-0.7.0}
+    image: thehyve/transmart-packer:${TRANSMART_PACKER_VERSION:-0.7.1}
     command: ['transmart-packer']
     ports:
       - 8999:8999
@@ -29,7 +29,7 @@ services:
       - ./ssl/certs.pem:/ssl/certs.pem
 
   transmart-packer-worker:
-    image: thehyve/transmart-packer:${TRANSMART_PACKER_VERSION:-0.7.0}
+    image: thehyve/transmart-packer:${TRANSMART_PACKER_VERSION:-0.7.1}
     command:  ['celery', '-A', 'packer.tasks', 'worker', '-c', '4', '--loglevel', 'info']
     depends_on:
       - redis
