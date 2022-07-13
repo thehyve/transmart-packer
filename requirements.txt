@@ -1,5 +1,5 @@
 PyYAML == 6.0
-transmart[full] == 0.2.6
+transmart[full] == 0.2.7
 redis >= 4.3.1, < 4.4
 celery == 5.2.6
 vine == 5.0.0
